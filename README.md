@@ -1,8 +1,8 @@
-## [1. A projekt célja](#1.-a-projekt-célja-1)
-## [2. A rendszer funkciói](#2.-a-rendszer-funkciói-1)
-## [3. Felhasznált technológiák](#3.-felhasznált-technológiák-1)
-## [4. A rendszer működésének áttekintése](#4.-a-rendszer-működésének-áttekintése-1)
-## [5. Összegzés](#5.-összegzés-1)
+## [1. A projekt célja](#1-a-projekt-célja-1)
+## [2. A rendszer funkciói](#2-a-rendszer-funkciói-1)
+## [3. Felhasznált technológiák](#3-felhasznált-technológiák-1)
+## [4. A rendszer működésének áttekintése](#4-a-rendszer-működésének-áttekintése-1)
+## [5. Összegzés](#5-összegzés-1)
 
 # Vizsgaremek alkalmazás
 ## 1. A projekt célja
