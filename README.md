@@ -14,7 +14,7 @@ A sporthelyekhez tartozó információk megjelenítése: cím, árak, nyitvatart
 Az adminok új sporthelyeket, eseményeket és kategóriákat adhatnak hozzá, illetve módosíthatják vagy törölhetik azokat.
 ## 3. Felhasznált technológiák
 ### A projekt során a következő technológiákat használjuk:
-•	Frontend:
+### •	Frontend:
 o	HTML5, CSS3, JavaScript
 o	(opcionálisan: React / Bootstrap)
 ### •	Backend:
