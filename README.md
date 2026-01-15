@@ -1,4 +1,4 @@
-[1. A projekt célja](https://pages.github.com/)
+[1. A projekt célja](# 1. A projekt célja)
 
 # Vizsgaremek alkalmazás
 ## 1. A projekt célja
