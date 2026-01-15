@@ -1,4 +1,4 @@
-[1. A projekt célja](# 1. a projekt célja)
+[1. A projekt célja](#1. a projekt célja)
 
 # Vizsgaremek alkalmazás
 ## 1. A projekt célja
