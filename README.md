@@ -6,11 +6,11 @@ Az alkalmazás célközönsége minden korosztály, aki szeretné aktívan tölt
 ### A webalkalmazás fő funkciói:
 •	Sportlehetőségek listázása
 Különböző sportok, edzéshelyszínek és sportesemények megjelenítése kategóriák szerint.
-•	Keresés és szűrés
+### •	Keresés és szűrés
 A felhasználók sporttípus, helyszín, időpont vagy ár alapján szűrhetik a találatokat.
-•	Részletes adatlap
+### •	Részletes adatlap
 A sporthelyekhez tartozó információk megjelenítése: cím, árak, nyitvatartás, képek, leírás, elérhetőségek.
-•	Adminisztrációs felület
+### •	Adminisztrációs felület
 Az adminok új sporthelyeket, eseményeket és kategóriákat adhatnak hozzá, illetve módosíthatják vagy törölhetik azokat.
 ## 3. Felhasznált technológiák
 ### A projekt során a következő technológiákat használjuk:
