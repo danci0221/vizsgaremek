@@ -1,10 +1,10 @@
+# Vizsgaremek alkalmazás
 ## [1. A projekt célja](#1-a-projekt-célja-1)
 ## [2. A rendszer funkciói](#2-a-rendszer-funkciói-1)
 ## [3. Felhasznált technológiák](#3-felhasznált-technológiák-1)
 ## [4. A rendszer működésének áttekintése](#4-a-rendszer-működésének-áttekintése-1)
 ## [5. Összegzés](#5-összegzés-1)
 
-# Vizsgaremek alkalmazás
 ## 1. A projekt célja
 ### A projekt célja egy olyan modern, könnyen használható webalkalmazás fejlesztése, amely összegyűjti és rendszerezi a különböző helyi sportlehetőségeket. A felhasználók egyszerűen megtalálhatják a számukra megfelelő sporttevékenységet, legyen szó hobbi sportolásról, edzőtermekről, szabadtéri pályákról vagy szervezett sporteseményekről.
 Az alkalmazás célközönsége minden korosztály, aki szeretné aktívan tölteni a szabadidejét, vagy új sportágakat kipróbálni.
