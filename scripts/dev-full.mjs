@@ -33,5 +33,5 @@ function shutdown(code = 0) {
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
-start("API", ["run", "server"]);
-start("Frontend", ["run", "dev"]);
+start("API", ["--prefix", "backend", "run", "dev"]);
+start("Frontend", ["--prefix", "Frontend", "run", "dev"]);
