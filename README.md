@@ -1,67 +1,37 @@
-# SportHub
+# Vizsgaremek alkalmazás
+## [1. A projekt célja](#1-a-projekt-célja-1)
+## [2. A rendszer funkciói](#2-a-rendszer-funkciói-1)
+## [3. Felhasznált technológiák](#3-felhasznált-technológiák-1)
+## [4. A rendszer működésének áttekintése](#4-a-rendszer-működésének-áttekintése-1)
+## [5. Összegzés](#5-összegzés-1)
 
-Sportlehetoseg nyilvantarto React frontenddel es Node.js API-val.
-A projekt mar nem SQLite-ot hasznal: az adatbazis MySQL, Dockerben fut.
-
-## Mappaszerkezet
-- `Frontend/`: Vite + React kliens.
-- `backend/`: Node.js API.
-- `db_init/`: MySQL schema + seed SQL.
-- `docker-compose.yml`: Docker Compose (MySQL + phpMyAdmin).
-
-## Adatbazis inditasa (Docker Desktop)
-Elotte legyen elinditva a Docker Desktop.
-
-```bash
-npm run docker:db:up
-```
-
-Ez elinditja:
-- MySQL: `localhost:3307`
-- phpMyAdmin: `http://localhost:8082`
-
-Leallitas:
-```bash
-npm run docker:db:down
-```
-
-Teljes reset (volume torles):
-```bash
-npm run docker:db:reset
-```
-
-Fontos: sema valtozas utan futtasd ujra a `npm run docker:db:reset` majd `npm run docker:db:up` parancsokat, mert a `db_init` SQL csak ures volume eseten fut automatikusan.
-
-## API konfiguracio
-Az API a kovetkezo env valtozokat hasznalja (defaultokkal):
-- `DB_HOST` (`127.0.0.1`)
-- `DB_PORT` (`3307`)
-- `DB_USER` (`appuser`)
-- `DB_PASSWORD` (`apppw`)
-- `DB_NAME` (`sporthub`)
-- `PORT` (`3001`)
-- `ADMIN_EMAILS` (opcionalis, vesszovel elvalasztott lista). Ha meg van adva, csak ezek az emailek kapnak admin jogot.
-
-## Fejlesztoi inditas
-1. Eloszor adatbazis:
-```bash
-npm run docker:db:up
-```
-2. Frontend + API:
-```bash
-npm run dev:full
-```
-
-Kulon-kulon is:
-```bash
-npm run server
-npm run dev
-```
-
-## SQL fajlok
-- `db_init/schema.mysql.sql`: MySQL tabla definiciok.
-- `db_init/seed.sql`: alap mintaadatok.
-
-## Megjegyzes
-- A frontend fejlesztesben `/api` proxyn keresztul eri el az API-t.
-- Ha az API nem erheto el, a frontend fallbackkent a `Frontend/src/data/Sports.json` mintaadatot hasznalja.
+## 1. A projekt célja
+### A projekt célja egy olyan modern, könnyen használható webalkalmazás fejlesztése, amely összegyűjti és rendszerezi a különböző helyi sportlehetőségeket. A felhasználók egyszerűen megtalálhatják a számukra megfelelő sporttevékenységet, legyen szó hobbi sportolásról, edzőtermekről, szabadtéri pályákról vagy szervezett sporteseményekről.
+Az alkalmazás célközönsége minden korosztály, aki szeretné aktívan tölteni a szabadidejét, vagy új sportágakat kipróbálni.
+## 2. A rendszer funkciói
+### A webalkalmazás fő funkciói:
+•	Sportlehetőségek listázása
+Különböző sportok, edzéshelyszínek és sportesemények megjelenítése kategóriák szerint.
+### •	Keresés és szűrés
+A felhasználók sporttípus, helyszín, időpont vagy ár alapján szűrhetik a találatokat.
+### •	Részletes adatlap
+A sporthelyekhez tartozó információk megjelenítése: cím, árak, nyitvatartás, képek, leírás, elérhetőségek.
+### •	Adminisztrációs felület
+Az adminok új sporthelyeket, eseményeket és kategóriákat adhatnak hozzá, illetve módosíthatják vagy törölhetik azokat.
+## 3. Felhasznált technológiák
+### A projekt során a következő technológiákat használjuk:
+### •	Frontend:
+o	HTML5, CSS3, JavaScript
+o	(opcionálisan: React / Bootstrap)
+### •	Backend:
+o	PHP / Laravel (vagy az általad használt keretrendszer)
+o	REST API
+### •	Adatbázis:
+o	MySQL / MariaDB
+### •	Fejlesztést segítő eszközök:
+o	Git, GitHub
+o	VS Code / PHPStorm
+## 4. A rendszer működésének áttekintése
+### A felhasználó a főoldalon böngészhet a sportlehetőségek között. A kereső segítségével gyorsan szűkítheti a találatokat. A részletes adatlapra kattintva minden fontos információhoz hozzájut. A regisztrált felhasználók elmenthetik kedvenceiket, az admin pedig gondozza az adatokat az adminfelületen keresztül.
+## 5. Összegzés
+### A vizsgaremek célja egy olyan webalkalmazás létrehozása, amely hozzájárul az aktív életmód népszerűsítéséhez, és egyszerűen, átláthatóan mutatja be a felhasználóknak a környékbeli sportolási lehetőségeket. A fejlesztés során korszerű technológiákat és jó gyakorlatokat alkalmazunk.
