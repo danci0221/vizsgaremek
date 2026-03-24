@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: sporthub_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: sporthub
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppw
+      TZ: Europe/Budapest
+    ports:
+      - "3307:3306"
+    volumes:
+      - sporthub_db_data:/var/lib/mysql
+      - ./db_init:/docker-entrypoint-initdb.d:ro
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_hungarian_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpw"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: sporthub_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: "0"
+      UPLOAD_LIMIT: 64M
+      TZ: Europe/Budapest
+    ports:
+      - "8082:80"
+
+volumes:
+  sporthub_db_data:
