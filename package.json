@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:full": "node scripts/dev-full.mjs",
+    "dev:full": "npm run docker:db:up && node dev-full.mjs",
+    "dev:full:app": "node dev-full.mjs",
     "docker:db:up": "docker compose -f docker-compose.yml up -d db phpmyadmin",
     "docker:db:down": "docker compose -f docker-compose.yml down",
     "docker:db:reset": "docker compose -f docker-compose.yml down -v",

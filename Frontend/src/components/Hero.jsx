@@ -1,14 +1,8 @@
-import { Link } from "react-router-dom";
-
 export default function Hero({
-  query,
-  onSearch,
   favoriteCount,
   resultCount,
   liveDayLabel,
   liveTimeLabel,
-  uniqueTypes,
-  onQuickTypeSelect,
 }) {
   return (
     <section className="hero" id="discover">
@@ -28,22 +22,6 @@ export default function Hero({
         Pontosan úgy, ahogy egy modern sportplatformtól várható.
       </p>
 
-      <div className="search">
-        <input
-          placeholder="Keresés sporttípus, helyszín vagy név alapján"
-          value={query}
-          onChange={(e) => onSearch(e.target.value)}
-        />
-        <div className="hero-actions">
-          <Link to="/kinalat" className="dark-btn">
-            Felfedezés
-          </Link>
-          <Link to="/programterv" className="ghost">
-            Programterv
-          </Link>
-        </div>
-      </div>
-
       <div className="hero-stats">
         <article>
           <p>Aktív találat</p>
@@ -59,16 +37,6 @@ export default function Hero({
         </article>
       </div>
 
-      <div className="hero-chip-row">
-        <button type="button" className="chip-btn" onClick={() => onQuickTypeSelect("all")}>
-          Minden sport
-        </button>
-        {uniqueTypes.slice(0, 6).map((type) => (
-          <button key={type} type="button" className="chip-btn" onClick={() => onQuickTypeSelect(type)}>
-            {type}
-          </button>
-        ))}
-      </div>
     </section>
   );
 }

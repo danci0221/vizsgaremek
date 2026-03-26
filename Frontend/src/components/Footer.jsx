@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { footerLinksBase } from "../constants";
 
-export default function Footer({ authUser, isAdmin, now, onSignOut }) {
+export default function Footer({ authUser, isAdmin, now }) {
   const footerLinks = isAdmin
     ? [...footerLinksBase, { to: "/admin", label: "Admin" }]
     : footerLinksBase;
@@ -54,11 +54,11 @@ export default function Footer({ authUser, isAdmin, now, onSignOut }) {
               <h3>{authUser.username || "SportHub tag"}</h3>
               <p>Pár gyors lépés, és már indulhat is a heti ritmusod.</p>
               <div className="footer-actions">
-                <Link to="/kinalat" className="cta">
-                  Kínálat megnyitása
+                <Link to="/fiok" className="cta">
+                  Fiókom
                 </Link>
-                <Link to="/kedvencek" className="ghost">
-                  Kedvencek
+                <Link to="/kinalat" className="ghost">
+                  Kínálat
                 </Link>
                 {isAdmin && (
                   <Link to="/admin" className="ghost">

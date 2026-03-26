@@ -1,5 +1,16 @@
 import { useMemo } from "react";
 
+const scheduleFallbackBySlot = {
+  morning: "H-P 06:00-10:00",
+  afternoon: "H-P 12:00-18:00",
+  evening: "H-P 17:00-22:00",
+  weekend: "Szo-V 09:00-18:00",
+};
+
+function resolveOpeningHours(item) {
+  return item.openingHours || scheduleFallbackBySlot[item.timeSlot] || "H-P 08:00-20:00";
+}
+
 export default function FavoritesPage({
   sports,
   favorites,
@@ -32,6 +43,7 @@ export default function FavoritesPage({
               <p>
                 {item.sportType} - {item.location}
               </p>
+              <p>{resolveOpeningHours(item)}</p>
               <div className="recommendation-actions">
                 <button
                   type="button"
@@ -63,7 +75,7 @@ export default function FavoritesPage({
               <article key={item.id}>
                 <h4>{item.name}</h4>
                 <p>{item.priceLabel}</p>
-                <p>{item.openingHours}</p>
+                <p>{resolveOpeningHours(item)}</p>
               </article>
             ))}
           </div>

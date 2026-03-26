@@ -8,8 +8,10 @@ import CatalogPage from "./pages/CatalogPage";
 import TipsPage from "./pages/TipsPage";
 import PlannerPage from "./pages/PlannerPage";
 import FavoritesPage from "./pages/FavoritesPage";
+import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
 import AdminPage from "./pages/AdminPage";
+import MapPage from "./pages/MapPage";
 import sportsData from "./data/Sports.json";
 import { apiUrl } from "./lib/api";
 import { toPercent } from "./lib/utils";
@@ -97,7 +99,9 @@ function App() {
       "/kinalat",
       "/tippek",
       "/programterv",
+      "/fiok",
       "/kedvencek",
+      "/terkep",
       "/admin",
       "/auth",
     ]);
@@ -105,6 +109,19 @@ function App() {
       navigate("/", { replace: true });
     }
   }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    const protectedPaths = new Set(["/fiok", "/kedvencek"]);
+    if (protectedPaths.has(location.pathname) && !authUser) {
+      navigate("/auth?mode=signin", { replace: true });
+    }
+  }, [authUser, location.pathname, navigate]);
+
+  useEffect(() => {
+    if (location.pathname === "/auth" && authUser) {
+      navigate("/fiok", { replace: true });
+    }
+  }, [authUser, location.pathname, navigate]);
 
   // ============== FAVORITES - LOCAL ==============
   useEffect(() => {
@@ -253,8 +270,14 @@ function App() {
   // ============== EVENT HANDLERS ==============
 
   const applyScenario = (scenario) => {
-    setQuery(scenario.name);
-    navigate("/kinalat");
+    const nextQuery = scenario?.query || "";
+    setQuery(nextQuery);
+    navigate("/kinalat", {
+      state: {
+        searchQuery: nextQuery,
+        presetFilters: scenario?.filters || null,
+      },
+    });
   };
 
   const toggleFavorite = async (id) => {
@@ -382,6 +405,21 @@ function App() {
     }
   };
 
+  const normalizeAuthUser = (apiResponse) => {
+    if (!apiResponse) return null;
+
+    const user = apiResponse.user || apiResponse;
+    if (!user) return null;
+
+    return {
+      id: typeof user.id === "number" ? user.id : Number(user.id) || null,
+      username: user.username || user.felhasznalonev || user.name || "",
+      email: user.email || user.mail || "",
+      role: user.role || user.szerepkor || "user",
+      registeredAt: user.registeredAt || user.regisztracio_datum || null,
+    };
+  };
+
   const checkEmailExists = async (emailValue) => {
     const email = String(emailValue || "").trim().toLowerCase();
     if (!email) {
@@ -433,7 +471,8 @@ function App() {
       }
 
       const data = await response.json();
-      setAdminUsers(Array.isArray(data) ? data : []);
+      const users = Array.isArray(data) ? data : Array.isArray(data.users) ? data.users : [];
+      setAdminUsers(users);
       setAdminUsersState({ type: "success", message: "Felhasználók betöltve." });
     } catch (error) {
       setAdminUsersState({ type: "error", message: error.message });
@@ -448,7 +487,7 @@ function App() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (signUpForm.password !== signUpForm.passwordConfirm) {
+    if (signUpForm.password !== signUpForm.confirmPassword) {
       setAuthState({ type: "error", message: "A jelszó és a megerősítése nem egyezik." });
       return;
     }
@@ -473,10 +512,12 @@ function App() {
       }
 
       const data = await response.json();
-      setAuthUser(data);
+      const user = normalizeAuthUser(data);
+      console.log("signup user", data, user);
+      setAuthUser(user);
       setSignUpForm(signUpDefaults);
       setAuthState({ type: "success", message: "Sikeres regisztráció!" });
-      navigate("/");
+      navigate("/fiok");
     } catch (error) {
       setAuthState({ type: "error", message: error.message });
     } finally {
@@ -505,10 +546,12 @@ function App() {
       }
 
       const data = await response.json();
-      setAuthUser(data);
+      const user = normalizeAuthUser(data);
+      console.log("signin user", data, user);
+      setAuthUser(user);
       setSignInForm(signInDefaults);
       setAuthState({ type: "success", message: "Sikeres bejelentkezés!" });
-      navigate("/");
+      navigate("/fiok");
     } catch (error) {
       setAuthState({ type: "error", message: error.message });
     } finally {
@@ -529,20 +572,17 @@ function App() {
     content = (
       <>
         <Hero
-          query={query}
-          onSearch={setQuery}
           favoriteCount={favorites.length}
           resultCount={sports.length}
           liveDayLabel={liveDayLabel}
           liveTimeLabel={liveTimeLabel}
-          uniqueTypes={uniqueTypes}
-          onQuickTypeSelect={() => {}}
         />
         <HomePage
           sports={sports}
           favorites={favorites}
           onToggleFavorite={toggleFavorite}
           onApplyScenario={applyScenario}
+          authUser={authUser}
         />
       </>
     );
@@ -552,25 +592,23 @@ function App() {
     content = (
       <>
         <Hero
-          query={query}
-          onSearch={setQuery}
           favoriteCount={favorites.length}
           resultCount={sports.length}
           liveDayLabel={liveDayLabel}
           liveTimeLabel={liveTimeLabel}
-          uniqueTypes={uniqueTypes}
-          onQuickTypeSelect={setQuery}
         />
         <CatalogPage
           sports={sports}
           uniqueTypes={uniqueTypes}
           uniqueLocations={uniqueLocations}
           uniqueCategories={uniqueCategories}
+          authUser={authUser}
           favorites={favorites}
           compareIds={compareIds}
           onToggleFavorite={toggleFavorite}
           onToggleCompare={toggleCompare}
-          initialQuery={query}
+          initialQuery={location.state?.searchQuery ?? query}
+          initialPreset={location.state?.presetFilters ?? null}
         />
       </>
     );
@@ -591,18 +629,33 @@ function App() {
     );
   }
 
+  if (location.pathname === "/fiok") {
+    content = (
+      <>
+        <Hero
+          favoriteCount={favorites.length}
+          resultCount={sports.length}
+          liveDayLabel={liveDayLabel}
+          liveTimeLabel={liveTimeLabel}
+        />
+        <ProfilePage
+          authUser={authUser}
+          favoriteCount={favorites.length}
+          isAdmin={isAdmin}
+          onSignOut={handleSignOut}
+        />
+      </>
+    );
+  }
+
   if (location.pathname === "/kedvencek") {
     content = (
       <>
         <Hero
-          query=""
-          onSearch={() => {}}
           favoriteCount={favorites.length}
           resultCount={favorites.length}
           liveDayLabel={liveDayLabel}
           liveTimeLabel={liveTimeLabel}
-          uniqueTypes={uniqueTypes}
-          onQuickTypeSelect={() => {}}
         />
         <FavoritesPage
           sports={sports}
@@ -616,11 +669,20 @@ function App() {
     );
   }
 
+  if (location.pathname === "/terkep") {
+    content = (
+      <MapPage
+        sports={sports}
+        mapFocusId={mapFocusId}
+        onFocusItem={setMapFocusId}
+      />
+    );
+  }
+
   if (location.pathname === "/auth") {
     content = (
       <AuthPage
         authMode={authMode}
-        authUser={authUser}
         authState={authState}
         authBusy={authBusy}
         emailCheckState={emailCheckState}
@@ -630,7 +692,6 @@ function App() {
         onSwitchMode={switchAuthMode}
         onSignUp={handleSignUp}
         onSignIn={handleSignIn}
-        onSignOut={handleSignOut}
         onEmailCheck={checkEmailExists}
         onShowPasswordChange={setShowPassword}
         onSignUpFormChange={setSignUpForm}

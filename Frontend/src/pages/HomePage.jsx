@@ -15,6 +15,7 @@ export default function HomePage({
   favorites,
   onToggleFavorite,
   onApplyScenario,
+  authUser,
 }) {
   const navigate = useNavigate();
 
@@ -195,32 +196,32 @@ export default function HomePage({
   const scenarioCards = useMemo(
     () => [
       {
-        title: "Reggeli rajt",
-        text: "Indítsd a napot könnyebb, rövidebb blokkal.",
+        title: "Reggeli szűrő",
+        text: "Csak reggeli opciók egy kattintással.",
         tone: "orange",
-        cta: "Reggeli opciók",
-        filters: { timeSlot: "morning", price: "budget" },
+        cta: "Reggeli ajánlatok",
+        filters: { timeSlot: "morning" },
       },
       {
-        title: "Hétvégi közösség",
-        text: "Nézd meg a szabad, közösségi programokat.",
+        title: "Ingyenes hétvége",
+        text: "Hétvégi, ingyenes sportlehetőségek azonnal.",
         tone: "green",
-        cta: "Hétvégi lista",
+        cta: "Ingyenes hétvégi lista",
         filters: { timeSlot: "weekend", price: "free" },
       },
       {
-        title: `${topCityName} fókusz`,
-        text: "Gyors városi válogatás, hogy ott legyen minden egyben.",
+        title: "Tenisz fókusz",
+        text: "Csak tenisz opciók, minden városból.",
         tone: "blue",
-        cta: "Városi szűrés",
-        filters: { location: topCityName },
+        cta: "Tenisz kínálat",
+        filters: { type: "Tenisz" },
       },
       {
-        title: "Esti prémium",
-        text: "Kiemelt, magasabb szintű opciók munka utánra.",
+        title: `${topCityName} városnézet`,
+        text: "Csak az adott város sportlehetőségei.",
         tone: "dark",
-        cta: "Esti ajánlatok",
-        filters: { timeSlot: "evening", price: "premium" },
+        cta: "Városi szűrés",
+        filters: { location: topCityName },
       },
     ],
     [topCityName]
@@ -258,6 +259,20 @@ export default function HomePage({
 
   return (
     <>
+      <section className="map-cta surface-panel">
+        <div className="map-cta-copy">
+          <p className="eyebrow">Térkép</p>
+          <h2>Térkép nézet: ahol a sportok valójában vannak</h2>
+          <p className="muted-mini">Pontosan címre tett helyszínek, városonként több opcióval.</p>
+          <div className="map-cta-meta" aria-label="Térkép előnézet adatok">
+            <span>{stats.total} sportlehetőség</span>
+            <span>{uniqueLocations.length} város</span>
+            <span>cím alapú pontok</span>
+          </div>
+        </div>
+        <button type="button" className="dark-btn map-cta-btn" onClick={() => navigate("/terkep")}>Térkép megnyitása</button>
+      </section>
+
       <section className="momentum-strip">
         <div className="momentum-track">
           {momentumItems.map((item, index) => (
@@ -315,7 +330,7 @@ export default function HomePage({
               <button
                 type="button"
                 className="ghost"
-                onClick={() => onApplyScenario(card.filters)}
+                onClick={() => onApplyScenario({ filters: card.filters, query: card.query || "" })}
               >
                 {card.cta}
               </button>
@@ -361,13 +376,15 @@ export default function HomePage({
                     <button type="button" className="ghost" onClick={() => openInCatalog(item)}>
                       Megnyitás
                     </button>
-                    <button
-                      type="button"
-                      className={favoriteSet.has(item.id) ? "cta" : "dark-btn"}
-                      onClick={() => onToggleFavorite(item.id)}
-                    >
-                      {favoriteSet.has(item.id) ? "Kedvenc" : "Kedvencnek"}
-                    </button>
+                    {authUser && (
+                      <button
+                        type="button"
+                        className={favoriteSet.has(item.id) ? "cta" : "dark-btn"}
+                        onClick={() => onToggleFavorite(item.id)}
+                      >
+                        {favoriteSet.has(item.id) ? "Kedvenc" : "Kedvencnek"}
+                      </button>
+                    )}
                   </div>
                 </div>
               </article>
@@ -502,28 +519,30 @@ export default function HomePage({
         </div>
       </section>
 
-      <section className="cta-panel">
-        <div>
-          <p className="eyebrow">SportHub klub</p>
-          <h2>Legyen egy hely, ahol minden sportod átlátható</h2>
-          <p>
-            Tervezd meg a hetedet, tartsd egyben a kedvenceket, és találj új helyeket gyorsabban.
-          </p>
-          <ul className="cta-list">
-            {ctaHighlights.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="cta-actions">
-          <Link to="/auth?mode=signup" className="cta">
-            Fiók létrehozása
-          </Link>
-          <Link to="/kinalat" className="ghost">
-            Kínálat megnyitása
-          </Link>
-        </div>
-      </section>
+      {!authUser && (
+        <section className="cta-panel">
+          <div>
+            <p className="eyebrow">SportHub klub</p>
+            <h2>Legyen egy hely, ahol minden sportod átlátható</h2>
+            <p>
+              Tervezd meg a hetedet, tartsd egyben a kedvenceket, és találj új helyeket gyorsabban.
+            </p>
+            <ul className="cta-list">
+              {ctaHighlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="cta-actions">
+            <Link to="/auth?mode=signup" className="cta">
+              Fiók létrehozása
+            </Link>
+            <Link to="/kinalat" className="ghost">
+              Kínálat megnyitása
+            </Link>
+          </div>
+        </section>
+      )}
     </>
   );
 }

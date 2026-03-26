@@ -38,6 +38,8 @@ export function mapRowToSport(row) {
     contact: row.kapcsolat,
     description: row.megjegyzes,
     image: row.kep_url,
+    latitude: row.lat !== null && row.lat !== undefined ? Number(row.lat) : null,
+    longitude: row.lng !== null && row.lng !== undefined ? Number(row.lng) : null,
   };
 }
 

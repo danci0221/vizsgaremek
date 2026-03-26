@@ -1,10 +1,5 @@
-import { useState, useMemo } from "react";
-import { signUpDefaults, signInDefaults } from "../constants";
-import { isValidEmail } from "../lib/utils";
-
 export default function AuthPage({
   authMode,
-  authUser,
   authState,
   authBusy,
   emailCheckState,
@@ -14,7 +9,6 @@ export default function AuthPage({
   onSwitchMode,
   onSignUp,
   onSignIn,
-  onSignOut,
   onEmailCheck,
   onShowPasswordChange,
   onSignUpFormChange,
@@ -52,20 +46,7 @@ export default function AuthPage({
 
         {authState.type !== "idle" && <p className={`status ${authState.type}`}>{authState.message}</p>}
 
-        {authUser ? (
-          <div className="auth-profile">
-            <h3>Sikeresen be vagy jelentkezve</h3>
-            <p>
-              <strong>Felhasználónév:</strong> {authUser.username}
-            </p>
-            <p>
-              <strong>Email:</strong> {authUser.email}
-            </p>
-            <button type="button" className="ghost" onClick={onSignOut}>
-              Kijelentkezés
-            </button>
-          </div>
-        ) : authMode === "signup" ? (
+        {authMode === "signup" ? (
           <form className="auth-form" onSubmit={onSignUp}>
             <label>
               Felhasználónév

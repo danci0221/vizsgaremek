@@ -1,4 +1,10 @@
 import mysql from "mysql2/promise";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DB_HOST = process.env.DB_HOST || "127.0.0.1";
 const DB_PORT = Number(process.env.DB_PORT || 3307);
@@ -22,6 +28,7 @@ const pool = mysql.createPool({
   connectTimeout: DB_CONNECT_TIMEOUT_MS,
   timezone: "Z",
   dateStrings: true,
+  charset: "utf8mb4",
 });
 
 function sleep(ms) {
@@ -179,6 +186,8 @@ async function ensureBaseTables() {
       id INT PRIMARY KEY AUTO_INCREMENT,
       varos VARCHAR(100) NOT NULL,
       cim VARCHAR(255) NOT NULL,
+      lat DECIMAL(10, 7) NULL,
+      lng DECIMAL(10, 7) NULL,
       UNIQUE KEY uq_helyszin_varos_cim (varos, cim)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
   `);
@@ -464,12 +473,70 @@ async function migrateLegacySportsTable() {
 
 let schemaInitializationPromise = null;
 
+async function ensureSeedData() {
+  // Csak akkor hagyjuk ki a seedet, ha már vannak sportlehetőségek.
+  const sports = await query("SELECT COUNT(*) as count FROM sportlehetosegek");
+  if (Number(sports[0]?.count || 0) > 0) {
+    return;
+  }
+
+  console.log("Adatbázis üres, seed adatok feltöltése...");
+
+  try {
+    const seedPath = path.resolve(__dirname, "../../../db_init/seed.sql");
+    const seedSql = fs.readFileSync(seedPath, "utf8");
+    const statements = seedSql.split(';').map(stmt => stmt.trim()).filter(stmt => stmt.length > 0);
+
+    await withTransaction(async (connection) => {
+      for (const statement of statements) {
+        if (statement) {
+          await connection.query(statement);
+        }
+      }
+    });
+
+    console.log("Seed adatok sikeresen feltöltve.");
+  } catch (error) {
+    console.error("Hiba a seed adatok feltöltésekor:", error);
+    // Nem dobjuk tovább a hibát, hogy ne álljon le a szerver
+  }
+}
+
+async function ensureLocationCoordinatesColumns() {
+  await ensureColumn("helyszin", "lat", "DECIMAL(10, 7) NULL");
+  await ensureColumn("helyszin", "lng", "DECIMAL(10, 7) NULL");
+}
+
+async function ensureSingleSportPerLocation() {
+  if (!(await tableExists("sportlehetosegek"))) return;
+
+  // Ugyanarra a helyszínre csak a legfrissebb sportlehetőség maradjon.
+  await execute(`
+    DELETE older
+    FROM sportlehetosegek older
+    JOIN sportlehetosegek newer
+      ON older.helyszin_id = newer.helyszin_id
+     AND older.id < newer.id
+  `);
+
+  if (!(await indexExists("sportlehetosegek", "uq_sportlehetosegek_helyszin"))) {
+    await execute(`
+      ALTER TABLE sportlehetosegek
+      ADD UNIQUE KEY uq_sportlehetosegek_helyszin (helyszin_id)
+    `);
+  }
+}
+
 export async function ensureDatabaseSchema() {
   if (schemaInitializationPromise) return schemaInitializationPromise;
 
   schemaInitializationPromise = (async () => {
     await ensureBaseTables();
-    return migrateLegacySportsTable();
+    await ensureLocationCoordinatesColumns();
+    const migrated = await migrateLegacySportsTable();
+    await ensureSingleSportPerLocation();
+    await ensureSeedData();
+    return migrated;
   })();
 
   try {

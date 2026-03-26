@@ -10,7 +10,7 @@ export default function Header({ authUser, onSignOut }) {
     { to: "/kinalat", label: "Kínálat" },
     { to: "/tippek", label: "Tippek" },
     { to: "/programterv", label: "Programterv" },
-    { to: "/kedvencek", label: "Kedvencek" },
+    { to: "/terkep", label: "Térkép" },
   ];
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function Header({ authUser, onSignOut }) {
             {menuOpen && (
               <div className="user-dropdown">
                 <NavLink
-                  to="/auth?mode=signin"
+                  to="/fiok"
                   className="user-item"
                   onClick={() => setMenuOpen(false)}
                 >

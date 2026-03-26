@@ -22,6 +22,34 @@ const sortLabels = {
   "price-desc": "Ár szerint csökkenő",
 };
 
+const scheduleFallbackBySlot = {
+  morning: "H-P 06:00-10:00",
+  afternoon: "H-P 12:00-18:00",
+  evening: "H-P 17:00-22:00",
+  weekend: "Szo-V 09:00-18:00",
+};
+
+const sportTypeImages = {
+  Tenisz:
+    "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?auto=format&fit=crop&w=1400&q=80",
+  Futás:
+    "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=80",
+  "Úszás":
+    "https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1400&q=80",
+  "Jóga":
+    "https://images.unsplash.com/photo-1549570652-97324981a6fd?auto=format&fit=crop&w=1400&q=80",
+  Konditerem:
+    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80",
+};
+
+function resolveSportImage(sport) {
+  return sportTypeImages[sport.sportType] || sport.image;
+}
+
+function resolveOpeningHours(sport) {
+  return sport.openingHours || scheduleFallbackBySlot[sport.timeSlot] || "H-P 08:00-20:00";
+}
+
 export default function SportsGrid({
   sports,
   filters,
@@ -30,12 +58,12 @@ export default function SportsGrid({
   uniqueTypes,
   uniqueLocations,
   uniqueCategories,
+  authUser,
   favoriteSet,
-  compareIds,
   onToggleFavorite,
-  onToggleCompare,
 }) {
   const [selected, setSelected] = useState(null);
+  const canUseFavorites = Boolean(authUser);
 
   const updateFilter = (key, value) => {
     onFilterChange((prev) => ({ ...prev, [key]: value }));
@@ -113,14 +141,18 @@ export default function SportsGrid({
         </div>
 
         <div className="toggle-row">
-          <label className="switcher">
-            <input
-              type="checkbox"
-              checked={filters.onlyFavorites}
-              onChange={(e) => updateFilter("onlyFavorites", e.target.checked)}
-            />
-            <span>Csak kedvencek</span>
-          </label>
+          {canUseFavorites ? (
+            <label className="switcher">
+              <input
+                type="checkbox"
+                checked={filters.onlyFavorites}
+                onChange={(e) => updateFilter("onlyFavorites", e.target.checked)}
+              />
+              <span>Csak kedvencek</span>
+            </label>
+          ) : (
+            <span />
+          )}
           <button type="button" className="ghost" onClick={onClearFilters}>
             Szűrők nullázása
           </button>
@@ -129,11 +161,11 @@ export default function SportsGrid({
         <div className="grid">
           {sports.map((sport) => {
             const isFavorite = favoriteSet.has(sport.id);
-            const isComparing = compareIds.includes(sport.id);
+            const cardImage = resolveSportImage(sport);
 
             return (
               <article key={sport.id} className="card" onClick={() => setSelected(sport)}>
-                <img src={sport.image} alt={sport.name} />
+                <img src={cardImage} alt={sport.name} />
                 <div className="card-content">
                   <p className="chip">{sport.category}</p>
                   <h3>{sport.name}</h3>
@@ -141,7 +173,7 @@ export default function SportsGrid({
                     {sport.sportType} - {sport.location}
                   </p>
                   <p className="card-meta muted">
-                    {timeSlotLabels[sport.timeSlot]} sáv - Pontszám {sport.recommendationScore}
+                    {resolveOpeningHours(sport)}
                   </p>
                   <p className="price">{sport.priceLabel}</p>
 
@@ -150,22 +182,17 @@ export default function SportsGrid({
                     <span className="score-chip">#{sport.recommendationScore}</span>
                   </div>
 
-                  <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      type="button"
-                      className={isFavorite ? "cta" : "ghost"}
-                      onClick={() => onToggleFavorite(sport.id)}
-                    >
-                      {isFavorite ? "Kedvenc" : "Kedvencnek"}
-                    </button>
-                    <button
-                      type="button"
-                      className={isComparing ? "dark-btn" : "ghost"}
-                      onClick={() => onToggleCompare(sport.id)}
-                    >
-                      {isComparing ? "Kijelölve" : "Összehasonlít"}
-                    </button>
-                  </div>
+                  {canUseFavorites && (
+                    <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        type="button"
+                        className={isFavorite ? "cta" : "ghost"}
+                        onClick={() => onToggleFavorite(sport.id)}
+                      >
+                        {isFavorite ? "Kedvenc" : "Kedvencnek"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </article>
             );
@@ -182,7 +209,7 @@ export default function SportsGrid({
       {selected && (
         <div className="modal" onClick={() => setSelected(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <img src={selected.image} alt={selected.name} />
+            <img src={resolveSportImage(selected)} alt={selected.name} />
             <h2>{selected.name}</h2>
             <p>{selected.description}</p>
             <ul>
@@ -205,7 +232,7 @@ export default function SportsGrid({
                 <strong>Ajánlási pontszám:</strong> {selected.recommendationScore}
               </li>
               <li>
-                <strong>Nyitvatartás:</strong> {selected.openingHours}
+                <strong>Nyitvatartás:</strong> {resolveOpeningHours(selected)}
               </li>
               <li>
                 <strong>Elérhetőség:</strong> {selected.contact}

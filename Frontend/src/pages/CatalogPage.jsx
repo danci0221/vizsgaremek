@@ -1,27 +1,44 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SportsGrid from "../components/SportsGrid";
+
+const defaultCatalogFilters = {
+  type: "all",
+  location: "all",
+  category: "all",
+  timeSlot: "all",
+  price: "all",
+  sort: "recommended",
+  onlyFavorites: false,
+};
 
 export default function CatalogPage({
   sports,
   uniqueTypes,
   uniqueLocations,
   uniqueCategories,
+  authUser,
   favorites,
   compareIds,
   onToggleFavorite,
   onToggleCompare,
   initialQuery = "",
+  initialPreset = null,
 }) {
   const [query, setQuery] = useState(initialQuery);
-  const [filters, setFilters] = useState({
-    type: "all",
-    location: "all",
-    category: "all",
-    timeSlot: "all",
-    price: "all",
-    sort: "recommended",
-    onlyFavorites: false,
-  });
+  const [filters, setFilters] = useState(defaultCatalogFilters);
+
+  useEffect(() => {
+    setQuery(initialQuery || "");
+  }, [initialQuery]);
+
+  useEffect(() => {
+    if (!initialPreset) return;
+
+    setFilters({
+      ...defaultCatalogFilters,
+      ...initialPreset,
+    });
+  }, [initialPreset]);
 
   const favoriteSet = useMemo(() => new Set(favorites), [favorites]);
 
@@ -72,15 +89,7 @@ export default function CatalogPage({
   }, [sports, query, filters, favoriteSet]);
 
   const clearFilters = () => {
-    setFilters({
-      type: "all",
-      location: "all",
-      category: "all",
-      timeSlot: "all",
-      price: "all",
-      sort: "recommended",
-      onlyFavorites: false,
-    });
+    setFilters(defaultCatalogFilters);
     setQuery("");
   };
 
@@ -89,7 +98,7 @@ export default function CatalogPage({
       <section className="catalog-head">
         <div className="section-heading">
           <p className="eyebrow">Kínálat</p>
-          <h2>Sporthelyek eseményekkel, szűrőkkel és gyors összehasonlítással</h2>
+          <h2>Sporthelyek eseményekkel és gyors szűrőkkel</h2>
         </div>
         <div className="catalog-toolbar">
           <input
@@ -111,6 +120,7 @@ export default function CatalogPage({
         uniqueTypes={uniqueTypes}
         uniqueLocations={uniqueLocations}
         uniqueCategories={uniqueCategories}
+        authUser={authUser}
         favoriteSet={favoriteSet}
         compareIds={compareIds}
         onToggleFavorite={onToggleFavorite}

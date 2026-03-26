@@ -59,7 +59,7 @@ export const galleryCards = [
     title: "Tenisz - gyors reakció",
     place: "Budapest",
     image:
-      "https://images.unsplash.com/photo-1617083934551-54d4dbd8d86a?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?auto=format&fit=crop&w=1400&q=80",
   },
   {
     title: "Futás - ritmus és állóképesség",
@@ -168,7 +168,7 @@ export const footerLinksBase = [
   { to: "/kinalat", label: "Kínálat" },
   { to: "/tippek", label: "Tippek" },
   { to: "/programterv", label: "Programterv" },
-  { to: "/kedvencek", label: "Kedvencek" },
+  { to: "/terkep", label: "Térkép" },
 ];
 
 export const timeSlotLabels = {

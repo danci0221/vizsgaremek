@@ -13,7 +13,9 @@ const sportSelectSql = `SELECT
     s.kep_url,
     k.nev AS kategoria,
     h.varos,
-    h.cim
+    h.cim,
+    h.lat,
+    h.lng
   FROM sportlehetosegek s
   JOIN sportag sp ON sp.id = s.sportag_id
   JOIN kategoria k ON k.id = s.kategoria_id
@@ -73,17 +75,26 @@ export async function getOrCreateSportTypeId(connection, sportTypeName) {
   return Number(insertResult.insertId);
 }
 
-export async function getOrCreateLocationId(connection, address, city) {
+export async function getOrCreateLocationId(connection, address, city, latitude = null, longitude = null) {
   const [foundRows] = await connection.query(
     "SELECT id FROM helyszin WHERE varos = ? AND cim = ? LIMIT 1",
     [city, address]
   );
 
-  if (foundRows.length > 0) return Number(foundRows[0].id);
+  if (foundRows.length > 0) {
+    if (latitude !== null || longitude !== null) {
+      await connection.execute("UPDATE helyszin SET lat = COALESCE(?, lat), lng = COALESCE(?, lng) WHERE id = ?", [
+        latitude,
+        longitude,
+        foundRows[0].id,
+      ]);
+    }
+    return Number(foundRows[0].id);
+  }
 
   const [insertResult] = await connection.execute(
-    "INSERT INTO helyszin (varos, cim) VALUES (?, ?)",
-    [city, address]
+    "INSERT INTO helyszin (varos, cim, lat, lng) VALUES (?, ?, ?, ?)",
+    [city, address, latitude, longitude]
   );
 
   return Number(insertResult.insertId);
@@ -114,7 +125,13 @@ export async function createSport(body, creatorUserId = null) {
   return withTransaction(async (connection) => {
     const sportTypeId = await getOrCreateSportTypeId(connection, body.sportType);
     const categoryId = await getOrCreateCategoryId(connection, body.category);
-    const locationId = await getOrCreateLocationId(connection, body.address, body.location);
+    const locationId = await getOrCreateLocationId(
+      connection,
+      body.address,
+      body.location,
+      body.latitude ?? null,
+      body.longitude ?? null
+    );
     const organizerId = await getOrCreateOrganizerId(connection, `${body.name} szervezo`, body.contact);
 
     const [sportResult] = await connection.execute(
@@ -155,7 +172,13 @@ export async function updateSport(id, body) {
 
     const sportTypeId = await getOrCreateSportTypeId(connection, body.sportType);
     const categoryId = await getOrCreateCategoryId(connection, body.category);
-    const locationId = await getOrCreateLocationId(connection, body.address, body.location);
+    const locationId = await getOrCreateLocationId(
+      connection,
+      body.address,
+      body.location,
+      body.latitude ?? null,
+      body.longitude ?? null
+    );
     const organizerId = await getOrCreateOrganizerId(connection, `${body.name} szervezo`, body.contact);
 
     await connection.execute(
