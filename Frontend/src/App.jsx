@@ -41,6 +41,9 @@ function App() {
   const [sports, setSports] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [compareIds, setCompareIds] = useState([]);
+  const [favoritesState, setFavoritesState] = useState({ type: "idle", message: "" });
+  const [favoritesBusy, setFavoritesBusy] = useState(false);
+  const [toast, setToast] = useState(null);
 
   // ============== REGISTRATIONS ==============
   const [registrations, setRegistrations] = useState([]);
@@ -142,8 +145,105 @@ function App() {
     }
   }, [authUser, location.pathname, navigate]);
 
+  useEffect(() => {
+    if (!toast) return;
+    const timer = window.setTimeout(() => setToast(null), 2800);
+    return () => window.clearTimeout(timer);
+  }, [toast]);
+
+  const showToast = (type, message) => {
+    setToast({ type, message });
+  };
+
+  const resetFavoritesForAnon = () => {
+    setFavorites([]);
+    setFavoritesState({ type: "idle", message: "" });
+    setFavoritesBusy(false);
+    localStorage.removeItem(FAVORITES_KEY);
+    localStorage.setItem(FAVORITES_OWNER_KEY, "anon");
+  };
+
+  const refreshFavorites = async ({ silent = false } = {}) => {
+    if (!authUser?.email) {
+      resetFavoritesForAnon();
+      return;
+    }
+
+    if (favoritesBusy) return;
+    setFavoritesBusy(true);
+    if (!silent) setFavoritesState({ type: "idle", message: "" });
+
+    try {
+      let localFavorites = [];
+      const raw = localStorage.getItem(FAVORITES_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) localFavorites = parsed;
+        } catch {
+          localFavorites = [];
+        }
+      }
+      const owner = localStorage.getItem(FAVORITES_OWNER_KEY);
+      if (owner && owner !== "anon" && owner !== authUser.email.toLowerCase()) {
+        localFavorites = [];
+      }
+
+      const response = await fetch(apiUrl("/favorites"), {
+        headers: {
+          "X-User-Email": authUser.email,
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Nem sikerült frissíteni a kedvenceket.");
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      const serverFavorites = Array.isArray(data.favorites)
+        ? data.favorites.map((value) => Number(value)).filter((value) => Number.isFinite(value))
+        : [];
+      const merged = Array.from(new Set([...serverFavorites, ...localFavorites]));
+
+      setFavorites(merged);
+
+      const missing = merged.filter((id) => !serverFavorites.includes(id));
+      if (missing.length > 0) {
+        await Promise.all(
+          missing.map(async (sportId) => {
+            const syncResponse = await fetch(apiUrl("/favorites"), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-User-Email": authUser.email,
+              },
+              body: JSON.stringify({ sportId }),
+            });
+            if (!syncResponse.ok) {
+              throw new Error("Nem sikerült minden kedvencet szinkronizálni.");
+            }
+          })
+        );
+      }
+
+      if (!silent) {
+        setFavoritesState({ type: "success", message: "Kedvencek frissítve." });
+        showToast("success", "Kedvencek frissítve.");
+      }
+    } catch (error) {
+      setFavoritesState({ type: "error", message: error.message });
+      showToast("error", error.message);
+    } finally {
+      setFavoritesBusy(false);
+    }
+  };
+
   // ============== FAVORITES - LOCAL ==============
   useEffect(() => {
+    const owner = localStorage.getItem(FAVORITES_OWNER_KEY);
+    if (owner && owner !== "anon") return;
+
     const savedFavorites = localStorage.getItem(FAVORITES_KEY);
     if (savedFavorites) {
       try {
@@ -163,70 +263,14 @@ function App() {
 
   // ============== FAVORITES - SERVER SYNC ==============
   useEffect(() => {
-    if (!authUser?.email) return;
-    let cancelled = false;
-
-    const syncFavorites = async () => {
-      try {
-        let localFavorites = [];
-        const raw = localStorage.getItem(FAVORITES_KEY);
-        if (raw) {
-          try {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) localFavorites = parsed;
-          } catch {
-            localFavorites = [];
-          }
-        }
-        const owner = localStorage.getItem(FAVORITES_OWNER_KEY);
-        if (owner && owner !== "anon" && owner !== authUser.email.toLowerCase()) {
-          localFavorites = [];
-        }
-
-        const response = await fetch(apiUrl("/favorites"), {
-          headers: {
-            "X-User-Email": authUser.email,
-          },
-        });
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = await response.json();
-        const serverFavorites = Array.isArray(data.favorites)
-          ? data.favorites.map((value) => Number(value)).filter((value) => Number.isFinite(value))
-          : [];
-        const merged = Array.from(new Set([...serverFavorites, ...localFavorites]));
-
-        if (!cancelled) {
-          setFavorites(merged);
-        }
-
-        const missing = merged.filter((id) => !serverFavorites.includes(id));
-        if (missing.length === 0) return;
-
-        await Promise.all(
-          missing.map((sportId) =>
-            fetch(apiUrl("/favorites"), {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-User-Email": authUser.email,
-              },
-              body: JSON.stringify({ sportId }),
-            })
-          )
-        );
-      } catch {
-        // Keep local favorites if sync fails
-      }
-    };
-
-    syncFavorites();
-    return () => {
-      cancelled = true;
-    };
+    if (authUser?.email) {
+      refreshFavorites({ silent: true });
+      return;
+    }
+    const owner = localStorage.getItem(FAVORITES_OWNER_KEY);
+    if (owner && owner !== "anon") {
+      resetFavoritesForAnon();
+    }
   }, [authUser?.email]);
 
   // ============== AUTH - LOCAL ==============
@@ -314,31 +358,46 @@ function App() {
   };
 
   const toggleFavorite = async (id) => {
-    const isFav = favorites.includes(id);
-    const newFavorites = isFav ? favorites.filter((fid) => fid !== id) : [...favorites, id];
+    const previousFavorites = favorites;
+    const isFav = previousFavorites.includes(id);
+    const newFavorites = isFav
+      ? previousFavorites.filter((fid) => fid !== id)
+      : [...previousFavorites, id];
     setFavorites(newFavorites);
 
-    if (!authUser?.email) return;
+    const successMessage = isFav
+      ? "Eltávolítva a kedvencekből."
+      : "Hozzáadva a kedvencekhez.";
+
+    if (!authUser?.email) {
+      setFavoritesState({ type: "success", message: successMessage });
+      showToast("success", successMessage);
+      return;
+    }
 
     try {
-      const url = apiUrl(`/favorites`);
+      const url = isFav ? apiUrl(`/favorites/${id}`) : apiUrl(`/favorites`);
       const method = isFav ? "DELETE" : "POST";
+      const headers = { "X-User-Email": authUser.email };
+      if (!isFav) headers["Content-Type"] = "application/json";
+
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-Email": authUser.email,
-        },
-        body: JSON.stringify({ sportId: id }),
+        headers,
+        body: isFav ? undefined : JSON.stringify({ sportId: id }),
       });
 
       if (!response.ok) {
         const errorMessage = await readErrorMessage(response, "Kedvenc módosítás hiba.");
         throw new Error(errorMessage);
       }
+
+      setFavoritesState({ type: "success", message: successMessage });
+      showToast("success", successMessage);
     } catch (error) {
-      setStatus({ type: "error", message: error.message });
-      setFavorites(favorites);
+      setFavoritesState({ type: "error", message: error.message });
+      showToast("error", error.message);
+      setFavorites(previousFavorites);
     }
   };
 
@@ -755,6 +814,7 @@ function App() {
 
   const handleSignOut = () => {
     setAuthUser(null);
+    resetFavoritesForAnon();
     setAuthState({ type: "success", message: "Sikeresen kijelentkeztél." });
     navigate("/auth");
   };
@@ -861,14 +921,17 @@ function App() {
           liveDayLabel={liveDayLabel}
           liveTimeLabel={liveTimeLabel}
         />
-        <FavoritesPage
-          sports={sports}
-          favorites={favorites}
-          compareIds={compareIds}
-          onToggleFavorite={toggleFavorite}
-          onToggleCompare={toggleCompare}
-          onOpenInCatalog={openInCatalog}
-        />
+      <FavoritesPage
+        sports={sports}
+        favorites={favorites}
+        compareIds={compareIds}
+        onToggleFavorite={toggleFavorite}
+        onToggleCompare={toggleCompare}
+        onOpenInCatalog={openInCatalog}
+        favoritesState={favoritesState}
+        favoritesBusy={favoritesBusy}
+        onRefreshFavorites={refreshFavorites}
+      />
       </>
     );
   }
@@ -936,6 +999,11 @@ function App() {
       <main className="route-shell" key={location.pathname}>
         {content}
       </main>
+      {toast && (
+        <div className={`toast ${toast.type || ""}`} role="status" aria-live="polite">
+          {toast.message}
+        </div>
+      )}
       <Footer authUser={authUser} isAdmin={isAdmin} now={now} onSignOut={handleSignOut} />
     </div>
   );

@@ -18,6 +18,9 @@ export default function FavoritesPage({
   onToggleFavorite,
   onToggleCompare,
   onOpenInCatalog,
+  favoritesState,
+  favoritesBusy,
+  onRefreshFavorites,
 }) {
   const favoriteSet = useMemo(() => new Set(favorites), [favorites]);
   const favoriteSports = useMemo(
@@ -32,8 +35,23 @@ export default function FavoritesPage({
   return (
     <section className="favorites">
       <div className="section-heading">
-        <p className="eyebrow">Kedvenceid</p>
-        <h2>{favoriteSports.length > 0 ? "Mentett sporthelyek" : "Még nincs kedvenced"}</h2>
+        <div className="favorites-head">
+          <div>
+            <p className="eyebrow">Kedvenceid</p>
+            <h2>{favoriteSports.length > 0 ? "Mentett sporthelyek" : "Még nincs kedvenced"}</h2>
+          </div>
+          <button
+            type="button"
+            className="ghost"
+            disabled={favoritesBusy}
+            onClick={() => onRefreshFavorites?.()}
+          >
+            {favoritesBusy ? "Frissítés..." : "Frissítés"}
+          </button>
+        </div>
+        {favoritesState?.type !== "idle" && (
+          <p className={`status ${favoritesState.type}`}>{favoritesState.message}</p>
+        )}
       </div>
       <div className="favorite-row">
         {favoriteSports.length > 0 ? (
@@ -45,11 +63,7 @@ export default function FavoritesPage({
               </p>
               <p>{resolveOpeningHours(item)}</p>
               <div className="recommendation-actions">
-                <button
-                  type="button"
-                  className="ghost"
-                  onClick={() => onOpenInCatalog(item)}
-                >
+                <button type="button" className="ghost" onClick={() => onOpenInCatalog(item)}>
                   Megnyitás
                 </button>
                 <button type="button" className="cta" onClick={() => onToggleFavorite(item.id)}>

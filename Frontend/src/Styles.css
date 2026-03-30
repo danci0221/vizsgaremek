@@ -1033,6 +1033,11 @@ textarea {
     align-items: flex-start;
   }
 
+  .favorites-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .profile-actions {
     display: grid;
     grid-template-columns: 1fr;
@@ -1906,6 +1911,13 @@ button:disabled::after {
   gap: 0.45rem;
 }
 
+.favorites-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
 .empty-state {
   margin-top: 1rem;
   color: var(--ink-soft);
@@ -2362,6 +2374,38 @@ button:disabled::after {
 
 .status.error {
   color: #b42318;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 240;
+  max-width: min(360px, 90vw);
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+  background: #ffffff;
+  border: 1px solid rgba(31, 109, 255, 0.25);
+  box-shadow: var(--shadow-md);
+}
+
+.toast.success {
+  background: #ecfdf3;
+  border-color: #a6e7c1;
+  color: #11643b;
+}
+
+.toast.warning {
+  background: #eef8ff;
+  border-color: #b9dcff;
+  color: #1a6f8f;
+}
+
+.toast.error {
+  background: #fff1f2;
+  border-color: #f5c2c7;
+  color: #9b1c1c;
 }
 
 .modal {
