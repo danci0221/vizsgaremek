@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -42,6 +42,12 @@ function App() {
   const [favorites, setFavorites] = useState([]);
   const [compareIds, setCompareIds] = useState([]);
 
+  // ============== REGISTRATIONS ==============
+  const [registrations, setRegistrations] = useState([]);
+  const [registrationsState, setRegistrationsState] = useState({ type: "idle", message: "" });
+  const [registrationsBusy, setRegistrationsBusy] = useState(false);
+  const [registrationPending, setRegistrationPending] = useState(() => new Set());
+
   // ============== AUTH ==============
   const [authUser, setAuthUser] = useState(null);
   const [authState, setAuthState] = useState({ type: "idle", message: "" });
@@ -62,6 +68,12 @@ function App() {
   const [adminUsers, setAdminUsers] = useState([]);
   const [adminUsersState, setAdminUsersState] = useState({ type: "idle", message: "" });
   const [adminUsersBusy, setAdminUsersBusy] = useState(false);
+  const [adminRegistrations, setAdminRegistrations] = useState([]);
+  const [adminRegistrationsState, setAdminRegistrationsState] = useState({
+    type: "idle",
+    message: "",
+  });
+  const [adminRegistrationsBusy, setAdminRegistrationsBusy] = useState(false);
 
   // ============== PLANNER ==============
   const [planner, setPlanner] = useState(plannerDefaults);
@@ -77,6 +89,13 @@ function App() {
   const uniqueTypes = useMemo(() => [...new Set(sports.map((item) => item.sportType))], [sports]);
   const uniqueLocations = useMemo(() => [...new Set(sports.map((item) => item.location))], [sports]);
   const uniqueCategories = useMemo(() => [...new Set(sports.map((item) => item.category))], [sports]);
+  const registrationBySportId = useMemo(() => {
+    const lookup = {};
+    registrations.forEach((entry) => {
+      lookup[entry.sportId] = entry;
+    });
+    return lookup;
+  }, [registrations]);
 
   // Derived state for live day and time labels
   const liveDayLabel = useMemo(() => {
@@ -264,8 +283,22 @@ function App() {
     if (!authUser || authUser.role !== "admin") {
       setAdminUsers([]);
       setAdminUsersState({ type: "idle", message: "" });
+      setAdminRegistrations([]);
+      setAdminRegistrationsState({ type: "idle", message: "" });
     }
   }, [authUser]);
+
+  useEffect(() => {
+    if (!authUser?.email) {
+      setRegistrations([]);
+      setRegistrationsState({ type: "idle", message: "" });
+      setRegistrationsBusy(false);
+      setRegistrationPending(new Set());
+      return;
+    }
+
+    loadRegistrations({ silent: true });
+  }, [authUser?.email]);
 
   // ============== EVENT HANDLERS ==============
 
@@ -306,6 +339,135 @@ function App() {
     } catch (error) {
       setStatus({ type: "error", message: error.message });
       setFavorites(favorites);
+    }
+  };
+
+  const markRegistrationPending = (sportId) => {
+    setRegistrationPending((prev) => {
+      const next = new Set(prev);
+      next.add(sportId);
+      return next;
+    });
+  };
+
+  const clearRegistrationPending = (sportId) => {
+    setRegistrationPending((prev) => {
+      const next = new Set(prev);
+      next.delete(sportId);
+      return next;
+    });
+  };
+
+  const loadRegistrations = async ({ silent = false } = {}) => {
+    if (!authUser?.email || registrationsBusy) return;
+
+    setRegistrationsBusy(true);
+    setRegistrationsState({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(apiUrl("/registrations"), {
+        headers: {
+          "X-User-Email": authUser.email,
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await readErrorMessage(
+          response,
+          "Nem sikerålt betölteni a jelentkezéseket."
+        );
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      const list = Array.isArray(data)
+        ? data
+        : Array.isArray(data.registrations)
+          ? data.registrations
+          : [];
+
+      setRegistrations(list);
+      if (!silent) {
+        setRegistrationsState({ type: "success", message: "Jelentkezések betöltve." });
+      }
+    } catch (error) {
+      setRegistrationsState({ type: "error", message: error.message });
+    } finally {
+      setRegistrationsBusy(false);
+    }
+  };
+
+  const handleCreateRegistration = async (sportId) => {
+    if (!authUser?.email) {
+      navigate("/auth?mode=signin");
+      return;
+    }
+
+    if (registrationPending.has(sportId)) return;
+
+    markRegistrationPending(sportId);
+    setRegistrationsState({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(apiUrl("/registrations"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Email": authUser.email,
+        },
+        body: JSON.stringify({ sportId }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Sikertelen jelentkezés.");
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      setRegistrations((prev) => {
+        const next = prev.filter((item) => item.sportId !== sportId);
+        return [data, ...next];
+      });
+      setRegistrationsState({ type: "success", message: "Sikeres jelentkezés." });
+    } catch (error) {
+      setRegistrationsState({ type: "error", message: error.message });
+    } finally {
+      clearRegistrationPending(sportId);
+    }
+  };
+
+  const handleCancelRegistration = async (registration) => {
+    if (!authUser?.email || !registration?.id) return;
+
+    const sportId = registration.sportId;
+    if (registrationPending.has(sportId)) return;
+
+    markRegistrationPending(sportId);
+    setRegistrationsState({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(apiUrl(`/registrations/${registration.id}`), {
+        method: "DELETE",
+        headers: {
+          "X-User-Email": authUser.email,
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Sikertelen lemondás.");
+        throw new Error(errorMessage);
+      }
+
+      setRegistrations((prev) =>
+        prev.map((item) =>
+          item.id === registration.id ? { ...item, status: "lemondva" } : item
+        )
+      );
+      setRegistrationsState({ type: "success", message: "Jelentkezés lemondva." });
+    } catch (error) {
+      setRegistrationsState({ type: "error", message: error.message });
+    } finally {
+      clearRegistrationPending(sportId);
     }
   };
 
@@ -481,6 +643,38 @@ function App() {
     }
   };
 
+  const loadAdminRegistrations = async () => {
+    if (!isAdmin || adminRegistrationsBusy) return;
+
+    setAdminRegistrationsBusy(true);
+    setAdminRegistrationsState({ type: "idle", message: "" });
+
+    try {
+      const headers = authUser?.email ? { "X-Admin-Email": authUser.email } : undefined;
+      const response = await fetch(apiUrl("/admin/registrations"), { headers });
+      if (!response.ok) {
+        const errorMessage = await readErrorMessage(
+          response,
+          "Nem sikerålt betölteni a jelentkezéseket."
+        );
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      const list = Array.isArray(data)
+        ? data
+        : Array.isArray(data.registrations)
+          ? data.registrations
+          : [];
+      setAdminRegistrations(list);
+      setAdminRegistrationsState({ type: "success", message: "Jelentkezések betöltve." });
+    } catch (error) {
+      setAdminRegistrationsState({ type: "error", message: error.message });
+    } finally {
+      setAdminRegistrationsBusy(false);
+    }
+  };
+
   const switchAuthMode = (mode) => {
     navigate(`/auth?mode=${mode}`);
   };
@@ -607,6 +801,10 @@ function App() {
           compareIds={compareIds}
           onToggleFavorite={toggleFavorite}
           onToggleCompare={toggleCompare}
+          registrationBySportId={registrationBySportId}
+          registrationPending={registrationPending}
+          onCreateRegistration={handleCreateRegistration}
+          onCancelRegistration={handleCancelRegistration}
           initialQuery={location.state?.searchQuery ?? query}
           initialPreset={location.state?.presetFilters ?? null}
         />
@@ -643,6 +841,12 @@ function App() {
           favoriteCount={favorites.length}
           isAdmin={isAdmin}
           onSignOut={handleSignOut}
+          registrations={registrations}
+          registrationsState={registrationsState}
+          registrationsBusy={registrationsBusy}
+          registrationPending={registrationPending}
+          onRefreshRegistrations={loadRegistrations}
+          onCancelRegistration={handleCancelRegistration}
         />
       </>
     );
@@ -712,12 +916,16 @@ function App() {
         adminUsers={adminUsers}
         adminUsersState={adminUsersState}
         adminUsersBusy={adminUsersBusy}
+        adminRegistrations={adminRegistrations}
+        adminRegistrationsState={adminRegistrationsState}
+        adminRegistrationsBusy={adminRegistrationsBusy}
         onFormChange={setForm}
         onSubmit={handleSubmit}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onResetForm={resetForm}
         onLoadAdminUsers={loadAdminUsers}
+        onLoadAdminRegistrations={loadAdminRegistrations}
       />
     );
   }

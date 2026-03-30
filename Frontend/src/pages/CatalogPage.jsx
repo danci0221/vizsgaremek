@@ -21,6 +21,10 @@ export default function CatalogPage({
   compareIds,
   onToggleFavorite,
   onToggleCompare,
+  registrationBySportId,
+  registrationPending,
+  onCreateRegistration,
+  onCancelRegistration,
   initialQuery = "",
   initialPreset = null,
 }) {
@@ -122,6 +126,10 @@ export default function CatalogPage({
         uniqueCategories={uniqueCategories}
         authUser={authUser}
         favoriteSet={favoriteSet}
+        registrationBySportId={registrationBySportId}
+        registrationPending={registrationPending}
+        onCreateRegistration={onCreateRegistration}
+        onCancelRegistration={onCancelRegistration}
         compareIds={compareIds}
         onToggleFavorite={onToggleFavorite}
         onToggleCompare={onToggleCompare}

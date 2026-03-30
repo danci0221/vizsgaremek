@@ -17,7 +17,37 @@ function formatRegisteredAt(value) {
   });
 }
 
-export default function ProfilePage({ authUser, favoriteCount, isAdmin, onSignOut }) {
+function formatRegistrationStatus(status) {
+  return status === "lemondva" ? "Lemondva" : "Aktív";
+}
+
+function formatRegistrationDate(value) {
+  if (!value) return "Nincs adat";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Nincs adat";
+
+  return date.toLocaleString("hu-HU", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function ProfilePage({
+  authUser,
+  favoriteCount,
+  isAdmin,
+  onSignOut,
+  registrations = [],
+  registrationsState = { type: "idle", message: "" },
+  registrationsBusy = false,
+  registrationPending = new Set(),
+  onRefreshRegistrations,
+  onCancelRegistration,
+}) {
   return (
     <section className="profile-page">
       <div className="section-heading">
@@ -66,6 +96,79 @@ export default function ProfilePage({ authUser, favoriteCount, isAdmin, onSignOu
             <button type="button" className="ghost danger-outline" onClick={onSignOut}>
               Kijelentkezés
             </button>
+          </div>
+        </article>
+
+        <article className="profile-panel profile-registrations">
+          <div className="profile-section-head">
+            <div>
+              <p className="eyebrow">Jelentkezések</p>
+              <h3>Saját sportesemény regisztrációk</h3>
+            </div>
+            <button
+              type="button"
+              className="ghost"
+              disabled={registrationsBusy}
+              onClick={() => onRefreshRegistrations?.()}
+            >
+              {registrationsBusy ? "Betöltés..." : "Frissítés"}
+            </button>
+          </div>
+
+          {registrationsState.type !== "idle" && (
+            <p className={`status ${registrationsState.type}`}>{registrationsState.message}</p>
+          )}
+
+          <div className="registration-grid">
+            {registrations.length > 0 ? (
+              registrations.map((registration) => {
+                const isCancelled = registration.status === "lemondva";
+                const isPending = registrationPending?.has
+                  ? registrationPending.has(registration.sportId)
+                  : false;
+
+                return (
+                  <article key={registration.id} className="registration-card">
+                    <div className="registration-head">
+                      <h4>{registration.sportName}</h4>
+                      <span
+                        className={`registration-status ${
+                          isCancelled ? "cancelled" : "active"
+                        }`}
+                      >
+                        {formatRegistrationStatus(registration.status)}
+                      </span>
+                    </div>
+                    <p className="card-meta">
+                      {registration.sportType} - {registration.location}
+                    </p>
+                    <p className="card-meta muted">{registration.address}</p>
+                    <p className="card-meta">
+                      Jelentkezés: {formatRegistrationDate(registration.registeredAt)}
+                    </p>
+                    <p className="card-meta">Ár: {registration.priceLabel}</p>
+                    {!isCancelled && (
+                      <div className="registration-actions">
+                        <button
+                          type="button"
+                          className="danger-outline"
+                          disabled={isPending}
+                          onClick={() => onCancelRegistration?.(registration)}
+                        >
+                          {isPending ? "Mentés..." : "Lemondás"}
+                        </button>
+                      </div>
+                    )}
+                  </article>
+                );
+              })
+            ) : (
+              <p className="muted-mini">
+                {registrationsBusy
+                  ? "Jelentkezések betöltése..."
+                  : "Még nincs egyetlen jelentkezésed sem."}
+              </p>
+            )}
           </div>
         </article>
 

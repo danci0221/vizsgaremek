@@ -50,6 +50,23 @@ function resolveOpeningHours(sport) {
   return sport.openingHours || scheduleFallbackBySlot[sport.timeSlot] || "H-P 08:00-20:00";
 }
 
+function formatRegistrationStatus(status) {
+  return status === "lemondva" ? "Lemondva" : "Aktív";
+}
+
+function formatRegistrationDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleString("hu-HU", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default function SportsGrid({
   sports,
   filters,
@@ -60,10 +77,14 @@ export default function SportsGrid({
   uniqueCategories,
   authUser,
   favoriteSet,
+  registrationBySportId,
+  registrationPending,
+  onCreateRegistration,
+  onCancelRegistration,
   onToggleFavorite,
 }) {
   const [selected, setSelected] = useState(null);
-  const canUseFavorites = Boolean(authUser);
+  const canUseAccountActions = Boolean(authUser);
 
   const updateFilter = (key, value) => {
     onFilterChange((prev) => ({ ...prev, [key]: value }));
@@ -141,7 +162,7 @@ export default function SportsGrid({
         </div>
 
         <div className="toggle-row">
-          {canUseFavorites ? (
+          {canUseAccountActions ? (
             <label className="switcher">
               <input
                 type="checkbox"
@@ -162,6 +183,25 @@ export default function SportsGrid({
           {sports.map((sport) => {
             const isFavorite = favoriteSet.has(sport.id);
             const cardImage = resolveSportImage(sport);
+            const registration = registrationBySportId?.[sport.id];
+            const isRegistered = registration?.status === "aktiv";
+            const isCancelled = registration?.status === "lemondva";
+            const isPending = registrationPending?.has
+              ? registrationPending.has(sport.id)
+              : false;
+            const registrationLabel = isPending
+              ? "Mentés..."
+              : isRegistered
+                ? "Lemondás"
+                : isCancelled
+                  ? "Lemondva"
+                  : "Jelentkezem";
+            const registrationClass = isRegistered
+              ? "danger-outline"
+              : isCancelled
+                ? "ghost"
+                : "cta";
+            const registrationDisabled = isPending || isCancelled;
 
             return (
               <article key={sport.id} className="card" onClick={() => setSelected(sport)}>
@@ -180,9 +220,18 @@ export default function SportsGrid({
                   <div className="card-footer">
                     <span className="slot-chip">{timeSlotLabels[sport.timeSlot]}</span>
                     <span className="score-chip">#{sport.recommendationScore}</span>
+                    {registration && (
+                      <span
+                        className={`registration-status ${
+                          isRegistered ? "active" : "cancelled"
+                        }`}
+                      >
+                        {formatRegistrationStatus(registration.status)}
+                      </span>
+                    )}
                   </div>
 
-                  {canUseFavorites && (
+                  {canUseAccountActions && (
                     <div className="card-actions" onClick={(e) => e.stopPropagation()}>
                       <button
                         type="button"
@@ -190,6 +239,20 @@ export default function SportsGrid({
                         onClick={() => onToggleFavorite(sport.id)}
                       >
                         {isFavorite ? "Kedvenc" : "Kedvencnek"}
+                      </button>
+                      <button
+                        type="button"
+                        className={registrationClass}
+                        disabled={registrationDisabled}
+                        onClick={() => {
+                          if (isRegistered) {
+                            onCancelRegistration?.(registration);
+                            return;
+                          }
+                          if (!isCancelled) onCreateRegistration?.(sport.id);
+                        }}
+                      >
+                        {registrationLabel}
                       </button>
                     </div>
                   )}
@@ -212,6 +275,19 @@ export default function SportsGrid({
             <img src={resolveSportImage(selected)} alt={selected.name} />
             <h2>{selected.name}</h2>
             <p>{selected.description}</p>
+            {(() => {
+              const registration = registrationBySportId?.[selected.id];
+              if (!registration) return null;
+              const statusClass = registration.status === "aktiv" ? "success" : "warning";
+              return (
+                <p className={`status ${statusClass}`}>
+                  Jelentkezés: {formatRegistrationStatus(registration.status)}
+                  {registration.registeredAt
+                    ? ` - ${formatRegistrationDate(registration.registeredAt)}`
+                    : ""}
+                </p>
+              );
+            })()}
             <ul>
               <li>
                 <strong>Sport:</strong> {selected.sportType}
@@ -238,9 +314,55 @@ export default function SportsGrid({
                 <strong>Elérhetőség:</strong> {selected.contact}
               </li>
             </ul>
-            <button className="cta" onClick={() => setSelected(null)}>
-              Bezárás
-            </button>
+            {authUser ? (
+              <div className="modal-actions">
+                {(() => {
+                  const registration = registrationBySportId?.[selected.id];
+                  const isRegistered = registration?.status === "aktiv";
+                  const isCancelled = registration?.status === "lemondva";
+                  const isPending = registrationPending?.has
+                    ? registrationPending.has(selected.id)
+                    : false;
+                  const registrationLabel = isPending
+                    ? "Mentés..."
+                    : isRegistered
+                      ? "Lemondás"
+                      : isCancelled
+                        ? "Lemondva"
+                        : "Jelentkezem";
+                  const registrationClass = isRegistered
+                    ? "danger-outline"
+                    : isCancelled
+                      ? "ghost"
+                      : "cta";
+                  const registrationDisabled = isPending || isCancelled;
+
+                  return (
+                    <button
+                      type="button"
+                      className={registrationClass}
+                      disabled={registrationDisabled}
+                      onClick={() => {
+                        if (isRegistered) {
+                          onCancelRegistration?.(registration);
+                          return;
+                        }
+                        if (!isCancelled) onCreateRegistration?.(selected.id);
+                      }}
+                    >
+                      {registrationLabel}
+                    </button>
+                  );
+                })()}
+                <button className="ghost" onClick={() => setSelected(null)}>
+                  Bezárás
+                </button>
+              </div>
+            ) : (
+              <button className="cta" onClick={() => setSelected(null)}>
+                Bezárás
+              </button>
+            )}
           </div>
         </div>
       )}

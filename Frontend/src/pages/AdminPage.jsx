@@ -1,5 +1,24 @@
 import { emptyForm } from "../constants";
 
+function formatRegistrationStatus(status) {
+  return status === "lemondva" ? "Lemondva" : "Aktív";
+}
+
+function formatRegistrationDate(value) {
+  if (!value) return "-";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+
+  return date.toLocaleString("hu-HU", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default function AdminPage({
   authUser,
   isAdmin,
@@ -10,12 +29,16 @@ export default function AdminPage({
   adminUsers,
   adminUsersState,
   adminUsersBusy,
+  adminRegistrations = [],
+  adminRegistrationsState = { type: "idle", message: "" },
+  adminRegistrationsBusy = false,
   onFormChange,
   onSubmit,
   onEdit,
   onDelete,
   onResetForm,
   onLoadAdminUsers,
+  onLoadAdminRegistrations,
 }) {
   return (
     <section className="admin" id="admin">
@@ -82,6 +105,64 @@ export default function AdminPage({
                 {adminUsersBusy
                   ? "Felhasználók betöltése..."
                   : "Nincs megjeleníthető felhasználói adat."}
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+      {isAdmin && (
+        <section className="admin-registrations">
+          <div className="admin-users-head">
+            <div>
+              <p className="eyebrow">Jelentkezések</p>
+              <h3>Sportesemény regisztrációk</h3>
+            </div>
+            <button
+              type="button"
+              className="ghost"
+              disabled={adminRegistrationsBusy}
+              onClick={onLoadAdminRegistrations}
+            >
+              {adminRegistrationsBusy ? "Frissítés..." : "Frissítés"}
+            </button>
+          </div>
+          {adminRegistrationsState.type !== "idle" && (
+            <p className={`status ${adminRegistrationsState.type}`}>
+              {adminRegistrationsState.message}
+            </p>
+          )}
+          <div className="registration-grid">
+            {adminRegistrations.length > 0 ? (
+              adminRegistrations.map((registration) => (
+                <article key={registration.id} className="registration-card">
+                  <div className="registration-head">
+                    <h4>{registration.sportName}</h4>
+                    <span
+                      className={`registration-status ${
+                        registration.status === "lemondva" ? "cancelled" : "active"
+                      }`}
+                    >
+                      {formatRegistrationStatus(registration.status)}
+                    </span>
+                  </div>
+                  <p className="card-meta">
+                    {registration.username} - {registration.email}
+                  </p>
+                  <p className="card-meta">
+                    {registration.sportType} - {registration.location}
+                  </p>
+                  <p className="card-meta muted">{registration.address}</p>
+                  <p className="card-meta">
+                    Jelentkezés: {formatRegistrationDate(registration.registeredAt)}
+                  </p>
+                  <p className="card-meta">Ár: {registration.priceLabel}</p>
+                </article>
+              ))
+            ) : (
+              <p className="admin-users-empty">
+                {adminRegistrationsBusy
+                  ? "Jelentkezések betöltése..."
+                  : "Nincs megjeleníthető jelentkezés."}
               </p>
             )}
           </div>
