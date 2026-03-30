@@ -30,7 +30,7 @@ o	REST API
 o	MySQL / MariaDB
 ### •	Fejlesztést segítő eszközök:
 o	Git, GitHub
-o	VS Code / PHPStorm
+o	VS Code
 ## 4. A rendszer működésének áttekintése
 ### A felhasználó a főoldalon böngészhet a sportlehetőségek között. A kereső segítségével gyorsan szűkítheti a találatokat. A részletes adatlapra kattintva minden fontos információhoz hozzájut. A regisztrált felhasználók elmenthetik kedvenceiket, az admin pedig gondozza az adatokat az adminfelületen keresztül.
 ## 5. Összegzés
