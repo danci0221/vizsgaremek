@@ -1,10 +1,50 @@
 import { Link } from "react-router-dom";
 import { footerLinksBase } from "../constants";
 
-export default function Footer({ authUser, isAdmin, now }) {
+export default function Footer({ authUser, isAdmin, now, isHome = false }) {
   const footerLinks = isAdmin
     ? [...footerLinksBase, { to: "/admin", label: "Admin" }]
     : footerLinksBase;
+
+  if (isHome) {
+    return (
+      <footer className="sh-footer">
+        <div className="sh-footer-inner">
+          <div className="sh-footer-col">
+            <h5>Kiemelt Programok</h5>
+            <Link to="/kinalat">Kínálat</Link>
+            <Link to="/programterv">Programterv</Link>
+            <Link to="/kedvencek">Kedvenceim</Link>
+          </div>
+
+          <div className="sh-footer-col">
+            <h5>Média</h5>
+            <Link to="/tippek">SportHub beszámolók</Link>
+            <Link to="/tippek">Heti podcast</Link>
+            <Link to="/tippek">Legújabb videó</Link>
+          </div>
+
+          <div className="sh-footer-col">
+            <h5>Oldaltérkép</h5>
+            {footerLinks.map((item) => (
+              <Link key={item.to} to={item.to}>
+                {item.label}
+              </Link>
+            ))}
+            {authUser ? <Link to="/fiok">Profilom</Link> : <Link to="/auth?mode=signup">Regisztráció</Link>}
+          </div>
+
+          <div className="sh-footer-col">
+            <h5>Jogi Információk</h5>
+            <Link to="/">Adatkezelési tájékoztató</Link>
+            <Link to="/">Felhasználási feltételek</Link>
+            <Link to="/">Visszatérítési szabályzat</Link>
+            <p className="sh-footer-note">SportHub {now.getFullYear()} - Minden jog fenntartva</p>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="site-footer">
@@ -15,14 +55,15 @@ export default function Footer({ authUser, isAdmin, now }) {
             <span className="logo-text">SportHub</span>
           </Link>
           <p className="footer-note">
-            Tervezd meg a hetedet, tartsd egyben a kedvenceket, és mozogj tudatosan.
+            Egy hely, ahol a kínálat, a térkép és a programterv egységes sportélménnyé áll össze.
           </p>
           <div className="footer-badges">
-            <span>Sport radar</span>
+            <span>Élő feed</span>
             <span>Élő szűrők</span>
-            <span>Programterv</span>
+            <span>Heti terv</span>
           </div>
         </div>
+
         <div className="footer-links">
           <p className="eyebrow">Navigáció</p>
           <div className="footer-link-grid">
@@ -33,15 +74,16 @@ export default function Footer({ authUser, isAdmin, now }) {
             ))}
           </div>
         </div>
+
         <div className="footer-cta">
           {!authUser ? (
             <>
               <p className="eyebrow">Kezdés</p>
-              <h3>Építs új ritmust a SportHubbal</h3>
-              <p>Reális tervek, közeli helyszínek és gyors választás egy felületen.</p>
+              <h3>Csatlakozz a SportHub közösségéhez</h3>
+              <p>Regisztráció után mentés, tervezés és gyors jelentkezés egy fiókban.</p>
               <div className="footer-actions">
                 <Link to="/auth?mode=signup" className="cta">
-                  Fiók létrehozása
+                  Csatlakozom
                 </Link>
                 <Link to="/tippek" className="ghost">
                   Tippek
@@ -50,9 +92,9 @@ export default function Footer({ authUser, isAdmin, now }) {
             </>
           ) : (
             <>
-              <p className="eyebrow">Üdv újra</p>
+              <p className="eyebrow">Örülünk, hogy itt vagy</p>
               <h3>{authUser.username || "SportHub tag"}</h3>
-              <p>Pár gyors lépés, és már indulhat is a heti ritmusod.</p>
+              <p>Minden készen áll, hogy magabiztosan folytasd a heti sportritmusod.</p>
               <div className="footer-actions">
                 <Link to="/fiok" className="cta">
                   Fiókom
@@ -62,7 +104,7 @@ export default function Footer({ authUser, isAdmin, now }) {
                 </Link>
                 {isAdmin && (
                   <Link to="/admin" className="ghost">
-                    Admin felület
+                    Admin
                   </Link>
                 )}
               </div>
@@ -70,6 +112,7 @@ export default function Footer({ authUser, isAdmin, now }) {
           )}
         </div>
       </div>
+
       <div className="footer-legal">
         <p>SportHub {now.getFullYear()} - Minden jog fenntartva.</p>
         <p>Kapcsolat: hello@sporthub.hu</p>

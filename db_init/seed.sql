@@ -1,5 +1,5 @@
-SET NAMES utf8mb4;
-SET CHARACTER SET utf8mb4;
+SET NAMES utf8 COLLATE utf8_hungarian_ci;
+SET CHARACTER SET utf8;
 
 INSERT IGNORE INTO kategoria (nev) VALUES
   ('Edzőterem'),

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-export default function Header({ authUser, onSignOut }) {
+export default function Header({ authUser, onSignOut, isHome = false }) {
   const isAdmin = authUser?.role === "admin";
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+
   const navItems = [
     { to: "/", label: "Főoldal" },
     { to: "/kinalat", label: "Kínálat" },
@@ -27,6 +28,7 @@ export default function Header({ authUser, onSignOut }) {
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
@@ -39,13 +41,13 @@ export default function Header({ authUser, onSignOut }) {
     .toUpperCase();
 
   return (
-    <header className="header">
+    <header className={`header ${isHome ? "header--hub" : ""}`}>
       <div className="header-left">
         <Link to="/" className="logo">
           <span className="logo-mark">SH</span>
           <span className="logo-text">SportHub</span>
         </Link>
-        <span className="live-pill">Sport radar</span>
+        <span className="live-pill">{isHome ? "Elit sporthálózat" : "Sport radar"}</span>
       </div>
 
       <nav>
@@ -75,33 +77,17 @@ export default function Header({ authUser, onSignOut }) {
             </button>
             {menuOpen && (
               <div className="user-dropdown">
-                <NavLink
-                  to="/fiok"
-                  className="user-item"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink to="/fiok" className="user-item" onClick={() => setMenuOpen(false)}>
                   Fiókom
                 </NavLink>
-                <NavLink
-                  to="/kedvencek"
-                  className="user-item"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink to="/kedvencek" className="user-item" onClick={() => setMenuOpen(false)}>
                   Kedvencek
                 </NavLink>
-                <NavLink
-                  to="/programterv"
-                  className="user-item"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink to="/programterv" className="user-item" onClick={() => setMenuOpen(false)}>
                   Programterv
                 </NavLink>
                 {isAdmin && (
-                  <NavLink
-                    to="/admin"
-                    className="user-item"
-                    onClick={() => setMenuOpen(false)}
-                  >
+                  <NavLink to="/admin" className="user-item" onClick={() => setMenuOpen(false)}>
                     Admin
                   </NavLink>
                 )}

@@ -28,7 +28,7 @@ const pool = mysql.createPool({
   connectTimeout: DB_CONNECT_TIMEOUT_MS,
   timezone: "Z",
   dateStrings: true,
-  charset: "utf8mb4",
+  charset: "utf8_hungarian_ci",
 });
 
 function sleep(ms) {
@@ -149,7 +149,7 @@ async function ensureBaseTables() {
       szerepkor ENUM('user', 'admin') NOT NULL DEFAULT 'user',
       regisztracio_datum DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       utolso_modositas DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -164,21 +164,21 @@ async function ensureBaseTables() {
       CONSTRAINT fk_bejelentkezes_felhasznalo
         FOREIGN KEY (felhasznalo_id) REFERENCES felhasznalo (id)
         ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
     CREATE TABLE IF NOT EXISTS kategoria (
       id INT PRIMARY KEY AUTO_INCREMENT,
       nev VARCHAR(50) NOT NULL UNIQUE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
     CREATE TABLE IF NOT EXISTS sportag (
       id INT PRIMARY KEY AUTO_INCREMENT,
       nev VARCHAR(100) NOT NULL UNIQUE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -189,7 +189,7 @@ async function ensureBaseTables() {
       lat DECIMAL(10, 7) NULL,
       lng DECIMAL(10, 7) NULL,
       UNIQUE KEY uq_helyszin_varos_cim (varos, cim)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -199,7 +199,7 @@ async function ensureBaseTables() {
       telefon VARCHAR(30),
       email VARCHAR(150),
       weboldal VARCHAR(255)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -241,7 +241,7 @@ async function ensureBaseTables() {
       CONSTRAINT fk_sportlehetosegek_letrehozo
         FOREIGN KEY (letrehozo_felhasznalo_id) REFERENCES felhasznalo (id)
         ON DELETE SET NULL ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -259,7 +259,7 @@ async function ensureBaseTables() {
       CONSTRAINT fk_jelentkezes_sportlehetoseg
         FOREIGN KEY (sportlehetoseg_id) REFERENCES sportlehetosegek (id)
         ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 
   await execute(`
@@ -275,7 +275,7 @@ async function ensureBaseTables() {
       CONSTRAINT fk_kedvenc_sportlehetoseg
         FOREIGN KEY (sportlehetoseg_id) REFERENCES sportlehetosegek (id)
         ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_hungarian_ci
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci
   `);
 }
 
