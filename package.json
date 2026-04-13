@@ -9,6 +9,7 @@
     "docker:db:up": "docker compose -f docker-compose.yml up -d db phpmyadmin",
     "docker:db:down": "docker compose -f docker-compose.yml down",
     "docker:db:reset": "docker compose -f docker-compose.yml down -v",
-    "docker:db:logs": "docker compose -f docker-compose.yml logs -f db"
+    "docker:db:logs": "docker compose -f docker-compose.yml logs -f db",
+    "test": "cd backend && npm test"
   }
 }

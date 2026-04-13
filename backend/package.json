@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "vitest"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -12,5 +13,10 @@
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-globals": "^0.1.7",
+    "vitest": "^4.1.4"
   }
 }

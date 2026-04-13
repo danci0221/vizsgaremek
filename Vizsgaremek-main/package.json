@@ -1,0 +1,8 @@
+{
+  "name": "mozi-projekt-docker",
+  "version": "1.0.0",
+  "description": "Fő indító script a Dockerhez",
+  "scripts": {
+    "start": "node indito.js"
+  }
+}
