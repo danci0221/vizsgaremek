@@ -88,6 +88,24 @@ export const tipsCards = [
     image:
       "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1200&q=80",
   },
+  {
+    title: "Táplálkozás az erőért",
+    text: "Egyél kiegyensúlyozottan: fehérje, szénhidrát és zsír aránya segít a teljesítményben.",
+    image:
+      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    title: "Mentális wellness",
+    text: "Figyelj a stresszre és a motivációra. Rövid meditáció vagy vizualizáció segíthet.",
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    title: "Technika fejlesztése",
+    text: "Fókuszálj a helyes formára. Lassú ismétlések és videók segítenek javítani.",
+    image:
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80",
+  },
 ];
 
 export const prepTips = [
@@ -95,6 +113,10 @@ export const prepTips = [
   "Az első 10 perc legyen könnyebb tempó.",
   "Ellenőrizd cipő, víz, törölköző.",
   "Hetente legalább 1 teljes pihenő.",
+  "Egyél edzés előtt 1-2 órával.",
+  "Figyelj az időjárásra és ruházatra.",
+  "Melegítsd fel az izmokat nyújtással.",
+  "Állítsd be a célokat az edzésre.",
 ];
 
 export const recoveryTips = [
@@ -102,6 +124,64 @@ export const recoveryTips = [
   "Napi 7-8 óra alvás szinte kötelező.",
   "Magas intenzitás után másnap könnyű mozgás.",
   "Fehérje + szénhidrát + víz legyen meg.",
+  "Nyújtás segít az izomlazításban.",
+  "Használj jég vagy meleg pakolást sérülés esetén.",
+  "Figyelj a test jeleire, ne erőltesd.",
+  "Pihenj, ha fáradt vagy.",
+];
+
+export const nutritionTips = [
+  "Egyél fehérjét minden étkezéskor az izomépítéshez.",
+  "Szénhidrátok adják az energiát, de mértékkel.",
+  "Zöldségek és gyümölcsök a vitaminokért.",
+  "Hidratálj rendszeresen, ne csak edzéskor.",
+  "Kerüld a feldolgozott ételeket.",
+  "Tervezd meg az étkezéseket előre.",
+];
+
+export const mentalTips = [
+  "Állíts be reális célokat.",
+  "Motiváld magad pozitív gondolatokkal.",
+  "Kerüld az összehasonlítást másokkal.",
+  "Ünnepeld a kis sikereket.",
+  "Használj vizualizációt a teljesítményhez.",
+  "Kérj támogatást, ha szükséges.",
+];
+
+export const randomTips = [
+  "Egyél banánt edzés előtt energiaért!",
+  "Próbáld ki a HIIT-et rövid idő alatt.",
+  "Figyelj a légzésedre minden mozdulatnál.",
+  "Változtasd meg a rutint hetente egyszer.",
+  "Mosolyogj edzés közben - jobb lesz a hangulat!",
+  "Hallgass zenét, ami motivál.",
+  "Jegyezd fel az edzéseidet egy naplóba.",
+  "Kérdezd meg a tested: mit szeretnél ma csinálni?",
+];
+
+export const motivationalQuotes = [
+  "\"A siker nem végleges, a kudarc nem végzetes: a folytatás bátorsága számít.\" - Winston Churchill",
+  "\"Ne várj a tökéletes pillanatra, tedd meg most.\"",
+  "\"Minden nagy utazás egyetlen lépéssel kezdődik.\" - Lao Tzu",
+  "\"Az edzés nem büntetés, jutalom.\"",
+];
+
+export const quizQuestions = [
+  {
+    question: "Mi a legjobb időpont az edzés előtt enni?",
+    options: ["Pontosan edzés előtt", "1-2 órával előtte", "Edzés után azonnal", "Nem számít"],
+    correct: 1,
+  },
+  {
+    question: "Hány óra alvás ajánlott sportolóknak?",
+    options: ["4-5 óra", "6-7 óra", "7-9 óra", "10+ óra"],
+    correct: 2,
+  },
+  {
+    question: "Mi segít a leggyorsabban a regenerációban?",
+    options: ["Forró fürdő", "Aktív pihenés és nyújtás", "Teljes mozdulatlanság", "Több edzés"],
+    correct: 1,
+  },
 ];
 
 export const momentumItems = [

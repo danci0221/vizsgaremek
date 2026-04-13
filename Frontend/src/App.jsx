@@ -988,7 +988,7 @@ function App() {
 
   return (
     <div className={`page-shell ${isHomeRoute ? "page-shell--sporthub-home" : ""}`}>
-      <Header authUser={authUser} onSignOut={handleSignOut} isHome={isHomeRoute} />
+      <Header authUser={authUser} onSignOut={handleSignOut} />
       <main className="route-shell" key={location.pathname}>
         {content}
       </main>

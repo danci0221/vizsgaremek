@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-export default function Header({ authUser, onSignOut, isHome = false }) {
+export default function Header({ authUser, onSignOut }) {
   const isAdmin = authUser?.role === "admin";
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -41,13 +41,13 @@ export default function Header({ authUser, onSignOut, isHome = false }) {
     .toUpperCase();
 
   return (
-    <header className={`header ${isHome ? "header--hub" : ""}`}>
+    <header className="header header--hub">
       <div className="header-left">
         <Link to="/" className="logo">
           <span className="logo-mark">SH</span>
           <span className="logo-text">SportHub</span>
         </Link>
-        <span className="live-pill">{isHome ? "Elit sporthálózat" : "Sport radar"}</span>
+        <span className="live-pill">Elit sporthálózat</span>
       </div>
 
       <nav>
@@ -118,3 +118,4 @@ export default function Header({ authUser, onSignOut, isHome = false }) {
     </header>
   );
 }
+
