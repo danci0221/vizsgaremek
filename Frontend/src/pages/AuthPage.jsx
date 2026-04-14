@@ -15,10 +15,10 @@ export default function AuthPage({
   onSignInFormChange,
 }) {
   return (
-    <section className="auth">
+    <section className="auth" data-testid="auth-page">
       <div className="section-heading">
         <p className="eyebrow">Fiókkezelés</p>
-        <h2>
+        <h2 data-testid="auth-heading">
           {authMode === "signup" ? "Hozz létre új fiókot" : "Jelentkezz be a fiókodba"}
         </h2>
         <p className="auth-sub">
@@ -31,6 +31,7 @@ export default function AuthPage({
           <button
             type="button"
             className={authMode === "signup" ? "active" : ""}
+            data-testid="auth-signup-tab"
             onClick={() => onSwitchMode("signup")}
           >
             Regisztráció
@@ -38,6 +39,7 @@ export default function AuthPage({
           <button
             type="button"
             className={authMode === "signin" ? "active" : ""}
+            data-testid="auth-signin-tab"
             onClick={() => onSwitchMode("signin")}
           >
             Bejelentkezés
@@ -47,7 +49,7 @@ export default function AuthPage({
         {authState.type !== "idle" && <p className={`status ${authState.type}`}>{authState.message}</p>}
 
         {authMode === "signup" ? (
-          <form className="auth-form" onSubmit={onSignUp}>
+          <form className="auth-form" data-testid="auth-signup-form" onSubmit={onSignUp}>
             <label>
               Felhasználónév
               <input
@@ -137,7 +139,7 @@ export default function AuthPage({
             </button>
           </form>
         ) : (
-          <form className="auth-form" onSubmit={onSignIn}>
+          <form className="auth-form" data-testid="auth-signin-form" onSubmit={onSignIn}>
             <label>
               Felhasználónév vagy email
               <input

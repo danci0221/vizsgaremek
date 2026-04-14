@@ -31,19 +31,21 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
   };
 
   return (
-    <section className="planner">
+    <section className="planner" data-testid="planner-page">
       <div className="section-heading">
         <p className="eyebrow">Programterv</p>
         <h2>Állíts össze heti sporttervet gyors presetekkel</h2>
       </div>
       <form
         className="planner-form"
+        data-testid="planner-form"
         onSubmit={(e) => {
           e.preventDefault();
           setPlannerSubmitted(true);
         }}
       >
         <select
+          data-testid="planner-type"
           value={planner.type}
           onChange={(e) => setPlanner((prev) => ({ ...prev, type: e.target.value }))}
         >
@@ -55,6 +57,7 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
           ))}
         </select>
         <select
+          data-testid="planner-location"
           value={planner.location}
           onChange={(e) => setPlanner((prev) => ({ ...prev, location: e.target.value }))}
         >
@@ -66,6 +69,7 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
           ))}
         </select>
         <select
+          data-testid="planner-time-slot"
           value={planner.timeSlot}
           onChange={(e) => setPlanner((prev) => ({ ...prev, timeSlot: e.target.value }))}
         >
@@ -77,6 +81,7 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
           ))}
         </select>
         <select
+          data-testid="planner-budget"
           value={planner.budget}
           onChange={(e) => setPlanner((prev) => ({ ...prev, budget: e.target.value }))}
         >
@@ -85,15 +90,15 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
           <option value="budget">Kedvező (0-5000)</option>
           <option value="premium">Prémium (5000+)</option>
         </select>
-        <button type="submit" className="dark-btn">
+        <button type="submit" className="dark-btn" data-testid="planner-submit">
           Terv generálása
         </button>
       </form>
       {plannerSubmitted && (
-        <div className="planner-results">
+        <div className="planner-results" data-testid="planner-results">
           {plannerResults.length > 0 ? (
             plannerResults.map((item) => (
-              <article key={item.id}>
+              <article key={item.id} data-testid="planner-result-card">
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
                 <p>

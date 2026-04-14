@@ -99,7 +99,7 @@ export default function CatalogPage({
 
   return (
     <>
-      <section className="catalog-head">
+      <section className="catalog-head" data-testid="catalog-page">
         <div className="section-heading">
           <p className="eyebrow">Kínálat</p>
           <h2>Sporthelyek eseményekkel és gyors szűrőkkel</h2>
@@ -107,11 +107,17 @@ export default function CatalogPage({
         <div className="catalog-toolbar">
           <input
             type="search"
+            data-testid="catalog-search-input"
             placeholder="Keresés név, sporttípus vagy város alapján"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <button type="button" className="ghost" onClick={() => setQuery("")}>
+          <button
+            type="button"
+            className="ghost"
+            data-testid="catalog-clear-search"
+            onClick={() => setQuery("")}
+          >
             Keresés törlése
           </button>
         </div>

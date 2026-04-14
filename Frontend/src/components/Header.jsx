@@ -5,6 +5,13 @@ export default function Header({ authUser, onSignOut }) {
   const isAdmin = authUser?.role === "admin";
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const navTestIds = {
+    "/": "nav-link-home",
+    "/kinalat": "nav-link-catalog",
+    "/tippek": "nav-link-tips",
+    "/programterv": "nav-link-planner",
+    "/terkep": "nav-link-map",
+  };
 
   const navItems = [
     { to: "/", label: "Főoldal" },
@@ -43,7 +50,7 @@ export default function Header({ authUser, onSignOut }) {
   return (
     <header className="header header--hub">
       <div className="header-left">
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" data-testid="header-logo">
           <span className="logo-mark">SH</span>
           <span className="logo-text">SportHub</span>
         </Link>
@@ -56,6 +63,7 @@ export default function Header({ authUser, onSignOut }) {
             key={item.to}
             to={item.to}
             end={item.to === "/"}
+            data-testid={navTestIds[item.to]}
             className={({ isActive }) => (isActive ? "active" : "")}
           >
             {item.label}
@@ -106,10 +114,10 @@ export default function Header({ authUser, onSignOut }) {
           </div>
         ) : (
           <>
-            <NavLink to="/auth?mode=signup" className="ghost">
+            <NavLink to="/auth?mode=signup" className="ghost" data-testid="header-signup-link">
               Regisztráció
             </NavLink>
-            <NavLink to="/auth?mode=signin" className="cta">
+            <NavLink to="/auth?mode=signin" className="cta" data-testid="header-signin-link">
               Bejelentkezés
             </NavLink>
           </>

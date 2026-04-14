@@ -289,7 +289,7 @@ export default function MapPage({ sports, mapFocusId, onFocusItem }) {
   }, [filteredMarkers, focusMarker, mapFocusId]);
 
   return (
-    <section className="map-section surface-panel">
+    <section className="map-section surface-panel" data-testid="map-page">
       <div className="section-heading">
         <p className="eyebrow">Térkép</p>
         <h2>Sporthelyek térképes nézetben</h2>
@@ -302,6 +302,7 @@ export default function MapPage({ sports, mapFocusId, onFocusItem }) {
         <div className="map-type-filters">
           <button
             type="button"
+            data-testid="map-filter-all"
             className={`map-filter-chip ${selectedType === "all" ? "active" : ""}`}
             onClick={() => setSelectedType("all")}
           >
@@ -321,7 +322,11 @@ export default function MapPage({ sports, mapFocusId, onFocusItem }) {
 
         <label className="map-city-filter">
           Város
-          <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+          <select
+            data-testid="map-city-select"
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+          >
             <option value="all">Összes város</option>
             {cities.map((city) => (
               <option key={city} value={city}>
@@ -335,11 +340,13 @@ export default function MapPage({ sports, mapFocusId, onFocusItem }) {
       <div className="map-layout">
         <div className="map-canvas" aria-label="Magyarország sporthely térképe" ref={mapContainerRef} id="sporthub-map" />
 
-        <aside className="map-list">
+        <aside className="map-list" data-testid="map-list">
           {sortedMarkers.length > 0 ? (
             sortedMarkers.map((marker) => (
               <article
                 key={marker.id}
+                data-testid="map-list-item"
+                data-city={marker.city}
                 className={`map-item ${mapFocusId === marker.id ? "active" : ""}`}
                 onClick={() => focusMarker(marker.id)}
               >

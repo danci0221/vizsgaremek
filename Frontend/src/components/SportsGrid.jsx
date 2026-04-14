@@ -92,14 +92,18 @@ export default function SportsGrid({
 
   return (
     <>
-      <section className="sports" id="sports">
+      <section className="sports" id="sports" data-testid="sports-grid-section">
         <div className="section-heading">
           <p className="eyebrow">Keresés és szűrés</p>
           <h2>Sporthelyek és események</h2>
         </div>
 
         <div className="filters">
-          <select value={filters.type} onChange={(e) => updateFilter("type", e.target.value)}>
+          <select
+            data-testid="filter-type"
+            value={filters.type}
+            onChange={(e) => updateFilter("type", e.target.value)}
+          >
             <option value="all">Minden sporttípus</option>
             {uniqueTypes.map((type) => (
               <option key={type} value={type}>
@@ -109,6 +113,7 @@ export default function SportsGrid({
           </select>
 
           <select
+            data-testid="filter-location"
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
           >
@@ -121,6 +126,7 @@ export default function SportsGrid({
           </select>
 
           <select
+            data-testid="filter-category"
             value={filters.category}
             onChange={(e) => updateFilter("category", e.target.value)}
           >
@@ -133,6 +139,7 @@ export default function SportsGrid({
           </select>
 
           <select
+            data-testid="filter-time-slot"
             value={filters.timeSlot}
             onChange={(e) => updateFilter("timeSlot", e.target.value)}
           >
@@ -144,7 +151,11 @@ export default function SportsGrid({
             ))}
           </select>
 
-          <select value={filters.price} onChange={(e) => updateFilter("price", e.target.value)}>
+          <select
+            data-testid="filter-price"
+            value={filters.price}
+            onChange={(e) => updateFilter("price", e.target.value)}
+          >
             {Object.entries(priceLabels).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -152,7 +163,11 @@ export default function SportsGrid({
             ))}
           </select>
 
-          <select value={filters.sort} onChange={(e) => updateFilter("sort", e.target.value)}>
+          <select
+            data-testid="filter-sort"
+            value={filters.sort}
+            onChange={(e) => updateFilter("sort", e.target.value)}
+          >
             {Object.entries(sortLabels).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -174,12 +189,17 @@ export default function SportsGrid({
           ) : (
             <span />
           )}
-          <button type="button" className="ghost" onClick={onClearFilters}>
+          <button
+            type="button"
+            className="ghost"
+            data-testid="clear-filters"
+            onClick={onClearFilters}
+          >
             Szűrők nullázása
           </button>
         </div>
 
-        <div className="grid">
+        <div className="grid" data-testid="sports-grid">
           {sports.map((sport) => {
             const isFavorite = favoriteSet.has(sport.id);
             const cardImage = resolveSportImage(sport);
@@ -204,7 +224,13 @@ export default function SportsGrid({
             const registrationDisabled = isPending || isCancelled;
 
             return (
-              <article key={sport.id} className="card" onClick={() => setSelected(sport)}>
+              <article
+                key={sport.id}
+                className="card"
+                data-testid="sport-card"
+                data-sport-name={sport.name}
+                onClick={() => setSelected(sport)}
+              >
                 <img src={cardImage} alt={sport.name} />
                 <div className="card-content">
                   <p className="chip">{sport.category}</p>

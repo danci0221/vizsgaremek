@@ -115,3 +115,17 @@ npm run docker:db:up
 # Backend tesztek (backend mappából)
 npm test
 ```
+
+**Frontend Selenium smoke tesztek:**
+
+```bash
+# Root könyvtárból
+npm run test:frontend:selenium
+
+# Vagy közvetlenül a Frontend mappából
+npm run test:selenium
+```
+
+Alapértelmezésben a Selenium runner elindít egy helyi Vite szervert `http://127.0.0.1:4173` címen, majd lefuttatja a főoldal, a kínálat és a védett útvonal átirányításának ellenőrzését. A böngésző és a futtatás módja a `SELENIUM_BROWSER`, `SELENIUM_HEADLESS` és `SELENIUM_START_SERVER` környezeti változókkal állítható.
+
+A tesztek külön fájlokra vannak bontva a `Frontend/tests/selenium` mappában, például `auth.test.js`, `nav.test.js`, `catalog.test.js`, `features.test.js` és `map.test.js`, így egyes suite-ok külön is futtathatók `node ./tests/selenium/<fajlnev>` formában.

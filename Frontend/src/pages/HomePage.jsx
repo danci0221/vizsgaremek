@@ -221,7 +221,7 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
   ];
 
   return (
-    <div className="sh-home">
+    <div className="sh-home" data-testid="home-page">
       <section className="sh-hero-splash">
         <div className="sh-hero-video-layer" aria-hidden="true">
           <video
@@ -255,6 +255,7 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
                 <button
                   type="button"
                   className="sh-button-primary"
+                  data-testid="home-primary-cta"
                   onClick={() => navigate("/kinalat")}
                 >
                   {heroVariant.cta}
@@ -262,6 +263,7 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
                 <button
                   type="button"
                   className="sh-button-secondary sh-hero-secondary"
+                  data-testid="home-map-cta"
                   onClick={() => navigate("/terkep")}
                 >
                   Megnézem a térképet

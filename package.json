@@ -10,6 +10,7 @@
     "docker:db:down": "docker compose -f docker-compose.yml down",
     "docker:db:reset": "docker compose -f docker-compose.yml down -v",
     "docker:db:logs": "docker compose -f docker-compose.yml logs -f db",
-    "test": "cd backend && npm test"
+    "test": "cd backend && npm test",
+    "test:frontend:selenium": "cd Frontend && npm run test:selenium"
   }
 }

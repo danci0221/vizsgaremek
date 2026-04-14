@@ -31,7 +31,7 @@ export default function TipsPage() {
 
   return (
     <>
-      <section className="tips-hero">
+      <section className="tips-hero" data-testid="tips-page">
         <div>
           <p className="eyebrow">Tippek és tanácsok</p>
           <h2>Edzz okosan: stabil forma, jobb fejlődés, kevesebb sérülés</h2>
@@ -54,10 +54,10 @@ export default function TipsPage() {
         <p style={{color: 'var(--ink-soft)'}}>Fedezd fel játékosan a sporttitkokat!</p>
       </section>
 
-      <section className="tips-random">
+      <section className="tips-random" data-testid="tips-random-section">
         <h3>🎲 Véletlen tipp generátor</h3>
-        <p>{randomTip}</p>
-        <button onClick={getRandomTip}>Új tipp!</button>
+        <p data-testid="tips-random-tip">{randomTip}</p>
+        <button onClick={getRandomTip} data-testid="tips-random-button">Új tipp!</button>
       </section>
 
       <section className="tips-quote">
@@ -117,9 +117,9 @@ export default function TipsPage() {
         </article>
       </section>
 
-      <section className="tips-quiz">
+      <section className="tips-quiz" data-testid="tips-quiz-section">
         <h3>🧠 Teszteld tudásod!</h3>
-        <p><strong>{quizQuestions[currentQuiz].question}</strong></p>
+        <p data-testid="tips-quiz-question"><strong>{quizQuestions[currentQuiz].question}</strong></p>
         {quizQuestions[currentQuiz].options.map((option, index) => (
           <button
             key={index}
@@ -145,7 +145,7 @@ export default function TipsPage() {
               : `❌ Helyes válasz: ${quizQuestions[currentQuiz].options[quizQuestions[currentQuiz].correct]}`}
           </p>
         )}
-        <button onClick={nextQuiz} style={{marginTop: '0.5rem'}}>Következő kérdés</button>
+        <button onClick={nextQuiz} data-testid="tips-next-quiz" style={{marginTop: '0.5rem'}}>Következő kérdés</button>
       </section>
     </>
   );
