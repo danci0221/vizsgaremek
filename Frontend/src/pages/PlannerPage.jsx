@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { timeSlotLabels, plannerDefaults } from "../constants";
 
-export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
+export default function PlannerPage({ sports, uniqueTypes, uniqueLocations, onOpenInCatalog }) {
   const [planner, setPlanner] = useState(plannerDefaults);
   const [plannerSubmitted, setPlannerSubmitted] = useState(false);
 
@@ -25,7 +25,12 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations }) {
   }, [sports, planner]);
 
   const openInCatalog = (item) => {
-    // Ezt az App-ből adja majd át a navigate függvény
+    if (typeof onOpenInCatalog === "function") {
+      onOpenInCatalog(item);
+      return;
+    }
+
+    // Visszafallaback, ha mégsem kapta meg a propot.
     const event = new CustomEvent("openInCatalog", { detail: item });
     window.dispatchEvent(event);
   };

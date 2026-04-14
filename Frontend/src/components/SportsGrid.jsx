@@ -209,7 +209,7 @@ export default function SportsGrid({
               : isRegistered
                 ? "Lemondás"
                 : "Jelentkezem";
-            const registrationClass = isRegistered ? "danger-outline" : "cta";
+            const registrationClass = isRegistered ? "danger-outline" : "ghost";
             const registrationDisabled = isPending;
 
             return (
@@ -337,7 +337,7 @@ export default function SportsGrid({
                     : isRegistered
                       ? "Lemondás"
                       : "Jelentkezem";
-                  const registrationClass = isRegistered ? "danger-outline" : "cta";
+                  const registrationClass = isRegistered ? "danger-outline" : "ghost";
                   const registrationDisabled = isPending;
 
                   return (

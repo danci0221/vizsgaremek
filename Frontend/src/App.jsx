@@ -536,8 +536,26 @@ function App() {
   };
 
   const openInCatalog = (item) => {
-    setQuery(item.name);
-    navigate("/kinalat");
+    setQuery(item.name || "");
+    navigate("/kinalat", {
+      state: {
+        searchQuery: item.name || "",
+        presetFilters: {
+          type: item.sportType || "all",
+          location: item.location || "all",
+          category: item.category || "all",
+          timeSlot: item.timeSlot || "all",
+          price:
+            item.price === 0
+              ? "free"
+              : item.price > 0 && item.price <= 5000
+                ? "budget"
+                : "premium",
+          sort: "recommended",
+          onlyFavorites: false,
+        },
+      },
+    });
   };
 
   const resetForm = () => {

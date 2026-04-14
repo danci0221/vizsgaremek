@@ -2070,6 +2070,9 @@ button:disabled::after {
 .challenge-grid article,
 .favorite-row article,
 .planner-results article {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   border-radius: var(--radius-md);
   border: 1px solid rgba(31, 109, 255, 0.2);
   background: linear-gradient(145deg, #ffffff, #f3f7ff);
@@ -2111,6 +2114,16 @@ button:disabled::after {
 .planner-results article p {
   margin-top: 0.45rem;
   color: var(--ink-soft);
+}
+
+.planner-results article {
+  min-height: 340px;
+  padding: 1.2rem;
+}
+
+.planner-results article button {
+  margin-top: auto;
+  align-self: flex-start;
 }
 
 .challenge-grid article button {
@@ -3358,7 +3371,7 @@ body:has(.page-shell--sporthub-home)::after {
   backdrop-filter: blur(12px);
   box-shadow: none;
   padding: 0.9rem clamp(0.9rem, 3vw, 2rem);
-  position: relative;
+  position: sticky;
 }
 
 .page-shell--sporthub-home .header--hub::after {
@@ -4641,6 +4654,10 @@ body:has(.page-shell--sporthub-home)::after {
 .page-shell:not(.page-shell--sporthub-home) .profile-card,
 .page-shell:not(.page-shell--sporthub-home) .admin-user-grid article,
 .page-shell:not(.page-shell--sporthub-home) .admin-list article {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
   border-radius: 16px;
   border: 1px solid rgba(24, 106, 199, 0.2);
   background: linear-gradient(155deg, #ffffff, #f0f7ff);
@@ -4704,7 +4721,15 @@ body:has(.page-shell--sporthub-home)::after {
 }
 
 .page-shell:not(.page-shell--sporthub-home) .planner-results article {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
   padding: 1rem;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .planner-results article button {
+  margin-top: auto;
 }
 
 .page-shell:not(.page-shell--sporthub-home) .map-section {

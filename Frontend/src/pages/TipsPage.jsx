@@ -2,21 +2,9 @@ import { useState } from "react";
 import { tipsCards, prepTips, recoveryTips, nutritionTips, mentalTips, randomTips, motivationalQuotes, quizQuestions } from "../constants";
 
 export default function TipsPage() {
-  const [randomTip, setRandomTip] = useState(randomTips[0]);
-  const [currentQuote, setCurrentQuote] = useState(motivationalQuotes[0]);
   const [currentQuiz, setCurrentQuiz] = useState(0);
   const [quizAnswered, setQuizAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-
-  const getRandomTip = () => {
-    const randomIndex = Math.floor(Math.random() * randomTips.length);
-    setRandomTip(randomTips[randomIndex]);
-  };
-
-  const getRandomQuote = () => {
-    const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
-    setCurrentQuote(motivationalQuotes[randomIndex]);
-  };
 
   const handleQuizAnswer = (index) => {
     setSelectedAnswer(index);
@@ -47,22 +35,6 @@ export default function TipsPage() {
           alt="Sporttippek"
           loading="lazy"
         />
-      </section>
-
-      <section style={{textAlign: 'center', margin: '1rem 0'}}>
-        <h2 style={{color: 'var(--brand)', fontFamily: 'Space Grotesk', marginBottom: '0.5rem'}}>🎯 Interaktív eszközök</h2>
-        <p style={{color: 'var(--ink-soft)'}}>Fedezd fel játékosan a sporttitkokat!</p>
-      </section>
-
-      <section className="tips-random" data-testid="tips-random-section">
-        <h3>🎲 Véletlen tipp generátor</h3>
-        <p data-testid="tips-random-tip">{randomTip}</p>
-        <button onClick={getRandomTip} data-testid="tips-random-button">Új tipp!</button>
-      </section>
-
-      <section className="tips-quote">
-        <p>{currentQuote}</p>
-        <button onClick={getRandomQuote} style={{marginTop: '0.5rem', fontSize: '0.8rem'}}>Új idézet</button>
       </section>
 
       <section className="tips-section">

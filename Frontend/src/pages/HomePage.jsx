@@ -375,27 +375,6 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
           </div>
         </section>
       ))}
-
-      <section className="sh-section sh-newsletter">
-        <div className="sh-shell sh-newsletter-inner">
-          <p className="sh-slide-title">HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ</p>
-          <h2>SPORTHUB HÍRLEVÉL</h2>
-          <p className="sh-newsletter-sub">A heti motivációd és versenyelőnyöd</p>
-          <form className="sh-newsletter-form" onSubmit={(event) => event.preventDefault()}>
-            <input type="email" required placeholder="Add meg az e-mail-címed" />
-            <button type="submit" className="sh-button-primary">
-              Feliratkozom
-            </button>
-          </form>
-          <div className="sh-newsletter-hint">
-            {authUser ? (
-              <span>Örülünk, hogy újra itt vagy, {authUser.username || "SportHub tag"}.</span>
-            ) : (
-              <Link to="/auth?mode=signup">Hozz létre fiókot a teljes hozzáféréshez</Link>
-            )}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
