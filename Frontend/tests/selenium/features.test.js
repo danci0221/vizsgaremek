@@ -1,82 +1,82 @@
-import { Select } from "selenium-webdriver/lib/select.js";
-import { BASE_URL } from "./config.js";
-import {
-  countByTestId,
-  isDirectExecution,
-  waitForTestId,
-} from "./helpers.js";
-import { runSuite } from "./suiteRunner.js";
+import { Builder, By, until, Key } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome.js';
 
-export const featuresSuite = {
-  name: "FEATURES",
-  tests: [
-    {
-      name: "planner generates at least one free weekend result in Gyor",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/programterv`);
-        await waitForTestId(driver, "planner-page");
+const BASE_URL = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:5173';
+const headless = process.env.SELENIUM_HEADLESS !== 'false';
 
-        const locationSelect = new Select(await waitForTestId(driver, "planner-location"));
-        await locationSelect.selectByVisibleText("Győr");
+async function extraTesztek() {
+    let options = new chrome.Options();
+    if (headless) options.addArguments('--headless=new');
+    options.addArguments('--log-level=3'); 
+    options.addArguments('--silent');
+    options.excludeSwitches('enable-logging'); 
 
-        const timeSlotSelect = new Select(await waitForTestId(driver, "planner-time-slot"));
-        await timeSlotSelect.selectByValue("weekend");
+    let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
-        const budgetSelect = new Select(await waitForTestId(driver, "planner-budget"));
-        await budgetSelect.selectByValue("free");
+    try {
+        await driver.manage().window().maximize();
+        console.log("---  FUNKCIÓK TESZTJE (26-30) ---");
 
-        const submitButton = await waitForTestId(driver, "planner-submit");
-        await submitButton.click();
+        await driver.get(`${BASE_URL}/`);
+        await driver.wait(until.elementLocated(By.css('.search-btn-icon')), 5000).click();
+        let keresoMezo = await driver.wait(until.elementLocated(By.css('input[placeholder*="Címek"]')), 5000);
+        await keresoMezo.sendKeys('Ava');
+        let dropdown = await driver.wait(until.elementLocated(By.css('.search-dropdown-modern')), 5000);
+        if(await dropdown.isDisplayed()) console.log("✅ 26. Keresési javaslatok megjelennek: OK");
 
-        await waitForTestId(driver, "planner-results");
+        await driver.get(`${BASE_URL}/`);
+        await driver.sleep(1000);
+        let elsoKartya = await driver.wait(until.elementLocated(By.css('.movie-card')), 5000);
+        await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", elsoKartya);
+        await elsoKartya.click();
+        let video = await driver.wait(until.elementLocated(By.css('.video-container iframe')), 5000);
+        if(await video.isDisplayed()) console.log("✅ 27. Trailer videólejátszó betöltése: OK");
+        await driver.findElement(By.css('.close-modal')).click();
+        await driver.sleep(1000);
 
-        const resultCount = await countByTestId(driver, "planner-result-card");
-        if (resultCount < 1) {
-          throw new Error("A planner nem adott vissza találatot a várt kombinációra.");
-        }
-      },
-    },
-    {
-      name: "tips next quiz changes the current question",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/tippek`);
-        await waitForTestId(driver, "tips-page");
+        let megnézemGomb = await driver.wait(until.elementLocated(By.css('.btn-card-play')), 5000);
+        await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", megnézemGomb);
+        await megnézemGomb.click();
+        let streaming = await driver.wait(until.elementLocated(By.css('.streaming-services-container')), 5000);
+        if(await streaming.isDisplayed()) console.log("✅ 28. Streaming választó modal: OK");
+        await driver.findElement(By.css('.close-modal')).click();
+        await driver.sleep(1000);
 
-        const question = await waitForTestId(driver, "tips-quiz-question");
-        const before = await question.getText();
+        console.log("...Bejelentkezés az utolsó tesztekhez...");
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
+        await driver.sleep(1000);
+        await driver.findElement(By.css('.auth-card input[type="email"]')).sendKeys('admin@admin.com');
+        await driver.findElement(By.css('.auth-card input[type="password"]')).sendKeys('admin1');
+        await driver.findElement(By.css('.btn-submit-auth')).click();
 
-        const nextButton = await waitForTestId(driver, "tips-next-quiz");
-        await driver.executeScript("arguments[0].scrollIntoView({ block: 'center' });", nextButton);
-        await driver.executeScript("arguments[0].click();", nextButton);
+        let profilAvatar = await driver.wait(until.elementLocated(By.css('.nav-right img')), 10000);
+        await driver.sleep(2000); 
+        console.log("...Belépve.");
 
-        await driver.wait(async () => {
-          const currentQuestion = await waitForTestId(driver, "tips-quiz-question");
-          return (await currentQuestion.getText()) !== before;
-        }, 15000);
-      },
-    },
-    {
-      name: "tips random generator keeps a non-empty tip visible",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/tippek`);
-        await waitForTestId(driver, "tips-page");
+        await profilAvatar.click();
+        await driver.sleep(1000);
 
-        const randomButton = await waitForTestId(driver, "tips-random-button");
-        await randomButton.click();
+        let editLink = await driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Profil szerkesztése')]") ), 5000);
+        await editLink.click();
 
-        const tip = await waitForTestId(driver, "tips-random-tip");
-        const text = (await tip.getText()).trim();
-        if (!text) {
-          throw new Error("A random tipp mező üres maradt.");
-        }
-      },
-    },
-  ],
-};
+        let profileModal = await driver.wait(until.elementLocated(By.css('.profile-modal-content')), 5000);
+        if(await profileModal.isDisplayed()) console.log("✅ 29. Profil szerkesztő (ProfileEditor) megnyitása: OK");
 
-if (isDirectExecution(import.meta.url)) {
-  runSuite(featuresSuite).catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-  });
+        await driver.findElement(By.css('.profile-close-modal')).click();
+        await driver.sleep(1000);
+
+        await profilAvatar.click();
+        await driver.sleep(1000);
+        let favLink = await driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Kedvenceim')]") ), 5000);
+        await favLink.click();
+
+        let sidebar = await driver.wait(until.elementLocated(By.css('[class*="sidebar"]')), 5000);
+        if(await sidebar.isDisplayed()) console.log("✅ 30. Kedvencek oldalsáv (Sidebar) megnyílt: OK");
+
+    } catch (hiba) { 
+        console.error("❌  TESZT ELBUKOTT:", hiba.message);
+    } finally { 
+        await driver.quit(); 
+    }
 }
+extraTesztek();

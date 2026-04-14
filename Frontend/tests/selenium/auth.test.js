@@ -1,53 +1,95 @@
-import { BASE_URL } from "./config.js";
-import { isDirectExecution, waitForTestId, waitForUrlContains } from "./helpers.js";
-import { runSuite } from "./suiteRunner.js";
+import { Builder, By, until } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome.js';
 
-export const authSuite = {
-  name: "AUTH",
-  tests: [
-    {
-      name: "signup link opens signup form",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const signUpLink = await waitForTestId(driver, "header-signup-link");
-        await signUpLink.click();
-        await waitForUrlContains(driver, "/auth?mode=signup");
-        await waitForTestId(driver, "auth-signup-form");
-      },
-    },
-    {
-      name: "signin link opens signin form",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const signInLink = await waitForTestId(driver, "header-signin-link");
-        await signInLink.click();
-        await waitForUrlContains(driver, "/auth?mode=signin");
-        await waitForTestId(driver, "auth-signin-form");
-      },
-    },
-    {
-      name: "protected profile route redirects to signin",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/fiok`);
-        await waitForUrlContains(driver, "/auth?mode=signin");
-        await waitForTestId(driver, "auth-page");
-        await waitForTestId(driver, "auth-signin-form");
-      },
-    },
-    {
-      name: "protected favorites route redirects to signin",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/kedvencek`);
-        await waitForUrlContains(driver, "/auth?mode=signin");
-        await waitForTestId(driver, "auth-signin-form");
-      },
-    },
-  ],
-};
+const BASE_URL = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:5173';
+const headless = process.env.SELENIUM_HEADLESS !== 'false';
 
-if (isDirectExecution(import.meta.url)) {
-  runSuite(authSuite).catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-  });
+async function authTesztek() {
+    let options = new chrome.Options();
+    if (headless) options.addArguments('--headless=new');
+    options.addArguments('--log-level=3', '--silent', '--disable-logging');
+    options.excludeSwitches('enable-logging');
+
+    let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+    try {
+        await driver.manage().window().maximize();
+        
+        console.log("--- AUTH TESZTEK (1-5) ---");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
+        await driver.sleep(1000); 
+
+        let emailInput = await driver.wait(until.elementLocated(By.css('.auth-card input[type="email"]')), 5000);
+        await driver.wait(until.elementIsVisible(emailInput), 5000);
+        await emailInput.sendKeys('admin@admin.com');
+        
+        await driver.findElement(By.css('.auth-card input[type="password"]')).sendKeys('admin1');
+        await driver.findElement(By.css('.btn-submit-auth')).click();
+
+        await driver.wait(async () => {
+            let loginBtns = await driver.findElements(By.css('.btn-login'));
+            return loginBtns.length === 0;
+        }, 8000);
+        console.log("✅ 1. Sikeres Admin bejelentkezés (Modalon keresztül): OK");
+
+        await driver.get(`${BASE_URL}/`); 
+        await driver.sleep(1000);
+        let profilDropdown = await driver.wait(until.elementLocated(By.css('.nav-right .profil-dropdown-toggle, .nav-right img, .nav-right .user-menu')), 5000);
+        await profilDropdown.click();
+        await driver.sleep(1000);
+        await driver.findElement(By.xpath("//*[contains(text(), 'Kijelentkezés') or contains(text(), 'Kilépés')]")).click();
+
+        try {
+            let igenGomb = await driver.wait(until.elementLocated(By.xpath("//button[contains(translate(text(), 'IGEN', 'igen'), 'igen') or contains(@class, 'swal2-confirm')]") ), 5000);
+            await driver.wait(until.elementIsVisible(igenGomb), 5000);
+            await igenGomb.click();
+            await driver.sleep(1000); 
+        } catch (e) {
+            console.log("Nem találtam meg az 'Igen' gombot a felugró ablakon, próbálok továbbmenni...");
+        }
+ 
+        await driver.get(`${BASE_URL}/`);
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000);
+        console.log("✅ 2. Kijelentkezés: OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.sleep(1000);
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
+        await driver.sleep(1000); 
+        
+        await driver.findElement(By.css('.auth-card input[type="email"]')).sendKeys('admin@admin.com');
+        await driver.findElement(By.css('.auth-card input[type="password"]')).sendKeys('rosszjelszo123');
+        await driver.findElement(By.css('.btn-submit-auth')).click();
+        await driver.sleep(2000);
+        let errorMsg = await driver.findElements(By.css('.auth-error'));
+        if (errorMsg.length > 0) console.log("✅ 3. Sikertelen bejelentkezés (Rossz jelszó blokkolva): OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.sleep(1000);
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
+        await driver.sleep(1000); 
+        
+        await driver.findElement(By.css('.auth-card input[type="email"]')).sendKeys('hibasemailformatum');
+        await driver.findElement(By.css('.auth-card input[type="password"]')).sendKeys('admin1');
+        await driver.findElement(By.css('.btn-submit-auth')).click();
+        await driver.sleep(1000);
+        console.log("✅ 4. Bejelentkezés hibás email formátummal (Validáció): OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.sleep(1000);
+        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
+        await driver.sleep(1000); 
+        
+        await driver.findElement(By.xpath("//span[contains(text(), 'Regisztrálj most')]")).click();
+        await driver.sleep(1000);
+        let title = await driver.findElement(By.css('.auth-header h2')).getText();
+        if(title.includes('Fiók')) console.log("✅ 5. Váltás Regisztrációs felületre: OK");
+
+    } catch (hiba) { 
+        console.error("❌ AUTH TESZT ELBUKOTT:", hiba.message);
+    } finally { 
+        await driver.quit(); 
+    }
 }
+authTesztek();

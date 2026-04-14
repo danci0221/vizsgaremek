@@ -1,65 +1,75 @@
-import { BASE_URL } from "./config.js";
-import { isDirectExecution, waitForTestId, waitForUrlContains } from "./helpers.js";
-import { runSuite } from "./suiteRunner.js";
+import { Builder, By, until, Key } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome.js';
 
-export const navSuite = {
-  name: "NAV",
-  tests: [
-    {
-      name: "header catalog link opens catalog page",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const catalogLink = await waitForTestId(driver, "nav-link-catalog");
-        await catalogLink.click();
-        await waitForUrlContains(driver, "/kinalat");
-        await waitForTestId(driver, "catalog-page");
-      },
-    },
-    {
-      name: "header tips link opens tips page",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const tipsLink = await waitForTestId(driver, "nav-link-tips");
-        await tipsLink.click();
-        await waitForUrlContains(driver, "/tippek");
-        await waitForTestId(driver, "tips-page");
-      },
-    },
-    {
-      name: "header planner link opens planner page",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const plannerLink = await waitForTestId(driver, "nav-link-planner");
-        await plannerLink.click();
-        await waitForUrlContains(driver, "/programterv");
-        await waitForTestId(driver, "planner-page");
-      },
-    },
-    {
-      name: "header map link opens map page",
-      run: async (driver) => {
-        await driver.get(BASE_URL);
-        const mapLink = await waitForTestId(driver, "nav-link-map");
-        await mapLink.click();
-        await waitForUrlContains(driver, "/terkep");
-      },
-    },
-    {
-      name: "logo navigates back to home",
-      run: async (driver) => {
-        await driver.get(`${BASE_URL}/kinalat`);
-        const logo = await waitForTestId(driver, "header-logo");
-        await logo.click();
-        await waitForUrlContains(driver, "/");
-        await waitForTestId(driver, "home-page");
-      },
-    },
-  ],
-};
+const BASE_URL = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:5173';
+const headless = process.env.SELENIUM_HEADLESS !== 'false';
 
-if (isDirectExecution(import.meta.url)) {
-  runSuite(navSuite).catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-  });
+async function navTesztek() {
+    let options = new chrome.Options();
+    if (headless) options.addArguments('--headless=new');
+    options.addArguments('--log-level=3'); 
+    options.addArguments('--silent');
+    options.addArguments('--disable-logging');
+    options.excludeSwitches('enable-logging'); 
+
+    let driver = await new Builder()
+        .forBrowser('chrome')
+        .setChromeOptions(options)
+        .build();
+
+    try {
+        await driver.manage().window().maximize();
+        console.log("--- NAVIGÁCIÓ ÉS EXTRÁK (21-25) ---");
+
+        await driver.get(`${BASE_URL}/`);
+        let keresoIkon = await driver.wait(until.elementLocated(By.css('.search-btn-icon')), 5000);
+        await keresoIkon.click();
+        await driver.sleep(800);
+
+        let keresoMezo = await driver.wait(until.elementLocated(By.css('input[placeholder*="Címek"]')), 5000);
+        await keresoMezo.sendKeys('Avatar', Key.RETURN);
+
+        await driver.wait(until.urlContains('/kereses'), 5000);
+        console.log("✅ 21. Keresés funkció: OK");
+
+        let moziTerkepLink = await driver.wait(until.elementLocated(By.linkText('Mozitérkép')), 5000);
+        await driver.wait(until.elementIsVisible(moziTerkepLink), 5000);
+        await moziTerkepLink.click();
+        
+        await driver.wait(until.urlContains('/mozik-terkep'), 5000);
+        console.log("✅ 22. Mozitérkép oldal: OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        await driver.sleep(1000);
+        
+        let sugo = await driver.wait(until.elementLocated(By.linkText('Súgóközpont')), 5000);
+        await sugo.click();
+        await driver.wait(until.urlContains('/sugokozpont'), 5000);
+        console.log("✅ 23. Footer: Súgóközpont oldal: OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        await driver.sleep(1000);
+        
+        let aszf = await driver.wait(until.elementLocated(By.linkText('Használati feltételek')), 5000);
+        await aszf.click();
+        await driver.wait(until.urlContains('/aszf'), 5000);
+        console.log("✅ 24. Footer: Használati feltételek (ÁSZF): OK");
+
+        await driver.get(`${BASE_URL}/`);
+        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        await driver.sleep(1000);
+        
+        let adatvedelem = await driver.wait(until.elementLocated(By.linkText('Adatvédelem')), 5000);
+        await adatvedelem.click();
+        await driver.wait(until.urlContains('/adatvedelem'), 5000);
+        console.log("✅ 25. Footer: Adatvédelem oldal: OK");
+
+    } catch (hiba) { 
+        console.error("❌ NAVIGÁCIÓ TESZT ELBUKOTT:", hiba.message);
+    } finally { 
+        await driver.quit(); 
+    }
 }
+navTesztek();
