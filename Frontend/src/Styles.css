@@ -6194,3 +6194,165 @@ body:has(.page-shell:not(.page-shell--sporthub-home))::after {
   }
 }
 
+/* ===== QUIZ DARK THEME ===== */
+
+.page-shell:not(.page-shell--sporthub-home) .quiz-container {
+  background: linear-gradient(135deg, rgba(13, 34, 56, 0.95), rgba(22, 54, 88, 0.95)),
+              linear-gradient(120deg, #0d2238 0%, #16365b 100%);
+  border-color: rgba(122, 183, 255, 0.22);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .quiz-header h2 {
+  color: #f2f8ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .quiz-header p {
+  color: #b5d0eb;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .progress-bar {
+  background: rgba(31, 60, 92, 0.8);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .progress-fill {
+  background: linear-gradient(90deg, #17a8ff, #2dd4db, #45e28a);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .progress-text {
+  color: #7ec5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .quiz-question h3 {
+  color: #f2f8ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-button {
+  border-color: rgba(122, 183, 255, 0.26);
+  background: rgba(8, 24, 43, 0.88);
+  color: #cde5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-button:hover {
+  border-color: rgba(122, 183, 255, 0.42);
+  background: rgba(23, 168, 255, 0.14);
+  box-shadow: 0 8px 20px rgba(23, 168, 255, 0.2);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-button.active {
+  border-color: #17a8ff;
+  background: linear-gradient(145deg, rgba(23, 168, 255, 0.18), rgba(23, 168, 255, 0.08));
+  box-shadow: 0 0 0 1px rgba(23, 168, 255, 0.3), 0 8px 20px rgba(23, 168, 255, 0.2);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-radio {
+  border-color: rgba(122, 183, 255, 0.35);
+  background: rgba(5, 16, 29, 0.8);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-button.active .option-radio {
+  border-color: #17a8ff;
+  background: linear-gradient(130deg, #17a8ff, #2dd4db);
+  box-shadow: 0 0 0 3px rgba(23, 168, 255, 0.2);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .option-label {
+  color: #cde5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .quiz-footer {
+  border-color: rgba(122, 183, 255, 0.15);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .nav-button {
+  border-color: rgba(122, 183, 255, 0.26);
+  background: rgba(8, 24, 43, 0.88);
+  color: #7ec5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .nav-button:hover:not(:disabled) {
+  border-color: rgba(122, 183, 255, 0.52);
+  background: rgba(23, 168, 255, 0.14);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .submit-button {
+  background: linear-gradient(130deg, #17a8ff, #2dd4db);
+  box-shadow: 0 10px 24px rgba(23, 168, 255, 0.3);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .submit-button:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .results-header h2 {
+  color: #f2f8ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .results-header p {
+  color: #b5d0eb;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-card {
+  border-color: rgba(122, 183, 255, 0.2);
+  background: rgba(13, 34, 56, 0.9);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-card:hover {
+  border-color: rgba(69, 226, 138, 0.34);
+  box-shadow: 0 12px 28px rgba(23, 168, 255, 0.25);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-content h3 {
+  color: #f2f8ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .type-label {
+  background: rgba(23, 168, 255, 0.18);
+  color: #7ec5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .description {
+  color: #b5d0eb;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-meta {
+  border-color: rgba(122, 183, 255, 0.12);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-meta span {
+  color: #b5d0eb;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-button {
+  background: linear-gradient(130deg, #17a8ff, #2dd4db);
+  box-shadow: 0 8px 16px rgba(23, 168, 255, 0.25);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .rec-button:hover {
+  filter: brightness(1.12);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .restart-button {
+  border-color: rgba(122, 183, 255, 0.26);
+  background: rgba(8, 24, 43, 0.88);
+  color: #7ec5ff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .restart-button:hover {
+  border-color: rgba(122, 183, 255, 0.52);
+  background: rgba(23, 168, 255, 0.14);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .error-message {
+  border-color: rgba(198, 40, 40, 0.3);
+  background: rgba(198, 40, 40, 0.15);
+  color: #ff6b6b;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .empty-results {
+  border-color: rgba(122, 183, 255, 0.24);
+  background: rgba(23, 168, 255, 0.08);
+  color: #b5d0eb;
+}
+

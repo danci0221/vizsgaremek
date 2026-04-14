@@ -28,15 +28,18 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
     setError(null);
     
     try {
+      console.log("📤 Sending quiz answers:", answers);
       const response = await fetch(apiUrl("sports/quiz-recommendations"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(answers),
       });
 
+      console.log("📥 Response status:", response.status);
       if (!response.ok) throw new Error("Hiba történt az ajánlások generálásakor");
       
       const data = await response.json();
+      console.log("✅ Recommendations received:", data);
       setResults(data.recommendations || []);
     } catch (err) {
       setError(err.message);
