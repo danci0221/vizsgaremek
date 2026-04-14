@@ -106,6 +106,13 @@ A magas fokú rendelkezésre állás és hibamentes élmény érdekében többl�
 
 A platform telepítésének és futtatásának leegyszerűsítésére a teljes architektúrát Docker konténerekbe csomagoltuk. Az érzékeny adatokat a biztonsági standardoknak megfelelően lokális `.env` fájl kezeli.
 
+**Teszt fiókok:**
+
+| Szerepkör | Felhasználónév | E-mail | Jelszó |
+|-----------|----------------|--------|--------|
+| Admin | admin | admin@sporthub.hu | adminpass |
+| Felhasználó | user | user@sporthub.hu | userpass |
+
 **A rendszer indítása:**
 
 ```bash

@@ -34,6 +34,8 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
       PMA_ARBITRARY: "0"
+      PMA_USER: root
+      PMA_PASSWORD: rootpw
       UPLOAD_LIMIT: 64M
       TZ: Europe/Budapest
     ports:
