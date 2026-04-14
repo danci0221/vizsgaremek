@@ -1,5 +1,6 @@
 import { useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Ticker from "../components/Ticker";
 
 const fallbackSliderItems = [
   {
@@ -311,6 +312,16 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
           </div>
         </div>
       </section>
+
+      <Ticker
+        items={[
+          "🏃 Futás • Energikus napi mozgás",
+          "🏊 Úszás • Teljes testes edzés",
+          "🧘 Jóga • Rugalmasság és kreativitás",
+          "🏋️ Konditerem • Erőnövelés és forma",
+          "🎾 Tenisz • Közösségi sport",
+        ]}
+      />
 
       <section className="sh-section sh-wisdom">
         <div className="sh-shell">

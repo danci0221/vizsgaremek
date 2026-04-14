@@ -1,0 +1,151 @@
+/* Ticker/Marquee Component Styles */
+
+.ticker-wrapper {
+  width: 100%;
+  background: linear-gradient(90deg, var(--brand-blue, #0b6bf2) 0%, var(--brand-cyan, #17a8ff) 100%);
+  padding: 1.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ticker-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.ticker-track {
+  display: flex;
+  animation: ticker-scroll 60s linear infinite;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.ticker-container.ticker-paused .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.ticker-separator {
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0.5rem;
+}
+
+/* Dark theme adjustments */
+.page-shell:not(.page-shell--sporthub-home) .ticker-wrapper {
+  background: linear-gradient(90deg, var(--dark-bg, #0d2238) 0%, var(--dark-accent, #17a8ff) 100%);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .ticker-text {
+  color: #ffffff;
+}
+
+.page-shell:not(.page-shell--sporthub-home) .ticker-separator {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive Design */
+
+/* Tablet (620px - 860px) */
+@media (max-width: 860px) {
+  .ticker-wrapper {
+    padding: 1rem 0;
+  }
+
+  .ticker-track {
+    gap: 1.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .ticker-text {
+    font-size: 0.95rem;
+  }
+
+  @keyframes ticker-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/* Mobile (under 620px) */
+@media (max-width: 620px) {
+  .ticker-wrapper {
+    padding: 0.75rem 0;
+  }
+
+  .ticker-track {
+    gap: 1rem;
+    padding: 0 0.5rem;
+    animation: ticker-scroll 45s linear infinite;
+  }
+
+  .ticker-text {
+    font-size: 0.85rem;
+  }
+
+  .ticker-separator {
+    margin: 0 0.25rem;
+  }
+}
+
+/* Light theme override for homepage hero */
+.page-shell.page-shell--sporthub-home .ticker-wrapper {
+  background: linear-gradient(90deg, rgba(11, 107, 242, 0.95) 0%, rgba(23, 168, 255, 0.95) 100%);
+  backdrop-filter: blur(10px);
+}
+
+.page-shell.page-shell--sporthub-home .ticker-text {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect with pause animation */
+.ticker-container:hover {
+  cursor: grab;
+}
+
+.ticker-container:active {
+  cursor: grabbing;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+    transform: translateX(0);
+  }
+
+  .ticker-container.ticker-paused .ticker-track {
+    animation-play-state: running;
+  }
+}
