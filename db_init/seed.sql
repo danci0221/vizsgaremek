@@ -61,16 +61,16 @@ INSERT IGNORE INTO felhasznalo (felhasznalonev, email, jelszo_hash, szerepkor) V
     'admin'
   ),
   (
-    'demo',
-    'demo@sporthub.hu',
-    '58550ee20129ac7f3edb821511819c74:36da7349a214f556fad5e9fb6702087c53af5336409cb49f6f48c895a3dddcf751505464a7f60b1f795c801a7805b4f93ffce8bb11198669625b0fc89cd7f619',
+    'user',
+    'user@sporthub.hu',
+    'c3a41f9e8b7d2a54c671e90fd4ab3281:46a5dff32afdd1a14160ac0659ed3d8367821cd1703b30b83c7adeedea702ab4908cc6690e789e2a3698f6dd657b0a38faa07a33da3ef1bfb2f220e36a6e5c62',
     'user'
   );
 
 INSERT INTO bejelentkezes (felhasznalo_id, bejelentkezes_idopont, ip_cim, sikeres) VALUES
   ((SELECT id FROM felhasznalo WHERE email = 'admin@sporthub.hu'), NOW() - INTERVAL 3 DAY, '127.0.0.1', 1),
   ((SELECT id FROM felhasznalo WHERE email = 'admin@sporthub.hu'), NOW() - INTERVAL 1 DAY, '127.0.0.1', 1),
-  ((SELECT id FROM felhasznalo WHERE email = 'demo@sporthub.hu'), NOW() - INTERVAL 2 DAY, '127.0.0.1', 1);
+  ((SELECT id FROM felhasznalo WHERE email = 'user@sporthub.hu'), NOW() - INTERVAL 2 DAY, '127.0.0.1', 1);
 
 INSERT IGNORE INTO sportlehetosegek (
   nev,

@@ -78,7 +78,7 @@ export const tipsCards = [
   },
   {
     title: "Hidratálás tervezetten",
-    text: "Edzés előtt 30 percvel igyál vizet, hosszú blokkban pedig 15 percenként pótold.",
+    text: "Edzés előtt 30 perccel igyál vizet, hosszú blokkban pedig 15 percenként pótold.",
     image:
       "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=80",
   },
@@ -180,6 +180,41 @@ export const quizQuestions = [
   {
     question: "Mi segít a leggyorsabban a regenerációban?",
     options: ["Forró fürdő", "Aktív pihenés és nyújtás", "Teljes mozdulatlanság", "Több edzés"],
+    correct: 1,
+  },
+  {
+    question: "Miért fontos a bemelegítés edzés előtt?",
+    options: ["Növeli a sérülésveszélyt", "Csak időpazarlás", "Felkészíti az izmokat és ízületeket", "Csak profiknak kell"],
+    correct: 2,
+  },
+  {
+    question: "Mikor érdemes pótolni a folyadékot?",
+    options: ["Csak edzés után", "Csak ha szomjas vagy", "Edzés előtt, közben és után is", "Csak nyáron"],
+    correct: 2,
+  },
+  {
+    question: "Melyik jel utalhat túledzésre?",
+    options: ["Folyamatos fáradtság és romló teljesítmény", "Jobb alvásminőség", "Gyorsabb regeneráció", "Javuló motiváció"],
+    correct: 0,
+  },
+  {
+    question: "Mi a fehérje fő szerepe a sporttáplálkozásban?",
+    options: ["Csak energiaforrás", "Izomregeneráció és izomépítés támogatása", "Hidratáció pótlása", "Pulzus csökkentése"],
+    correct: 1,
+  },
+  {
+    question: "Mit érdemes tenni, ha edzés közben szédülést érzel?",
+    options: ["Növelni az intenzitást", "Figyelmen kívül hagyni", "Megállni, pihenni és folyadékot pótolni", "Azonnal sprintelni"],
+    correct: 2,
+  },
+  {
+    question: "Melyik intenzitás ideális a zsírégető, hosszabb kardióhoz?",
+    options: ["Közepes, tartós intenzitás", "Mindig maximális terhelés", "Csak nagyon alacsony intenzitás", "Nincs jelentősége"],
+    correct: 0,
+  },
+  {
+    question: "Melyik étkezés lehet jó választás edzés utáni regenerációhoz?",
+    options: ["Csak cukros üdítő", "Fehérje + összetett szénhidrát", "Semmit ne egyél 6 óráig", "Csak koffein"],
     correct: 1,
   },
 ];

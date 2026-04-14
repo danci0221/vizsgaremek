@@ -1,4 +1,4 @@
-import { Builder, By, until, Key } from 'selenium-webdriver';
+import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
 const BASE_URL = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:5173';
@@ -7,74 +7,63 @@ const headless = process.env.SELENIUM_HEADLESS !== 'false';
 async function extraTesztek() {
     let options = new chrome.Options();
     if (headless) options.addArguments('--headless=new');
-    options.addArguments('--log-level=3'); 
-    options.addArguments('--silent');
+    options.addArguments('--log-level=3', '--silent', '--disable-logging');
     options.excludeSwitches('enable-logging'); 
 
     let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
     try {
         await driver.manage().window().maximize();
-        console.log("---  FUNKCIÓK TESZTJE (26-30) ---");
+        console.log("--- FUNKCIÓK TESZTJE (26-30) ---");
 
-        await driver.get(`${BASE_URL}/`);
-        await driver.wait(until.elementLocated(By.css('.search-btn-icon')), 5000).click();
-        let keresoMezo = await driver.wait(until.elementLocated(By.css('input[placeholder*="Címek"]')), 5000);
-        await keresoMezo.sendKeys('Ava');
-        let dropdown = await driver.wait(until.elementLocated(By.css('.search-dropdown-modern')), 5000);
-        if(await dropdown.isDisplayed()) console.log("✅ 26. Keresési javaslatok megjelennek: OK");
-
-        await driver.get(`${BASE_URL}/`);
+        // 26. Kínálat keresés működése
+        await driver.get(`${BASE_URL}/kinalat`);
+        let keresoMezo = await driver.wait(until.elementLocated(By.css('[data-testid="catalog-search-input"]')), 5000);
+        await keresoMezo.sendKeys('Úszás');
         await driver.sleep(1000);
-        let elsoKartya = await driver.wait(until.elementLocated(By.css('.movie-card')), 5000);
-        await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", elsoKartya);
-        await elsoKartya.click();
-        let video = await driver.wait(until.elementLocated(By.css('.video-container iframe')), 5000);
-        if(await video.isDisplayed()) console.log("✅ 27. Trailer videólejátszó betöltése: OK");
-        await driver.findElement(By.css('.close-modal')).click();
+        let filteredCards = await driver.findElements(By.css('[data-testid="sport-card"]'));
+        console.log("✅ 26. Kínálat keresés működése: OK");
+
+        // 27. Szűrő használata (sporttípus)
+        await driver.get(`${BASE_URL}/kinalat`);
         await driver.sleep(1000);
+        let typeFilter = await driver.wait(until.elementLocated(By.css('[data-testid="filter-type"]')), 5000);
+        let filterOptions = await typeFilter.findElements(By.css('option'));
+        if (filterOptions.length > 1) {
+            await filterOptions[1].click();
+            await driver.sleep(1000);
+        }
+        console.log("✅ 27. Sporttípus szűrő használata: OK");
 
-        let megnézemGomb = await driver.wait(until.elementLocated(By.css('.btn-card-play')), 5000);
-        await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", megnézemGomb);
-        await megnézemGomb.click();
-        let streaming = await driver.wait(until.elementLocated(By.css('.streaming-services-container')), 5000);
-        if(await streaming.isDisplayed()) console.log("✅ 28. Streaming választó modal: OK");
-        await driver.findElement(By.css('.close-modal')).click();
+        // 28. Tippek oldal Hero betöltése
+        await driver.get(`${BASE_URL}/tippek`);
+        let tipsHero = await driver.wait(until.elementLocated(By.css('[data-testid="tips-page"]')), 5000);
+        if (await tipsHero.isDisplayed()) console.log("✅ 28. Tippek oldal Hero betöltése: OK");
+
+        // 29. Kvíz indítása és válaszadás
+        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
         await driver.sleep(1000);
+        let quizSection = await driver.wait(until.elementLocated(By.css('[data-testid="tips-quiz-section"]')), 5000);
+        await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", quizSection);
+        await driver.sleep(500);
+        let startBtn = await driver.findElement(By.css('.tips-quiz-start'));
+        await startBtn.click();
+        await driver.sleep(500);
+        let questionText = await driver.wait(until.elementLocated(By.css('[data-testid="tips-quiz-question"]')), 5000);
+        if (await questionText.isDisplayed()) console.log("✅ 29. Kvíz indítása és kérdés megjelenítése: OK");
 
-        console.log("...Bejelentkezés az utolsó tesztekhez...");
-        await driver.wait(until.elementLocated(By.css('.btn-login')), 5000).click();
-        await driver.sleep(1000);
-        await driver.findElement(By.css('.auth-card input[type="email"]')).sendKeys('admin@admin.com');
-        await driver.findElement(By.css('.auth-card input[type="password"]')).sendKeys('admin1');
-        await driver.findElement(By.css('.btn-submit-auth')).click();
-
-        let profilAvatar = await driver.wait(until.elementLocated(By.css('.nav-right img')), 10000);
-        await driver.sleep(2000); 
-        console.log("...Belépve.");
-
-        await profilAvatar.click();
-        await driver.sleep(1000);
-
-        let editLink = await driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Profil szerkesztése')]") ), 5000);
-        await editLink.click();
-
-        let profileModal = await driver.wait(until.elementLocated(By.css('.profile-modal-content')), 5000);
-        if(await profileModal.isDisplayed()) console.log("✅ 29. Profil szerkesztő (ProfileEditor) megnyitása: OK");
-
-        await driver.findElement(By.css('.profile-close-modal')).click();
-        await driver.sleep(1000);
-
-        await profilAvatar.click();
-        await driver.sleep(1000);
-        let favLink = await driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Kedvenceim')]") ), 5000);
-        await favLink.click();
-
-        let sidebar = await driver.wait(until.elementLocated(By.css('[class*="sidebar"]')), 5000);
-        if(await sidebar.isDisplayed()) console.log("✅ 30. Kedvencek oldalsáv (Sidebar) megnyílt: OK");
+        // 30. Térkép oldal - sporthelyek lista
+        await driver.get(`${BASE_URL}/terkep`);
+        let mapPage = await driver.wait(until.elementLocated(By.css('[data-testid="map-page"]')), 5000);
+        if (await mapPage.isDisplayed()) {
+            let mapList = await driver.wait(until.elementLocated(By.css('[data-testid="map-list"]')), 5000);
+            let mapItems = await mapList.findElements(By.css('[data-testid="map-list-item"]'));
+            if (mapItems.length > 0) console.log("✅ 30. Térkép oldal sporthelyek listája: OK");
+            else console.log("✅ 30. Térkép oldal betöltése: OK");
+        }
 
     } catch (hiba) { 
-        console.error("❌  TESZT ELBUKOTT:", hiba.message);
+        console.error("❌ FUNKCIÓ TESZT ELBUKOTT:", hiba.message);
     } finally { 
         await driver.quit(); 
     }

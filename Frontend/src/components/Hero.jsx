@@ -15,7 +15,7 @@ export default function Hero({
       </div>
 
       <h1>
-        Építsd fel a saját <span>sportközpontodat</span>
+        ÉPÍTSD FEL A SAJÁT <span>SPORTKÖZPONTODAT</span>
       </h1>
       <p>
         Egyetlen felületen keresel, szűrsz, összehasonlítasz, tervezel és térképen navigálsz.
@@ -30,10 +30,6 @@ export default function Hero({
         <article>
           <p>Kedvenc elem</p>
           <h3>{favoriteCount}</h3>
-        </article>
-        <article>
-          <p>Fókusz mód</p>
-          <h3>PRO</h3>
         </article>
       </div>
 

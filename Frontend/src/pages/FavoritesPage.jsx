@@ -33,7 +33,7 @@ export default function FavoritesPage({
   );
 
   return (
-    <section className="favorites">
+    <section className={`favorites${favoriteSports.length === 0 ? " favorites--compact" : ""}`}>
       <div className="section-heading">
         <div className="favorites-head">
           <div>

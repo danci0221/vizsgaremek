@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS helyszin (
   id INT PRIMARY KEY AUTO_INCREMENT,
   varos VARCHAR(100) NOT NULL,
   cim VARCHAR(255) NOT NULL,
+  lat DECIMAL(10, 7) NULL,
+  lng DECIMAL(10, 7) NULL,
   UNIQUE KEY uq_helyszin_varos_cim (varos, cim)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_hungarian_ci;
 

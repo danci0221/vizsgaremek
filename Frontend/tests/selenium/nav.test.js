@@ -1,4 +1,4 @@
-import { Builder, By, until, Key } from 'selenium-webdriver';
+import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
 const BASE_URL = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:5173';
@@ -7,9 +7,7 @@ const headless = process.env.SELENIUM_HEADLESS !== 'false';
 async function navTesztek() {
     let options = new chrome.Options();
     if (headless) options.addArguments('--headless=new');
-    options.addArguments('--log-level=3'); 
-    options.addArguments('--silent');
-    options.addArguments('--disable-logging');
+    options.addArguments('--log-level=3', '--silent', '--disable-logging');
     options.excludeSwitches('enable-logging'); 
 
     let driver = await new Builder()
@@ -19,52 +17,44 @@ async function navTesztek() {
 
     try {
         await driver.manage().window().maximize();
-        console.log("--- NAVIGÁCIÓ ÉS EXTRÁK (21-25) ---");
+        console.log("--- NAVIGÁCIÓ TESZTEK (21-25) ---");
 
+        // 21. Navigáció a Kínálat oldalra
         await driver.get(`${BASE_URL}/`);
-        let keresoIkon = await driver.wait(until.elementLocated(By.css('.search-btn-icon')), 5000);
-        await keresoIkon.click();
-        await driver.sleep(800);
+        let kinalatLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-catalog"]')), 5000);
+        await kinalatLink.click();
+        await driver.wait(until.urlContains('/kinalat'), 5000);
+        console.log("✅ 21. Navigáció Kínálat oldalra: OK");
 
-        let keresoMezo = await driver.wait(until.elementLocated(By.css('input[placeholder*="Címek"]')), 5000);
-        await keresoMezo.sendKeys('Avatar', Key.RETURN);
+        // 22. Navigáció a Tippek oldalra
+        let tippekLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-tips"]')), 5000);
+        await tippekLink.click();
+        await driver.wait(until.urlContains('/tippek'), 5000);
+        console.log("✅ 22. Navigáció Tippek oldalra: OK");
 
-        await driver.wait(until.urlContains('/kereses'), 5000);
-        console.log("✅ 21. Keresés funkció: OK");
+        // 23. Navigáció a Térkép oldalra
+        let terkepLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-map"]')), 5000);
+        await terkepLink.click();
+        await driver.wait(until.urlContains('/terkep'), 5000);
+        console.log("✅ 23. Navigáció Térkép oldalra: OK");
 
-        let moziTerkepLink = await driver.wait(until.elementLocated(By.linkText('Mozitérkép')), 5000);
-        await driver.wait(until.elementIsVisible(moziTerkepLink), 5000);
-        await moziTerkepLink.click();
-        
-        await driver.wait(until.urlContains('/mozik-terkep'), 5000);
-        console.log("✅ 22. Mozitérkép oldal: OK");
+        // 24. Navigáció a Programterv oldalra
+        let programtervLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-planner"]')), 5000);
+        await programtervLink.click();
+        await driver.wait(until.urlContains('/programterv'), 5000);
+        console.log("✅ 24. Navigáció Programterv oldalra: OK");
 
-        await driver.get(`${BASE_URL}/`);
-        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-        await driver.sleep(1000);
-        
-        let sugo = await driver.wait(until.elementLocated(By.linkText('Súgóközpont')), 5000);
-        await sugo.click();
-        await driver.wait(until.urlContains('/sugokozpont'), 5000);
-        console.log("✅ 23. Footer: Súgóközpont oldal: OK");
-
-        await driver.get(`${BASE_URL}/`);
-        await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-        await driver.sleep(1000);
-        
-        let aszf = await driver.wait(until.elementLocated(By.linkText('Használati feltételek')), 5000);
-        await aszf.click();
-        await driver.wait(until.urlContains('/aszf'), 5000);
-        console.log("✅ 24. Footer: Használati feltételek (ÁSZF): OK");
-
+        // 25. Footer: Kínálat link és visszatérés a Főoldalra
         await driver.get(`${BASE_URL}/`);
         await driver.executeScript("window.scrollTo(0, document.body.scrollHeight)");
         await driver.sleep(1000);
-        
-        let adatvedelem = await driver.wait(until.elementLocated(By.linkText('Adatvédelem')), 5000);
-        await adatvedelem.click();
-        await driver.wait(until.urlContains('/adatvedelem'), 5000);
-        console.log("✅ 25. Footer: Adatvédelem oldal: OK");
+        let footerKinalat = await driver.wait(until.elementLocated(By.css('.sh-footer a[href="/kinalat"]')), 5000);
+        await footerKinalat.click();
+        await driver.wait(until.urlContains('/kinalat'), 5000);
+
+        await driver.findElement(By.css('[data-testid="header-logo"]')).click();
+        await driver.wait(until.urlIs(`${BASE_URL}/`), 5000);
+        console.log("✅ 25. Footer link és Főoldal visszatérés (Logo): OK");
 
     } catch (hiba) { 
         console.error("❌ NAVIGÁCIÓ TESZT ELBUKOTT:", hiba.message);

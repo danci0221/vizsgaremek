@@ -110,8 +110,8 @@ function App() {
   const liveTimeLabel = useMemo(() => {
     const hour = now.getHours();
     if (hour >= 6 && hour < 12) return "reggel";
-    if (hour >= 12 && hour < 17) return "délután";
-    if (hour >= 17 && hour < 21) return "este";
+    if (hour >= 12 && hour < 18) return "délután";
+    if (hour >= 18 && hour < 21) return "este";
     return "éjjel";
   }, [now]);
 
@@ -132,6 +132,10 @@ function App() {
       navigate("/", { replace: true });
     }
   }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     const protectedPaths = new Set(["/fiok", "/kedvencek"]);
@@ -897,12 +901,6 @@ function App() {
   if (location.pathname === "/fiok") {
     content = (
       <>
-        <Hero
-          favoriteCount={favorites.length}
-          resultCount={sports.length}
-          liveDayLabel={liveDayLabel}
-          liveTimeLabel={liveTimeLabel}
-        />
         <ProfilePage
           authUser={authUser}
           favoriteCount={favorites.length}
@@ -922,23 +920,17 @@ function App() {
   if (location.pathname === "/kedvencek") {
     content = (
       <>
-        <Hero
-          favoriteCount={favorites.length}
-          resultCount={favorites.length}
-          liveDayLabel={liveDayLabel}
-          liveTimeLabel={liveTimeLabel}
+        <FavoritesPage
+          sports={sports}
+          favorites={favorites}
+          compareIds={compareIds}
+          onToggleFavorite={toggleFavorite}
+          onToggleCompare={toggleCompare}
+          onOpenInCatalog={openInCatalog}
+          favoritesState={favoritesState}
+          favoritesBusy={favoritesBusy}
+          onRefreshFavorites={refreshFavorites}
         />
-      <FavoritesPage
-        sports={sports}
-        favorites={favorites}
-        compareIds={compareIds}
-        onToggleFavorite={toggleFavorite}
-        onToggleCompare={toggleCompare}
-        onOpenInCatalog={openInCatalog}
-        favoritesState={favoritesState}
-        favoritesBusy={favoritesBusy}
-        onRefreshFavorites={refreshFavorites}
-      />
       </>
     );
   }
@@ -1016,7 +1008,7 @@ function App() {
         isAdmin={isAdmin}
         now={now}
         onSignOut={handleSignOut}
-        isHome={isHomeRoute}
+        isHome={true}
       />
     </div>
   );

@@ -18,13 +18,6 @@ export default function Footer({ authUser, isAdmin, now, isHome = false }) {
           </div>
 
           <div className="sh-footer-col">
-            <h5>Média</h5>
-            <Link to="/tippek">SportHub beszámolók</Link>
-            <Link to="/tippek">Heti podcast</Link>
-            <Link to="/tippek">Legújabb videó</Link>
-          </div>
-
-          <div className="sh-footer-col">
             <h5>Oldaltérkép</h5>
             {footerLinks.map((item) => (
               <Link key={item.to} to={item.to}>
