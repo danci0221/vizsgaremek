@@ -9,12 +9,12 @@
   margin: 0;
   background: linear-gradient(
     90deg,
-    rgba(4, 13, 23, 0.95) 0%,
-    rgba(10, 25, 45, 0.92) 20%,
-    rgba(15, 35, 60, 0.92) 40%,
-    rgba(8, 28, 50, 0.92) 60%,
-    rgba(12, 20, 38, 0.92) 80%,
-    rgba(4, 13, 23, 0.95) 100%
+    rgba(2, 8, 15, 0.96) 0%,
+    rgba(4, 12, 22, 0.94) 20%,
+    rgba(6, 16, 28, 0.94) 40%,
+    rgba(3, 14, 24, 0.94) 60%,
+    rgba(5, 10, 18, 0.94) 80%,
+    rgba(2, 8, 15, 0.96) 100%
   );
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -93,11 +93,11 @@
 .page-shell.page-shell--sporthub-home .ticker-wrapper {
   background: linear-gradient(
     90deg,
-    rgba(11, 107, 242, 0.88) 0%,
-    rgba(23, 168, 255, 0.88) 25%,
-    rgba(79, 146, 220, 0.88) 50%,
-    rgba(147, 92, 195, 0.88) 75%,
-    rgba(11, 107, 242, 0.88) 100%
+    rgba(6, 50, 120, 0.90) 0%,
+    rgba(10, 80, 150, 0.90) 25%,
+    rgba(40, 75, 140, 0.90) 50%,
+    rgba(70, 40, 100, 0.90) 75%,
+    rgba(6, 50, 120, 0.90) 100%
   );
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 1px;
