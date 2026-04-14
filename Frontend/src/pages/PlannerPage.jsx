@@ -28,18 +28,18 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
     setError(null);
     
     try {
-      console.log("📤 Sending quiz answers:", answers);
+      console.log("Kvíz válaszok küldése:", answers);
       const response = await fetch(apiUrl("sports/quiz-recommendations"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(answers),
       });
 
-      console.log("📥 Response status:", response.status);
+      console.log("Válasz státusz:", response.status);
       if (!response.ok) throw new Error("Hiba történt az ajánlások generálásakor");
       
       const data = await response.json();
-      console.log("✅ Recommendations received:", data);
+      console.log("Ajánlások fogadva:", data);
       setResults(data.recommendations || []);
     } catch (err) {
       setError(err.message);
@@ -72,7 +72,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
       <section className="quiz-container" data-testid="quiz-results">
         <div className="quiz-results">
           <div className="results-header">
-            <h2>🎯 Az Én Sportok</h2>
+            <h2>Az Én Sportok</h2>
             <p>Ezek a legjobban illő sportok a válaszaid alapján</p>
           </div>
 
@@ -92,7 +92,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
                       <p className="type-label">{item.sportType}</p>
                       <p className="description">{item.description}</p>
                       <div className="rec-meta">
-                        <span className="location">📍 {item.location}</span>
+                        <span className="location">{item.location}</span>
                         <span className="price">{item.priceLabel}</span>
                       </div>
                       <button
@@ -107,14 +107,14 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
                 ))}
               </div>
               <button className="restart-button" onClick={resetQuiz}>
-                ↻ Újabb kvíz
+                Újabb kvíz
               </button>
             </>
           ) : (
             <>
               <p className="empty-results">Sajnos nincs ajánlásunk. Próbáld meg más választásokkal!</p>
               <button className="restart-button" onClick={resetQuiz}>
-                ↻ Újra próbálkozom
+                Újra próbálkozom
               </button>
             </>
           )}
@@ -132,7 +132,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
     <section className="quiz-container" data-testid="quiz-page">
       <div className="quiz-wrapper">
         <div className="quiz-header">
-          <h2>🏃 Melyik Sport Passzol Hozzád?</h2>
+          <h2>Melyik Sport Passzol Hozzád?</h2>
           <p>Néhány gyors kérdésre válaszolva megtudod, mely sportok illeszkednek a legjobban az igényeidhez!</p>
         </div>
 
@@ -173,7 +173,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
             onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
             disabled={currentQuestion === 0}
           >
-            ← Vissza
+            Vissza
           </button>
 
           {isLastQuestion ? (
@@ -184,7 +184,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
               disabled={!canSubmit || loading}
               data-testid="submit-quiz"
             >
-              {loading ? "Feldolgozom..." : "🎯 Ajánlások megjelenítése"}
+              {loading ? "Feldolgozom..." : "Ajánlások megjelenítése"}
             </button>
           ) : (
             <button
@@ -193,7 +193,7 @@ export default function PlannerPage({ sports, onOpenInCatalog }) {
               onClick={() => setCurrentQuestion(currentQuestion + 1)}
               disabled={!answers[currentQ.id]}
             >
-              Tovább →
+              Tovább
             </button>
           )}
         </div>

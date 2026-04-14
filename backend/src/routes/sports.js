@@ -67,49 +67,40 @@ export async function handleSportsRoutes(req, res, pathname, fullUrl) {
       // Get all sports for matching
       const allSports = await listSports();
 
+      // Map English quiz answers to Hungarian sport types
+      const typeMap = {
+        cardio: ["Futás", "Úszás"],
+        strength: ["Konditerem", "Erőedzés"],
+        balance: ["Jóga"],
+        team: ["Tenisz", "Labdarúgás"],
+      };
+
+      // Map English location preferences to Hungarian location keywords
+      const locationMap = {
+        outdoor: ["Sportesemény", "Park", "Pálya"],
+        indoor: ["Stúdió", "Edzőterem", "Uszoda"],
+        both: ["Sportesemény", "Park", "Pálya", "Stúdió", "Edzőterem", "Uszoda"],
+      };
+
       // Calculate match score for each sport
       const recommendations = allSports.map((sport) => {
         let matchScore = 0;
 
-        // Type matching (0-20 points)
-        const typeScores = {
-          cardio: ["running", "cycling", "swimming", "football", "tennis"],
-          strength: ["weightlifting", "yoga", "pilates", "crossfit", "boxing"],
-          balance: ["yoga", "pilates", "dance", "gymnastics", "climbing"],
-          team: ["football", "basketball", "volleyball", "hockey", "baseball"],
-        };
-
-        const sportTypeLower = sport.sportType?.toLowerCase() || "";
-        const matchingTypes = typeScores[type] || [];
-        if (matchingTypes.some((t) => sportTypeLower.includes(t))) {
-          matchScore += 20;
+        // Type matching (0-30 points)
+        const matchingTypes = typeMap[type] || [];
+        if (matchingTypes.some((t) => sport.sportType?.includes(t))) {
+          matchScore += 30;
         } else {
-          matchScore += 5; // partial credit for any sport
+          matchScore += 5; // Base credit for any sport
         }
 
-        // Location matching (0-20 points)
-        const locationMap = {
-          outdoor: ["open", "park", "field", "court", "mountain", "water"],
-          indoor: ["gym", "studio", "pool", "hall", "center"],
-          both: [...["open", "park", "field", "court", "mountain", "water"], ...[
-            "gym",
-            "studio",
-            "pool",
-            "hall",
-            "center",
-          ]],
-        };
-
-        const categoryLower = sport.category?.toLowerCase() || "";
-        const addressLower = sport.address?.toLowerCase() || "";
-        const nameLower = sport.name?.toLowerCase() || "";
-        const searchText = `${categoryLower} ${addressLower} ${nameLower}`;
+        // Location matching (0-25 points)
         const locationKeywords = locationMap[location] || [];
-
-        if (locationKeywords.some((kw) => searchText.includes(kw))) {
-          matchScore += 20;
+        const sportTextsearch = `${sport.category || ""} ${sport.location || ""}`.toLowerCase();
+        if (locationKeywords.some((kw) => sportTextsearch.includes(kw.toLowerCase()))) {
+          matchScore += 25;
         } else if (location === "both") {
-          matchScore += 10; // Any location works for "both"
+          matchScore += 15; // Any location works for "both"
         }
 
         // Budget matching (0-20 points)
@@ -130,50 +121,25 @@ export async function handleSportsRoutes(req, res, pathname, fullUrl) {
           }
         }
 
-        // Time matching (0-15 points)
+        // Time slot matching (0-15 points)
         if (sport.timeSlot === time) {
           matchScore += 15;
-        } else if (time === "weekend" && ["saturday", "sunday"].includes(sport.timeSlot)) {
-          matchScore += 12;
         } else {
-          matchScore += 3; // some credit for flexible timing
+          matchScore += 3; // Some credit for flexible timing
         }
 
-        // Duration matching (0-15 points)
-        const durationMap = {
-          short: ["30 min", "45 min", "1 hour"],
-          medium: ["1 hour", "1.5 hour", "2 hour"],
-          long: ["2 hour", "3 hour", "full day"],
-        };
-
-        const openingHours = sport.openingHours?.toLowerCase() || "";
-        const durationKeywords = durationMap[duration] || [];
-        if (durationKeywords.some((kw) => openingHours.includes(kw))) {
-          matchScore += 15;
-        } else {
-          matchScore += 5; // partial credit
-        }
-
-        // Group/intensity matching (0-10 points)
-        const intensityMap = {
-          light: ["beginner", "relaxing", "gentle", "yoga", "tai chi"],
-          moderate: ["intermediate", "active", "fitness", "training"],
-          high: ["advanced", "intense", "crossfit", "competition", "professional"],
-        };
-
-        const groupMap = {
-          individual: ["personal", "one-on-one", "solo", "individual"],
-          small_group: ["small", "group", "class"],
-          class: ["class", "workshop", "group", "team"],
-          team_sport: ["team", "league", "competitive", "tournament"],
-        };
-
-        const intensityKeywords = intensityMap[intensity] || [];
-        const groupKeywords = groupMap[group] || [];
-        const allKeywords = [...intensityKeywords, ...groupKeywords];
-
-        if (allKeywords.some((kw) => searchText.includes(kw))) {
+        // Intensity and group matching (0-10 points)
+        const descriptionText = `${sport.description || ""}`.toLowerCase();
+        if (
+          (intensity === "high" && (descriptionText.includes("intenzív") || descriptionText.includes("verseng"))) ||
+          (intensity === "light" && (descriptionText.includes("relax") || descriptionText.includes("kezdő"))) ||
+          (intensity === "moderate" && (descriptionText.includes("aktív") || descriptionText.includes("közepes")))
+        ) {
           matchScore += 10;
+        } else if (group === "team_sport" && sport.sportType?.includes("Tenisz")) {
+          matchScore += 8;
+        } else {
+          matchScore += 2;
         }
 
         return {
@@ -182,12 +148,19 @@ export async function handleSportsRoutes(req, res, pathname, fullUrl) {
         };
       });
 
-      // Sort by matchScore descending and return top recommendations
+      // Sort by matchScore descending and ensure we have recommendations
       const topRecommendations = recommendations
+        .filter((s) => s.matchScore > 0)
         .sort((a, b) => b.matchScore - a.matchScore)
         .slice(0, 5);
 
-      return json(res, 200, { recommendations: topRecommendations });
+      // If no matches found with score filter, return top 5 anyway
+      const finalRecommendations =
+        topRecommendations.length > 0
+          ? topRecommendations
+          : recommendations.sort((a, b) => b.matchScore - a.matchScore).slice(0, 5);
+
+      return json(res, 200, { recommendations: finalRecommendations });
     } catch (error) {
       return json(res, 500, { message: error.message });
     }
