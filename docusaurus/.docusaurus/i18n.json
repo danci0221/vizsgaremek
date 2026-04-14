@@ -1,0 +1,20 @@
+{
+  "defaultLocale": "hu",
+  "locales": [
+    "hu"
+  ],
+  "path": "i18n",
+  "currentLocale": "hu",
+  "localeConfigs": {
+    "hu": {
+      "label": "Magyar",
+      "direction": "ltr",
+      "htmlLang": "hu",
+      "calendar": "gregory",
+      "path": "hu",
+      "translate": false,
+      "url": "https://danci0221.github.io",
+      "baseUrl": "/vizsgaremek/"
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "/vizsgaremek/__docusaurus/debug-d8e": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/__docusaurus/debug/config-8d9": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/__docusaurus/debug/content-fa7": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    },
+    "__props": "__props---vizsgaremek-docusaurus-debug-contentfed-f4e"
+  },
+  "/vizsgaremek/__docusaurus/debug/globalData-13b": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/__docusaurus/debug/metadata-679": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/__docusaurus/debug/registry-f38": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/__docusaurus/debug/routes-03c": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docusaurus-debugb-38-97e"
+    }
+  },
+  "/vizsgaremek/naplo-2e8": {
+    "__comp": "__comp---site-src-pages-naplo-js-2-b-0-c18",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-naploa-74-e19"
+    },
+    "config": "config---vizsgaremek-naplo-5-e-9-23a"
+  },
+  "/vizsgaremek/docs-148": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-docsaba-847"
+    }
+  },
+  "/vizsgaremek/docs-63c": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---vizsgaremek-docs-53-c-759"
+  },
+  "/vizsgaremek/docs-282": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/vizsgaremek/docs/adatbazis-e50": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-adatbazisd-00-6a6"
+  },
+  "/vizsgaremek/docs/admin-felulet-b1c": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-admin-felulet-581-d31"
+  },
+  "/vizsgaremek/docs/architektura-6b6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-architektura-5-cf-909"
+  },
+  "/vizsgaremek/docs/backend-api-9a3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-backend-api-4-ad-cf5"
+  },
+  "/vizsgaremek/docs/csapatmunka-b4d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-csapatmunkaef-0-68f"
+  },
+  "/vizsgaremek/docs/frontend-ui-b14": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-frontend-ui-497-596"
+  },
+  "/vizsgaremek/docs/projekt-attekintes-1b2": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-projekt-attekintescb-3-e0e"
+  },
+  "/vizsgaremek/docs/telepites-691": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-telepitesdb-5-b1b"
+  },
+  "/vizsgaremek/docs/teszteles-qa-219": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---vizsgaremek-docs-teszteles-qa-5-ea-50f"
+  },
+  "/vizsgaremek/-820": {
+    "__comp": "__comp---site-src-pages-index-jsc-4-f-f99",
+    "__context": {
+      "plugin": "plugin---vizsgaremek-naploa-74-e19"
+    },
+    "config": "config---vizsgaremek-naplo-5-e-9-23a"
+  }
+}

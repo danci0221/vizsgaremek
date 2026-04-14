@@ -1,0 +1,28 @@
+{
+  "id": "csapatmunka",
+  "title": "Csapatmunka és Módszertan",
+  "description": "A SportHub platform fejlesztése során a hatékony munkaszervezés és a tiszta felelősségi körök jelentették a projekt sikerességének alapját. A fejlesztési folyamatot az iteratív, Agilis elvek mentén szerveztük: a feladatokat kisebb, jól definiált egységekre bontottuk, amelyeket heti sprintekben valósítottunk meg. Ez a megközelítés lehetővé tette a folyamatos önreflexiót és a rugalmas prioritásváltásokat – ha egy korábbi sprint tapasztalatai alapján módosítani kellett a terven, azt gyorsan és hatékonyan megtehettük.",
+  "source": "@site/docs/02-csapatmunka.md",
+  "sourceDirName": ".",
+  "slug": "/csapatmunka",
+  "permalink": "/vizsgaremek/docs/csapatmunka",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "id": "csapatmunka",
+    "sidebar_position": 2,
+    "title": "Csapatmunka és Módszertan"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Projekt Áttekintés",
+    "permalink": "/vizsgaremek/docs/projekt-attekintes"
+  },
+  "next": {
+    "title": "Telepítés és Futtatás",
+    "permalink": "/vizsgaremek/docs/telepites"
+  }
+}

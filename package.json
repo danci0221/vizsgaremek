@@ -12,5 +12,11 @@
     "docker:db:logs": "docker compose -f docker-compose.yml logs -f db",
     "test": "cd backend && npm test",
     "test:frontend:selenium": "cd Frontend && npm run test:selenium"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.10.0",
+    "@docusaurus/module-type-aliases": "^3.10.0",
+    "@docusaurus/preset-classic": "^3.10.0",
+    "@docusaurus/types": "^3.10.0"
   }
 }

@@ -1,0 +1,24 @@
+{
+  "id": "teszteles-qa",
+  "title": "Tesztelés és QA",
+  "description": "Egy komplex, többrétegű webalkalmazás fejlesztése során elengedhetetlen a szisztematikus tesztelés. A SportHub platform esetében a legkisebb módosítás – legyen az egy adatbázis-sémaváltoztatás, egy backend validációs szabály módosítása vagy egy React komponens átszervezése – láncreakciót indíthat el a rendszerben. Ennek megelőzésére a szoftverfejlesztési életciklusunkba (SDLC) többszintű, automatizált tesztelési stratégiát integráltunk.",
+  "source": "@site/docs/09-teszteles-qa.md",
+  "sourceDirName": ".",
+  "slug": "/teszteles-qa",
+  "permalink": "/vizsgaremek/docs/teszteles-qa",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "id": "teszteles-qa",
+    "sidebar_position": 9,
+    "title": "Tesztelés és QA"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Admin Vezérlőpult",
+    "permalink": "/vizsgaremek/docs/admin-felulet"
+  }
+}

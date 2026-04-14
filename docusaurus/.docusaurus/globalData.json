@@ -1,0 +1,73 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/vizsgaremek/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/vizsgaremek/docs",
+          "mainDocId": "projekt-attekintes",
+          "docs": [
+            {
+              "id": "adatbazis",
+              "path": "/vizsgaremek/docs/adatbazis",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "admin-felulet",
+              "path": "/vizsgaremek/docs/admin-felulet",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "architektura",
+              "path": "/vizsgaremek/docs/architektura",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "backend-api",
+              "path": "/vizsgaremek/docs/backend-api",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "csapatmunka",
+              "path": "/vizsgaremek/docs/csapatmunka",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "frontend-ui",
+              "path": "/vizsgaremek/docs/frontend-ui",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "projekt-attekintes",
+              "path": "/vizsgaremek/docs/projekt-attekintes",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "telepites",
+              "path": "/vizsgaremek/docs/telepites",
+              "sidebar": "docsSidebar"
+            },
+            {
+              "id": "teszteles-qa",
+              "path": "/vizsgaremek/docs/teszteles-qa",
+              "sidebar": "docsSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docsSidebar": {
+              "link": {
+                "path": "/vizsgaremek/docs/projekt-attekintes",
+                "label": "projekt-attekintes"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

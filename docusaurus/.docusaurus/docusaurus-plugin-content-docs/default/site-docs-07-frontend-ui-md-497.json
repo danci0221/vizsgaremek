@@ -1,0 +1,28 @@
+{
+  "id": "frontend-ui",
+  "title": "Frontend és Felhasználói Felület",
+  "description": "A SportHub kliensoldala egy korszerű, komponensalapú React 19 Single Page Application (SPA), amelyet a Vite (Rolldown alapú) fejlesztői környezet szolgál ki. Az alkalmazás a teljes vizuális megjelenést egyedi CSS stíluslapokkal valósítja meg, kerülve a nehézsúlyú UI framework-öket (mint a Bootstrap vagy a Tailwind). A Flexbox és CSS Grid rácsrendszerek biztosítják a tökéletes reszponzivitást mobilkijelzőtől asztali monitorig.",
+  "source": "@site/docs/07-frontend-ui.md",
+  "sourceDirName": ".",
+  "slug": "/frontend-ui",
+  "permalink": "/vizsgaremek/docs/frontend-ui",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "id": "frontend-ui",
+    "sidebar_position": 7,
+    "title": "Frontend és Felhasználói Felület"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Backend és API",
+    "permalink": "/vizsgaremek/docs/backend-api"
+  },
+  "next": {
+    "title": "Admin Vezérlőpult",
+    "permalink": "/vizsgaremek/docs/admin-felulet"
+  }
+}

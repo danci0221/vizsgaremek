@@ -53,8 +53,18 @@ function installAndStart() {
             process.exit(1);
           }
 
-          console.log("✅ Összes függőség telepítve! Szerverek indítása...\n");
-          resolve();
+          console.log("📦 Függőségek telepítése a docusaurus-ban...");
+          const installDocs = runNpm(["--prefix", "docusaurus", "install"]);
+
+          installDocs.on("exit", (code) => {
+            if (code !== 0) {
+              console.error("Hiba a docusaurus install alatt!");
+              process.exit(1);
+            }
+
+            console.log("✅ Összes függőség telepítve! Szerverek indítása...\n");
+            resolve();
+          });
         });
       });
     });
@@ -75,3 +85,4 @@ await installAndStart();
 
 start("API", ["--prefix", "backend", "run", "dev"]);
 start("Frontend", ["--prefix", "Frontend", "run", "dev"]);
+start("Docs", ["--prefix", "docusaurus", "run", "start"]);

@@ -1,0 +1,28 @@
+{
+  "id": "adatbazis",
+  "title": "Adatbázis Felépítése",
+  "description": "A SportHub adatbázisa a platform teljes üzleti logikájának alapja: itt tárolódnak a felhasználói fiókok, a sportolási lehetőségek részletes adatai, a kedvencek, a jelentkezések és a bejelentkezési előzmények. A rendszert egy MySQL 8.4 relációs adatbázis-kezelő (RDBMS) szolgálja ki, amely az InnoDB tárolómotort használja a tranzakcióbiztonság (ACID garanciák) és az idegen kulcsos hivatkozási integritás érdekében.",
+  "source": "@site/docs/05-adatbazis.md",
+  "sourceDirName": ".",
+  "slug": "/adatbazis",
+  "permalink": "/vizsgaremek/docs/adatbazis",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "id": "adatbazis",
+    "sidebar_position": 5,
+    "title": "Adatbázis Felépítése"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Rendszer Architektúra",
+    "permalink": "/vizsgaremek/docs/architektura"
+  },
+  "next": {
+    "title": "Backend és API",
+    "permalink": "/vizsgaremek/docs/backend-api"
+  }
+}

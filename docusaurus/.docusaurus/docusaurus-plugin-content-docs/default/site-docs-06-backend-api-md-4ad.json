@@ -1,0 +1,28 @@
+{
+  "id": "backend-api",
+  "title": "Backend és API",
+  "description": "A SportHub szerveroldala egy Node.js futtatókörnyezetben, az Express.js 4.x keretrendszerre épülő RESTful API. A backend felelős a kéréskezelésért, a bemeneti validációért, az adattranszformációért, a kriptográfiai műveletekért és a MySQL adatbázissal történő kommunikációért. A szerver strict moduláris felépítésű: a Routes → Services → Utils rétegezés garantálja, hogy minden kódrészlet egyetlen, jól definiált feladatot lát el.",
+  "source": "@site/docs/06-backend-api.md",
+  "sourceDirName": ".",
+  "slug": "/backend-api",
+  "permalink": "/vizsgaremek/docs/backend-api",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "id": "backend-api",
+    "sidebar_position": 6,
+    "title": "Backend és API"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Adatbázis Felépítése",
+    "permalink": "/vizsgaremek/docs/adatbazis"
+  },
+  "next": {
+    "title": "Frontend és Felhasználói Felület",
+    "permalink": "/vizsgaremek/docs/frontend-ui"
+  }
+}

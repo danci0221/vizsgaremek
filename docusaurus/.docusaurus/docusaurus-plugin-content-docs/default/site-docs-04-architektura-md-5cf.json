@@ -1,0 +1,28 @@
+{
+  "id": "architektura",
+  "title": "Rendszer Architektúra",
+  "description": "A SportHub platform egy klasszikus, háromrétegű (three-tier) webalkalmazás, amelynek egyes rétegei szigorúan elválasztott felelősségi körökkel rendelkeznek. Ez a szeparáció lehetővé teszi, hogy az adatbázis-logikát, a szervermentes üzleti szabályokat és a felhasználói felületet egymástól függetlenül fejlesszük, teszteljük és skálázzuk.",
+  "source": "@site/docs/04-architektura.md",
+  "sourceDirName": ".",
+  "slug": "/architektura",
+  "permalink": "/vizsgaremek/docs/architektura",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "id": "architektura",
+    "sidebar_position": 4,
+    "title": "Rendszer Architektúra"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Telepítés és Futtatás",
+    "permalink": "/vizsgaremek/docs/telepites"
+  },
+  "next": {
+    "title": "Adatbázis Felépítése",
+    "permalink": "/vizsgaremek/docs/adatbazis"
+  }
+}

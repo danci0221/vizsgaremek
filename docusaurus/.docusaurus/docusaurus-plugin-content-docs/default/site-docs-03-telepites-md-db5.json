@@ -1,0 +1,28 @@
+{
+  "id": "telepites",
+  "title": "Telepítés és Futtatás",
+  "description": "A SportHub platform fejlesztésekor az egyik legfontosabb szempont a reprodukálható fejlesztői és futtatási környezet kialakítása volt. A „nálam működik\" típusú problémák kiküszöbölésére az adatbázis-réteget teljes egészében Docker konténerbe csomagoltuk, míg a backend és a frontend szerverek lokálisan, Node.js segítségével futnak a fejlesztés során. Ez az ún. hibrid megközelítés ötvözi a konténerizáció előnyeit (izolált, determinisztikus adatbázis) a gyors fejlesztői iteráció kényelmével (natív HMR a frontenden és azonnali szerver-újraindítás).",
+  "source": "@site/docs/03-telepites.md",
+  "sourceDirName": ".",
+  "slug": "/telepites",
+  "permalink": "/vizsgaremek/docs/telepites",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "id": "telepites",
+    "sidebar_position": 3,
+    "title": "Telepítés és Futtatás"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Csapatmunka és Módszertan",
+    "permalink": "/vizsgaremek/docs/csapatmunka"
+  },
+  "next": {
+    "title": "Rendszer Architektúra",
+    "permalink": "/vizsgaremek/docs/architektura"
+  }
+}

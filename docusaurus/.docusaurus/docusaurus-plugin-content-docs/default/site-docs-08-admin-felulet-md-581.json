@@ -1,0 +1,28 @@
+{
+  "id": "admin-felulet",
+  "title": "Admin Vezérlőpult",
+  "description": "A SportHub platform tartalmának és felhasználóinak hosszú távú menedzseléséhez elengedhetetlen egy professzionális adminisztrációs felület. Ahelyett, hogy a rendszergazdák közvetlenül SQL parancsokkal vagy phpMyAdminnal manipulálnák az adatbázist, a SportHub egy integrált, a React alkalmazásba épített Admin Dashboard (AdminPage.jsx) oldalt biztosít, amely a /admin útvonalon érhető el.",
+  "source": "@site/docs/08-admin-felulet.md",
+  "sourceDirName": ".",
+  "slug": "/admin-felulet",
+  "permalink": "/vizsgaremek/docs/admin-felulet",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "id": "admin-felulet",
+    "sidebar_position": 8,
+    "title": "Admin Vezérlőpult"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Frontend és Felhasználói Felület",
+    "permalink": "/vizsgaremek/docs/frontend-ui"
+  },
+  "next": {
+    "title": "Tesztelés és QA",
+    "permalink": "/vizsgaremek/docs/teszteles-qa"
+  }
+}

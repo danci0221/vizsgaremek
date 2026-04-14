@@ -17,6 +17,7 @@ A SportHub egy modern, Full-Stack webalkalmazás, amely lehetővé teszi a felha
 6. [Szoftvertesztelés (QA)](#6-szoftvertesztelés-qa)
 7. [Fejlesztési eszközök](#7-fejlesztési-eszközök)
 8. [Környezet és Futtatás](#8-környezet-és-futtatás)
+9. [Dokumentáció (Docusaurus)](#9-dokumentáció-docusaurus)
 
 ---
 
@@ -131,3 +132,21 @@ npm run test:selenium
 Alapértelmezésben a Selenium runner elindít egy helyi Vite szervert `http://127.0.0.1:5173` címen, majd lefuttatja a főoldal, a kínálat és a védett útvonal átirányításának ellenőrzését. A port felülírható `SELENIUM_PORT`, a teljes URL pedig `SELENIUM_BASE_URL` változóval. A böngésző és a futtatás módja a `SELENIUM_BROWSER`, `SELENIUM_HEADLESS` és `SELENIUM_START_SERVER` környezeti változókkal állítható.
 
 A tesztek külön fájlokra vannak bontva a `Frontend/tests/selenium` mappában, például `auth.test.js`, `nav.test.js`, `catalog.test.js`, `features.test.js` és `map.test.js`, így egyes suite-ok külön is futtathatók `node ./tests/selenium/<fajlnev>` formában.
+
+## 9. Dokumentáció (Docusaurus)
+
+A projekt részletes technikai dokumentációja egy [Docusaurus](https://docusaurus.io/) alapú statikus oldalon érhető el, a `docusaurus/` mappában.
+
+**Tartalma:**
+* Projekt áttekintés és csapatmunka
+* Telepítési és konfigurációs útmutató
+* Adatbázis séma leírás
+* Backend API dokumentáció
+* Frontend architektúra
+* Admin felület dokumentáció
+* Tesztelési stratégia és eredmények
+* Fejlesztési napló
+
+**Indítás:**
+
+Az oldal alapértelmezés szerint a `http://localhost:3000/vizsgaremek/` címen érhető el. Az `npm run dev:full` parancs automatikusan elindítja a dokumentációs oldalt is a backend és frontend mellett.
