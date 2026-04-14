@@ -74,26 +74,33 @@
   font-size: 0.85em;
 }
 
-/* Dark theme adjustments */
+/* Dark theme adjustments - for non-homepage routes */
 .page-shell:not(.page-shell--sporthub-home) .ticker-wrapper {
-  background: linear-gradient(90deg, rgba(13, 34, 56, 0.88) 0%, rgba(23, 168, 255, 0.88) 50%, rgba(13, 34, 56, 0.88) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-color: rgba(23, 168, 255, 0.12);
+  background: linear-gradient(90deg, rgba(4, 13, 23, 0.92) 0%, rgba(9, 27, 44, 0.92) 50%, rgba(4, 13, 23, 0.92) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(23, 168, 255, 0.15);
   box-shadow: 
-    0 8px 24px rgba(23, 168, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 8px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(23, 168, 255, 0.08);
+}
+
+.page-shell:not(.page-shell--sporthub-home) .ticker-wrapper::before {
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(23, 168, 255, 0.12), transparent 32%),
+    radial-gradient(circle at 85% 50%, rgba(69, 226, 138, 0.06), transparent 35%);
 }
 
 .page-shell:not(.page-shell--sporthub-home) .ticker-text {
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(232, 245, 255, 0.96);
+  font-weight: 600;
 }
 
 .page-shell:not(.page-shell--sporthub-home) .ticker-separator {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(23, 168, 255, 0.45);
 }
 
-/* Light theme override for homepage hero */
+/* Light theme - homepage specific */
 .page-shell.page-shell--sporthub-home .ticker-wrapper {
   background: linear-gradient(90deg, rgba(11, 107, 242, 0.91) 0%, rgba(23, 168, 255, 0.91) 50%, rgba(11, 107, 242, 0.91) 100%);
   backdrop-filter: blur(12px);
