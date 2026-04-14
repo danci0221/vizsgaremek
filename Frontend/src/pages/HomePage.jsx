@@ -315,11 +315,11 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
 
       <Ticker
         items={[
-          "🏃 Futás • Energikus napi mozgás",
-          "🏊 Úszás • Teljes testes edzés",
-          "🧘 Jóga • Rugalmasság és kreativitás",
-          "🏋️ Konditerem • Erőnövelés és forma",
-          "🎾 Tenisz • Közösségi sport",
+          "Futás • Energikus napi mozgás",
+          "Úszás • Teljes testes edzés",
+          "Jóga • Rugalmasság és kreativitás",
+          "Konditerem • Erőnövelés és forma",
+          "Tenisz • Közösségi sport",
         ]}
       />
 
