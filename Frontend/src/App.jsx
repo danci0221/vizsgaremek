@@ -121,7 +121,7 @@ function App() {
       "/",
       "/kinalat",
       "/tippek",
-      "/programterv",
+      "/sportkviz",
       "/fiok",
       "/kedvencek",
       "/terkep",
@@ -887,7 +887,7 @@ function App() {
     content = <TipsPage />;
   }
 
-  if (location.pathname === "/programterv") {
+  if (location.pathname === "/sportkviz") {
     content = (
       <PlannerPage
         sports={sports}

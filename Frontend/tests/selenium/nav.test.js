@@ -38,11 +38,11 @@ async function navTesztek() {
         await driver.wait(until.urlContains('/terkep'), 5000);
         console.log("✅ 23. Navigáció Térkép oldalra: OK");
 
-        // 24. Navigáció a Programterv oldalra
-        let programtervLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-planner"]')), 5000);
-        await programtervLink.click();
-        await driver.wait(until.urlContains('/programterv'), 5000);
-        console.log("✅ 24. Navigáció Programterv oldalra: OK");
+        // 24. Navigáció a Sportkvíz oldalra
+        let sportkvizLink = await driver.wait(until.elementLocated(By.css('[data-testid="nav-link-planner"]')), 5000);
+        await sportkvizLink.click();
+        await driver.wait(until.urlContains('/sportkviz'), 5000);
+        console.log("24. Navigáció Sportkvíz oldalra: OK");
 
         // 25. Footer: Kínálat link és visszatérés a Főoldalra
         await driver.get(`${BASE_URL}/`);

@@ -9,7 +9,7 @@ export default function Header({ authUser, onSignOut }) {
     "/": "nav-link-home",
     "/kinalat": "nav-link-catalog",
     "/tippek": "nav-link-tips",
-    "/programterv": "nav-link-planner",
+    "/sportkviz": "nav-link-planner",
     "/terkep": "nav-link-map",
   };
 
@@ -17,7 +17,7 @@ export default function Header({ authUser, onSignOut }) {
     { to: "/", label: "Főoldal" },
     { to: "/kinalat", label: "Kínálat" },
     { to: "/tippek", label: "Tippek" },
-    { to: "/programterv", label: "Programterv" },
+    { to: "/sportkviz", label: "Sportkvíz" },
     { to: "/terkep", label: "Térkép" },
   ];
 
@@ -91,8 +91,8 @@ export default function Header({ authUser, onSignOut }) {
                 <NavLink to="/kedvencek" className="user-item" onClick={() => setMenuOpen(false)}>
                   Kedvencek
                 </NavLink>
-                <NavLink to="/programterv" className="user-item" onClick={() => setMenuOpen(false)}>
-                  Programterv
+                <NavLink to="/sportkviz" className="user-item" onClick={() => setMenuOpen(false)}>
+                  Sportkvíz
                 </NavLink>
                 {isAdmin && (
                   <NavLink to="/admin" className="user-item" onClick={() => setMenuOpen(false)}>

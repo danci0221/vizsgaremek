@@ -85,7 +85,7 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
       titleEnd: "Minden Héten",
       cta: "Belépek a központba",
       copy:
-        "Keresés, térkép, programterv és jelentkezés egy folyamatban. Minden adott, hogy következetesen haladj előre.",
+        "Keresés, térkép, sportkvíz és jelentkezés egy folyamatban. Minden adott, hogy következetesen haladj előre.",
     },
   ];
 
@@ -184,8 +184,8 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
         "A SportHub megmutatja, hogyan építs heti rendszert idősáv, helyszín és költségkeret alapján. Kevesebb káosz, több előrelépés.",
       image:
         "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1600&q=80",
-      button: "Megtervezem a hetem",
-      action: () => navigate("/programterv"),
+      button: "Sportkvízt játszom",
+      action: () => navigate("/sportkviz"),
       footer: `Már ${stats.total}+ aktív sportopció érhető el`,
     },
     {

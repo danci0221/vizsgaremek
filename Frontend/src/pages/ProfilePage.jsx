@@ -90,8 +90,8 @@ export default function ProfilePage({
             <Link to="/kedvencek" className="cta">
               Kedvenceim megnyitása
             </Link>
-            <Link to="/programterv" className="ghost">
-              Programterv
+            <Link to="/sportkviz" className="ghost">
+              Sportkvíz
             </Link>
             <button type="button" className="ghost danger-outline" onClick={onSignOut}>
               Kijelentkezés
@@ -198,13 +198,13 @@ export default function ProfilePage({
           </article>
 
           <article className="profile-panel profile-card">
-            <p className="eyebrow">Heti ritmus</p>
-            <h3>Programterv</h3>
+            <p className="eyebrow">Sport ajánlás</p>
+            <h3>Sportkvíz</h3>
             <p>
-              Rakd össze a heti sportmenetrendedet külön városra, időpontra vagy sporttípusra.
+              Pár kérdésre válaszolva megtudod, mely sportok illeszkednek legjobban az igényeidhez.
             </p>
-            <Link to="/programterv" className="ghost">
-              Programterv megnyitása
+            <Link to="/sportkviz" className="ghost">
+              Sportkvíz megnyitása
             </Link>
           </article>
 

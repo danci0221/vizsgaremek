@@ -241,8 +241,8 @@ export const featureHighlights = [
   },
   {
     index: "03",
-    title: "Programterv pár perc alatt",
-    text: "Állíts össze heti ritmust presetekkel, és tartsd a fókuszt.",
+    title: "Sportkvíz pár perc alatt",
+    text: "Pár kérdésre válaszolva megtudod, mely sportok illeszkednek hozzád.",
   },
   {
     index: "04",
@@ -275,14 +275,14 @@ export const challengeCards = [
 export const ctaHighlights = [
   "Valós idejű ajánlások és okos szűrők",
   "Kedvencek automatikus mentése",
-  "Programterv, ami a heti ritmushoz igazodik",
+  "Sportkvíz, mely személyre szabott ajánlásokat ad",
 ];
 
 export const footerLinksBase = [
   { to: "/", label: "Főoldal" },
   { to: "/kinalat", label: "Kínálat" },
   { to: "/tippek", label: "Tippek" },
-  { to: "/programterv", label: "Programterv" },
+  { to: "/sportkviz", label: "Sportkvíz" },
   { to: "/terkep", label: "Térkép" },
 ];
 

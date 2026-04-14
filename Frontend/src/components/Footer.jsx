@@ -13,8 +13,8 @@ export default function Footer({ authUser, isAdmin, now, isHome = false }) {
           <div className="sh-footer-col">
             <h5>Kiemelt Programok</h5>
             <Link to="/kinalat">Kínálat</Link>
-            <Link to="/programterv">Programterv</Link>
-            <Link to="/kedvencek">Kedvenceim</Link>
+            <Link to="/sportkviz">Sportkvíz</Link>
+            <Link to="/kedvenceim">Kedvenceim</Link>
           </div>
 
           <div className="sh-footer-col">
@@ -48,7 +48,7 @@ export default function Footer({ authUser, isAdmin, now, isHome = false }) {
             <span className="logo-text">SportHub</span>
           </Link>
           <p className="footer-note">
-            Egy hely, ahol a kínálat, a térkép és a programterv egységes sportélménnyé áll össze.
+            Egy hely, ahol a kínálat, a térkép és a sportkvíz egységes sportélménnyé áll össze.
           </p>
           <div className="footer-badges">
             <span>Élő feed</span>
