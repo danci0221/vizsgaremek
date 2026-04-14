@@ -1,4 +1,4 @@
-# ⚽ SportHub – Vizsgaremek
+# SportHub – Vizsgaremek
 
 **Szoftverfejlesztő és -tesztelő záróvizsga remek** 
 
@@ -8,7 +8,7 @@ A SportHub egy modern, Full-Stack webalkalmazás, amely lehetővé teszi a felha
 
 ---
 
-## 📑 Tartalomjegyzék
+## Tartalomjegyzék
 1. [A projekt célkitűzése](#1-a-projekt-célkitűzése)
 2. [Fő funkciók és modulok](#2-fő-funkciók-és-modulok)
 3. [Technológiai Stack](#3-technológiai-stack)
@@ -57,24 +57,26 @@ A rendszert szigorúan rétegezett, mikro-szolgáltatás (microservices) szemlé
 
 ## 4. Csapatmunka és Feladatkörök
 
-A fejlesztés során az Agilis módszertant követtük, heti sprintekkel és folyamatos integrációval. A komplexebb moduloknál páros programozást alkalmaztunk. Mindkét csapattag Full-Stack szemléletben dolgozott.
+A fejlesztés során az Agilis módszertant követtük, heti sprintekkel és folyamatos integrációval. A komplexebb moduloknál páros programozást alkalmaztunk. Mindketten Full-Stack fejlesztőként dolgoztunk, azonban a feladatok megosztásánál figyelembe vettük az egyéni erősségeket: Máté inkább a frontend, míg Dániel inkább a backend terület felé orientálódott. Ennek ellenére mindketten aktívan részt vettünk mindkét oldal fejlesztésében.
 
 ### Decs Dániel
 
-* **Backend fejlesztés:** Node.js & Express.js alapú RESTful API architektúrájának megtervezése és implementálása.
-* **Autentifikáció & Biztonság:** JWT tokenek és Bcrypt alapú jelszókezelés implementálása.
-* **Adatbázis integrációja:** MySQL2 driverrel történő adatbázis kommunikáció, service réteg entwickálása, query optimalizálás.
-* **API Végpontok:** Sportlehetőségek, kedvencek, regisztráció és bejelentkezés végpontjainak teljes körű fejlesztése.
-* **QA szerveroldal:** Backend egységtesztek írása Vitest/Jest segítségével, mock-olt adatbázis kapcsolatokkal.
+* **Backend fókusz:** Node.js & Express.js alapú RESTful API architektúra tervezése és implementálása.
+* **Autentifikáció & Biztonság:** JWT tokenek és Bcrypt alapú jelszókezelés megvalósítása.
+* **Adatbázis integráció:** MySQL2 driverrel történő adatbázis kommunikáció, service réteg kialakítása, query optimalizálás.
+* **API végpontok:** Sportlehetőségek, kedvencek, regisztráció és bejelentkezés funkciók fejlesztése.
+* **Frontend hozzájárulás:** Kliensoldali logika és komponensek fejlesztésében való részvétel.
+* **QA:** Backend egységtesztek írása Vitest/Jest segítségével, valamint frontend funkciók tesztelése.
 
 ### Farkas Máté
 
-* **Frontend fejlesztés:** React.js SPA (Single Page Application) felépítése Vite build tools-al.
-* **UI/UX dizájn:** Reszponzív felhasználói felület kialakítása CSS Grid/Flexbox segítségével.
-* **Komponens architektúra:** React komponensek hierarchikus felépítése, Context API-val történő állapotkezelés.
-* **API integráció:** Axios-al történő backend kommunikáció, request/response kezelés.
+* **Frontend fókusz:** React.js alapú SPA (Single Page Application) fejlesztése Vite build eszközzel.
+* **UI/UX dizájn:** Reszponzív felhasználói felület kialakítása CSS Grid és Flexbox segítségével.
+* **Komponens architektúra:** React komponensstruktúra kialakítása, állapotkezelés Context API-val.
+* **API integráció:** Axios használata a backend kommunikációhoz, request/response kezelés.
 * **Admin felület:** Adminisztrációs felület fejlesztése az adatok kezeléséhez.
-* **QA frontend:** End-to-End és integrációs tesztek írása a kliensoldali funkciók validálásához.
+* **Backend hozzájárulás:** API végpontok és adatkezelési logika fejlesztésében való részvétel.
+* **QA:** End-to-End és integrációs tesztek készítése, valamint backend funkciók ellenőrzése.
 
 ## 5. Adatbázis architektúra
 
