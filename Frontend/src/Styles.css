@@ -3671,7 +3671,7 @@ body:has(.page-shell--sporthub-home)::after {
 
 .sh-hero-splash {
   position: relative;
-  min-height: clamp(560px, 100vh, 1200px);
+  min-height: clamp(560px, 95vh, 1000px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -4425,7 +4425,7 @@ body:has(.page-shell--sporthub-home)::after {
   }
 
   .sh-hero-splash {
-    min-height: 100vh;
+    min-height: 95vh;
   }
 
   .sh-newsletter-form {
