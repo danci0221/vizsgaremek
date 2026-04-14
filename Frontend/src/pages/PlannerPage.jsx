@@ -1,28 +1,50 @@
-import { useState, useMemo } from "react";
-import { timeSlotLabels, plannerDefaults } from "../constants";
+import { useState } from "react";
+import { sportQuizQuestions } from "../constants";
+import { apiUrl } from "../lib/api";
 
-export default function PlannerPage({ sports, uniqueTypes, uniqueLocations, onOpenInCatalog }) {
-  const [planner, setPlanner] = useState(plannerDefaults);
-  const [plannerSubmitted, setPlannerSubmitted] = useState(false);
+export default function PlannerPage({ sports, onOpenInCatalog }) {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const plannerResults = useMemo(() => {
-    return sports
-      .filter((item) => {
-        const matchesType = planner.type === "all" || item.sportType === planner.type;
-        const matchesLocation =
-          planner.location === "all" || item.location === planner.location;
-        const matchesTime = planner.timeSlot === "all" || item.timeSlot === planner.timeSlot;
-        const matchesBudget =
-          planner.budget === "all" ||
-          (planner.budget === "free" && item.price === 0) ||
-          (planner.budget === "budget" && item.price > 0 && item.price <= 5000) ||
-          (planner.budget === "premium" && item.price > 5000);
+  const totalQuestions = sportQuizQuestions.length;
+  const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
-        return matchesType && matchesLocation && matchesTime && matchesBudget;
-      })
-      .sort((a, b) => b.recommendationScore - a.recommendationScore)
-      .slice(0, 3);
-  }, [sports, planner]);
+  const handleAnswer = (questionId, value) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    
+    // Auto-advance to next question
+    if (currentQuestion < totalQuestions - 1) {
+      setTimeout(() => {
+        setCurrentQuestion(currentQuestion + 1);
+      }, 300);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(apiUrl("sports/quiz-recommendations"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(answers),
+      });
+
+      if (!response.ok) throw new Error("Hiba történt az ajánlások generálásakor");
+      
+      const data = await response.json();
+      setResults(data.recommendations || []);
+    } catch (err) {
+      setError(err.message);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openInCatalog = (item) => {
     if (typeof onOpenInCatalog === "function") {
@@ -30,95 +52,149 @@ export default function PlannerPage({ sports, uniqueTypes, uniqueLocations, onOp
       return;
     }
 
-    // Visszafallaback, ha mégsem kapta meg a propot.
     const event = new CustomEvent("openInCatalog", { detail: item });
     window.dispatchEvent(event);
   };
 
-  return (
-    <section className="planner" data-testid="planner-page">
-      <div className="section-heading">
-        <p className="eyebrow">Programterv</p>
-        <h2>Állíts össze heti sporttervet gyors presetekkel</h2>
-      </div>
-      <form
-        className="planner-form"
-        data-testid="planner-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setPlannerSubmitted(true);
-        }}
-      >
-        <select
-          data-testid="planner-type"
-          value={planner.type}
-          onChange={(e) => setPlanner((prev) => ({ ...prev, type: e.target.value }))}
-        >
-          <option value="all">Bármilyen sporttípus</option>
-          {uniqueTypes.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-        <select
-          data-testid="planner-location"
-          value={planner.location}
-          onChange={(e) => setPlanner((prev) => ({ ...prev, location: e.target.value }))}
-        >
-          <option value="all">Bármelyik város</option>
-          {uniqueLocations.map((locationValue) => (
-            <option key={locationValue} value={locationValue}>
-              {locationValue}
-            </option>
-          ))}
-        </select>
-        <select
-          data-testid="planner-time-slot"
-          value={planner.timeSlot}
-          onChange={(e) => setPlanner((prev) => ({ ...prev, timeSlot: e.target.value }))}
-        >
-          <option value="all">Bármelyik idősáv</option>
-          {Object.entries(timeSlotLabels).map(([key, label]) => (
-            <option key={key} value={key}>
-              {label}
-            </option>
-          ))}
-        </select>
-        <select
-          data-testid="planner-budget"
-          value={planner.budget}
-          onChange={(e) => setPlanner((prev) => ({ ...prev, budget: e.target.value }))}
-        >
-          <option value="all">Bármilyen költség</option>
-          <option value="free">Ingyenes</option>
-          <option value="budget">Kedvező (0-5000)</option>
-          <option value="premium">Prémium (5000+)</option>
-        </select>
-        <button type="submit" className="dark-btn" data-testid="planner-submit">
-          Terv generálása
-        </button>
-      </form>
-      {plannerSubmitted && (
-        <div className="planner-results" data-testid="planner-results">
-          {plannerResults.length > 0 ? (
-            plannerResults.map((item) => (
-              <article key={item.id} data-testid="planner-result-card">
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
-                <p>
-                  <strong>Ár:</strong> {item.priceLabel}
-                </p>
-                <button type="button" className="ghost" onClick={() => openInCatalog(item)}>
-                  Megnyitás a kínálat oldalon
-                </button>
-              </article>
-            ))
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setAnswers({});
+    setResults(null);
+    setError(null);
+  };
+
+  // Results screen
+  if (results !== null) {
+    return (
+      <section className="quiz-container" data-testid="quiz-results">
+        <div className="quiz-results">
+          <div className="results-header">
+            <h2>🎯 Az Én Sportok</h2>
+            <p>Ezek a legjobban illő sportok a válaszaid alapján</p>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          {results.length > 0 ? (
+            <>
+              <div className="recommendations-grid">
+                {results.map((item) => (
+                  <article key={item.id} className="rec-card" data-testid="rec-card">
+                    <div className="rec-image">
+                      <img src={item.image} alt={item.name} />
+                      <div className="match-badge">{Math.round(item.matchScore || 85)}% match</div>
+                    </div>
+                    <div className="rec-content">
+                      <h3>{item.name}</h3>
+                      <p className="type-label">{item.sportType}</p>
+                      <p className="description">{item.description}</p>
+                      <div className="rec-meta">
+                        <span className="location">📍 {item.location}</span>
+                        <span className="price">{item.priceLabel}</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="rec-button"
+                        onClick={() => openInCatalog(item)}
+                      >
+                        Megnézem a kínálatban
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <button className="restart-button" onClick={resetQuiz}>
+                ↻ Újabb kvíz
+              </button>
+            </>
           ) : (
-            <p className="empty-state">Erre a kombinációra most nincs találat.</p>
+            <>
+              <p className="empty-results">Sajnos nincs ajánlásunk. Próbáld meg más választásokkal!</p>
+              <button className="restart-button" onClick={resetQuiz}>
+                ↻ Újra próbálkozom
+              </button>
+            </>
           )}
         </div>
-      )}
+      </section>
+    );
+  }
+
+  // Quiz screen
+  const currentQ = sportQuizQuestions[currentQuestion];
+  const isLastQuestion = currentQuestion === totalQuestions - 1;
+  const canSubmit = isLastQuestion && Object.keys(answers).length === totalQuestions;
+
+  return (
+    <section className="quiz-container" data-testid="quiz-page">
+      <div className="quiz-wrapper">
+        <div className="quiz-header">
+          <h2>🏃 Melyik Sport Passzol Hozzád?</h2>
+          <p>Néhány gyors kérdésre válaszolva megtudod, mely sportok illeszkednek a legjobban az igényeidhez!</p>
+        </div>
+
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+          <span className="progress-text">
+            {currentQuestion + 1} / {totalQuestions}
+          </span>
+        </div>
+
+        <div className="quiz-question">
+          <h3>{currentQ.question}</h3>
+          
+          <div className="quiz-options">
+            {currentQ.options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={`option-button ${answers[currentQ.id] === option.value ? "active" : ""}`}
+                onClick={() => handleAnswer(currentQ.id, option.value)}
+                data-testid={`option-${option.value}`}
+              >
+                <span className="option-radio">
+                  {answers[currentQ.id] === option.value && (
+                    <span className="radio-check">✓</span>
+                  )}
+                </span>
+                <span className="option-label">{option.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="quiz-footer">
+          <button
+            type="button"
+            className="nav-button prev"
+            onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+            disabled={currentQuestion === 0}
+          >
+            ← Vissza
+          </button>
+
+          {isLastQuestion ? (
+            <button
+              type="button"
+              className="submit-button"
+              onClick={handleSubmit}
+              disabled={!canSubmit || loading}
+              data-testid="submit-quiz"
+            >
+              {loading ? "Feldolgozom..." : "🎯 Ajánlások megjelenítése"}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="nav-button next"
+              onClick={() => setCurrentQuestion(currentQuestion + 1)}
+              disabled={!answers[currentQ.id]}
+            >
+              Tovább →
+            </button>
+          )}
+        </div>
+      </div>
     </section>
   );
 }

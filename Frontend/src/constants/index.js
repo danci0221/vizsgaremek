@@ -292,3 +292,80 @@ export const timeSlotLabels = {
   evening: "Este",
   weekend: "Hétvége",
 };
+
+// ============== SPORT AJÂNLÓ QUIZ ==============
+export const sportQuizQuestions = [
+  {
+    id: "intensity",
+    question: "Milyen intenzitáson szeretsz edzeni?",
+    type: "single",
+    options: [
+      { label: "Könnyű, relaxálóbb mozgás", value: "light" },
+      { label: "Közepes, kihívó de fenntartható", value: "moderate" },
+      { label: "Magas, verítékes intenzitás", value: "high" },
+    ],
+  },
+  {
+    id: "type",
+    question: "Mi vonz meg jobban?",
+    type: "single",
+    options: [
+      { label: "Kardió (futás, úszás, kerékpár)", value: "cardio" },
+      { label: "Erőedzés és izomépítés", value: "strength" },
+      { label: "Egyensúly és rugalmasság (jóga, pilates)", value: "balance" },
+      { label: "Csapat és verseng (labdajáték)", value: "team" },
+    ],
+  },
+  {
+    id: "group",
+    question: "Hogyan szeretsz edzeni?",
+    type: "single",
+    options: [
+      { label: "Egyénileg, saját tempóban", value: "individual" },
+      { label: "Kiscsoportban, barátokkal", value: "small_group" },
+      { label: "Nagyobb csoportban vagy osztályon", value: "class" },
+      { label: "Csapatsportban", value: "team_sport" },
+    ],
+  },
+  {
+    id: "location",
+    question: "Hol szeretsz edzeni?",
+    type: "single",
+    options: [
+      { label: "Kültéren (park, pályák)", value: "outdoor" },
+      { label: "Beltéren (edzőterem, stúdió)", value: "indoor" },
+      { label: "Mindegy, felváltva szívesen", value: "both" },
+    ],
+  },
+  {
+    id: "budget",
+    question: "Mi a te költségvetési kereteid?",
+    type: "single",
+    options: [
+      { label: "Ingyenes vagy nagyon olcsó", value: "free" },
+      { label: "Kedvező (1-5000 Ft körül)", value: "budget" },
+      { label: "Prémium (5000+ Ft)", value: "premium" },
+    ],
+  },
+  {
+    id: "time",
+    question: "Mikor szívesen mozgolnál?",
+    type: "single",
+    options: [
+      { label: "Reggel, még munkakezdés előtt", value: "morning" },
+      { label: "Délután, munka vagy iskola után", value: "afternoon" },
+      { label: "Este, levezetésként", value: "evening" },
+      { label: "Hétvégén, ha van idő", value: "weekend" },
+    ],
+  },
+  {
+    id: "duration",
+    question: "Mennyi időt tudsz edzésre szánni egy alkalommal?",
+    type: "single",
+    options: [
+      { label: "30 perc vagy kevesebb", value: "short" },
+      { label: "30-60 perc", value: "medium" },
+      { label: "60+ perc", value: "long" },
+    ],
+  },
+];
