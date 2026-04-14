@@ -32,6 +32,55 @@ export async function listRegistrations(userId) {
 
 export async function createRegistration(userId, sportId) {
   try {
+    const existingRows = await query(
+      `SELECT id, allapot FROM jelentkezes
+       WHERE felhasznalo_id = ? AND sportlehetoseg_id = ?`,
+      [userId, sportId]
+    );
+
+    if (existingRows.length > 0) {
+      const existing = existingRows[0];
+      if (existing.allapot === "aktiv") {
+        return { error: "Már regisztrált vagy erre a sportra." };
+      }
+
+      const result = await execute(
+        `UPDATE jelentkezes
+         SET allapot = 'aktiv', jelentkezes_idopont = NOW()
+         WHERE id = ?`,
+        [existing.id]
+      );
+
+      if (result.affectedRows === 0) {
+        return { error: "Nem sikerült újra jelentkezni." };
+      }
+
+      const rows = await query(
+        `SELECT
+            j.id,
+            j.allapot,
+            j.jelentkezes_idopont,
+            s.id AS sport_id,
+            s.nev AS sport_name,
+            sp.nev AS sport_type,
+            h.varos AS location,
+            h.cim AS address,
+            s.ar AS price,
+            s.idoszak AS time_slot,
+            s.nyitvatartas AS opening_hours,
+            s.kapcsolat AS contact,
+            s.kep_url AS image
+         FROM jelentkezes j
+         JOIN sportlehetosegek s ON s.id = j.sportlehetoseg_id
+         JOIN sportag sp ON sp.id = s.sportag_id
+         JOIN helyszin h ON h.id = s.helyszin_id
+         WHERE j.id = ?`,
+        [existing.id]
+      );
+
+      return rows.length === 0 ? null : mapRegistrationRow(rows[0]);
+    }
+
     const result = await execute(
       `INSERT INTO jelentkezes (felhasznalo_id, sportlehetoseg_id, allapot, jelentkezes_idopont)
        VALUES (?, ?, 'aktiv', NOW())`,
@@ -82,7 +131,7 @@ export async function cancelRegistration(userId, registrationId) {
   if (rows.length === 0) return false;
 
   const result = await execute(
-    `UPDATE jelentkezes SET allapot = 'lemondva'
+    `DELETE FROM jelentkezes
      WHERE id = ?`,
     [registrationId]
   );
@@ -152,10 +201,9 @@ export async function getRegistrationStats() {
   const rows = await query(
     `SELECT
         COUNT(*) as total_registrations,
-        SUM(CASE WHEN allapot = 'aktiv' THEN 1 ELSE 0 END) as active_registrations,
-        SUM(CASE WHEN allapot = 'lemondva' THEN 1 ELSE 0 END) as cancelled_registrations
+        SUM(CASE WHEN allapot = 'aktiv' THEN 1 ELSE 0 END) as active_registrations
      FROM jelentkezes`
   );
 
-  return rows[0] || { total_registrations: 0, active_registrations: 0, cancelled_registrations: 0 };
+  return rows[0] || { total_registrations: 0, active_registrations: 0 };
 }

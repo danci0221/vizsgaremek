@@ -2034,6 +2034,14 @@ button:disabled::after {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
+  align-items: center;
+}
+
+.card-actions button {
+  white-space: nowrap;
+  min-height: 44px;
+  min-width: 10.5rem;
+  flex-shrink: 0;
 }
 
 .favorites-head {
@@ -3318,6 +3326,15 @@ button:disabled::after {
   background: var(--sh-bg);
 }
 
+.page-shell--sporthub-home .sh-shell {
+  width: min(1220px, 92%);
+  margin: 0 auto;
+}
+
+.page-shell--sporthub-home .sh-home {
+  color: var(--sh-text);
+}
+
 body:has(.page-shell--sporthub-home) {
   background: var(--sh-bg);
 }
@@ -3424,35 +3441,34 @@ body:has(.page-shell--sporthub-home)::after {
 .page-shell--sporthub-home .header--hub .header-cta-group .cta,
 .page-shell--sporthub-home .header--hub .header-cta-group .ghost {
   border-radius: 999px;
-  padding: 0.68rem 1.06rem;
-  font-size: 0.9rem;
+  min-height: 40px;
+  padding: 0.68rem 1rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  min-height: 40px;
-  padding-inline: 1rem;
+  letter-spacing: 0.08em;
 }
 
 .page-shell--sporthub-home .header--hub .header-cta-group .cta {
-  color: #ffffff;
-  background: linear-gradient(130deg, var(--brand), #0ea9c8);
-  box-shadow: 0 10px 24px rgba(11, 107, 242, 0.28);
-  border: 0;
+  color: #eff6ff;
+  border: 1px solid transparent;
+  background: linear-gradient(130deg, #2aa7ff 0%, #1e7edb 62%, #0b5ba4 100%);
+  box-shadow: 0 10px 22px rgba(42, 167, 255, 0.33);
 }
 
 .page-shell--sporthub-home .header--hub .header-cta-group .ghost {
-  color: #134681;
-  background: #e8f5ff;
-  border: 0;
+  border: 1px solid rgba(102, 170, 245, 0.24);
+  color: #d5eaff;
+  background: rgba(9, 24, 42, 0.84);
 }
 
-.sh-home {
-  color: var(--sh-text);
+.page-shell--sporthub-home .header--hub .header-cta-group .ghost:hover {
+  border-color: rgba(57, 211, 162, 0.52);
+  color: #eff8ff;
 }
 
-.sh-shell {
-  width: min(1220px, 92%);
-  margin-inline: auto;
+.page-shell--sporthub-home .header--hub .header-cta-group .cta:hover {
+  filter: brightness(1.07);
 }
 
 .sh-section {
@@ -3539,6 +3555,7 @@ body:has(.page-shell--sporthub-home)::after {
   text-transform: uppercase;
   font-weight: 700;
   padding: 0.3rem 0.68rem;
+  margin-bottom: 0.95rem;
 }
 
 .sh-hero-eyebrow::before {

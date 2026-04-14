@@ -12,7 +12,8 @@
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
-    "mysql2": "^3.18.2"
+    "mysql2": "^3.18.2",
+    "sporthub": "file:.."
   },
   "devDependencies": {
     "jest": "^29.7.0",

@@ -62,7 +62,7 @@ describe('Registrations Service', () => {
       };
 
       db.execute.mockResolvedValue({ insertId: 1, affectedRows: 1 });
-      db.query.mockResolvedValue([mockRegistration]);
+      db.query.mockResolvedValueOnce([]).mockResolvedValueOnce([mockRegistration]);
       mappers.mapRegistrationRow.mockReturnValue(mockRegistration);
 
       const result = await registrationsService.createRegistration(10, 5);
@@ -102,7 +102,7 @@ describe('Registrations Service', () => {
 
       expect(result).toBe(true);
       expect(db.execute).toHaveBeenCalledWith(
-        expect.stringContaining('UPDATE jelentkezes SET allapot'),
+        expect.stringContaining('DELETE FROM jelentkezes'),
         [1]
       );
     });

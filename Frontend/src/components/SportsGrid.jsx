@@ -50,10 +50,6 @@ function resolveOpeningHours(sport) {
   return sport.openingHours || scheduleFallbackBySlot[sport.timeSlot] || "H-P 08:00-20:00";
 }
 
-function formatRegistrationStatus(status) {
-  return status === "lemondva" ? "Lemondva" : "Aktív";
-}
-
 function formatRegistrationDate(value) {
   if (!value) return "";
   const date = new Date(value);
@@ -205,7 +201,6 @@ export default function SportsGrid({
             const cardImage = resolveSportImage(sport);
             const registration = registrationBySportId?.[sport.id];
             const isRegistered = registration?.status === "aktiv";
-            const isCancelled = registration?.status === "lemondva";
             const isPending = registrationPending?.has
               ? registrationPending.has(sport.id)
               : false;
@@ -213,15 +208,9 @@ export default function SportsGrid({
               ? "Mentés..."
               : isRegistered
                 ? "Lemondás"
-                : isCancelled
-                  ? "Lemondva"
-                  : "Jelentkezem";
-            const registrationClass = isRegistered
-              ? "danger-outline"
-              : isCancelled
-                ? "ghost"
-                : "cta";
-            const registrationDisabled = isPending || isCancelled;
+                : "Jelentkezem";
+            const registrationClass = isRegistered ? "danger-outline" : "cta";
+            const registrationDisabled = isPending;
 
             return (
               <article
@@ -246,13 +235,9 @@ export default function SportsGrid({
                   <div className="card-footer">
                     <span className="slot-chip">{timeSlotLabels[sport.timeSlot]}</span>
                     <span className="score-chip">#{sport.recommendationScore}</span>
-                    {registration && (
-                      <span
-                        className={`registration-status ${
-                          isRegistered ? "active" : "cancelled"
-                        }`}
-                      >
-                        {formatRegistrationStatus(registration.status)}
+                    {registration && isRegistered && (
+                      <span className="registration-status active">
+                        Aktív
                       </span>
                     )}
                   </div>
@@ -275,7 +260,7 @@ export default function SportsGrid({
                             onCancelRegistration?.(registration);
                             return;
                           }
-                          if (!isCancelled) onCreateRegistration?.(sport.id);
+                          onCreateRegistration?.(sport.id);
                         }}
                       >
                         {registrationLabel}
@@ -303,11 +288,10 @@ export default function SportsGrid({
             <p>{selected.description}</p>
             {(() => {
               const registration = registrationBySportId?.[selected.id];
-              if (!registration) return null;
-              const statusClass = registration.status === "aktiv" ? "success" : "warning";
+              if (!registration || registration.status !== "aktiv") return null;
               return (
-                <p className={`status ${statusClass}`}>
-                  Jelentkezés: {formatRegistrationStatus(registration.status)}
+                <p className="status success">
+                  Jelentkezés: Aktív
                   {registration.registeredAt
                     ? ` - ${formatRegistrationDate(registration.registeredAt)}`
                     : ""}
@@ -345,7 +329,6 @@ export default function SportsGrid({
                 {(() => {
                   const registration = registrationBySportId?.[selected.id];
                   const isRegistered = registration?.status === "aktiv";
-                  const isCancelled = registration?.status === "lemondva";
                   const isPending = registrationPending?.has
                     ? registrationPending.has(selected.id)
                     : false;
@@ -353,15 +336,9 @@ export default function SportsGrid({
                     ? "Mentés..."
                     : isRegistered
                       ? "Lemondás"
-                      : isCancelled
-                        ? "Lemondva"
-                        : "Jelentkezem";
-                  const registrationClass = isRegistered
-                    ? "danger-outline"
-                    : isCancelled
-                      ? "ghost"
-                      : "cta";
-                  const registrationDisabled = isPending || isCancelled;
+                      : "Jelentkezem";
+                  const registrationClass = isRegistered ? "danger-outline" : "cta";
+                  const registrationDisabled = isPending;
 
                   return (
                     <button
@@ -373,7 +350,7 @@ export default function SportsGrid({
                           onCancelRegistration?.(registration);
                           return;
                         }
-                        if (!isCancelled) onCreateRegistration?.(selected.id);
+                        onCreateRegistration?.(selected.id);
                       }}
                     >
                       {registrationLabel}

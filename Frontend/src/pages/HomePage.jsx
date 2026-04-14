@@ -376,54 +376,6 @@ export default function HomePage({ sports = [], onApplyScenario, authUser }) {
         </section>
       ))}
 
-      <section className="sh-section sh-repeat-strip" aria-label="Kiemelt tartalom">
-        <div className="sh-shell">
-          <div className="sh-repeat-track">
-            <span>SPORTHUB INSPIRÁCIÓ</span>
-            <span>SPORTHUB INSPIRÁCIÓ</span>
-            <span>SPORTHUB INSPIRÁCIÓ</span>
-            <span>SPORTHUB INSPIRÁCIÓ</span>
-            <span>SPORTHUB INSPIRÁCIÓ</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="sh-section sh-credentials">
-        <div className="sh-shell">
-          <div className="sh-title-wrap">
-            <p className="sh-slide-title">HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ</p>
-            <h2>
-              <span>Tarts velünk</span> hétről hétre
-            </h2>
-          </div>
-
-          <div className="sh-credentials-grid">
-            {credentialCards.map((item) => (
-              <article key={item.key} className="sh-credential-card">
-                <img src={item.image} alt={item.title} loading="lazy" />
-                <div className="sh-credential-overlay" />
-                <div className="sh-credential-content">
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                  <button type="button" className="sh-button-secondary" onClick={item.action}>
-                    Megnyitom
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="sh-social-links">
-            <a href="https://twitter.com" target="_blank" rel="noreferrer">
-              @SportHubLive
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer">
-              @SportHubPlanner
-            </a>
-          </div>
-        </div>
-      </section>
-
       <section className="sh-section sh-newsletter">
         <div className="sh-shell sh-newsletter-inner">
           <p className="sh-slide-title">HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ - HETI SPORTFRISSÍTŐ</p>

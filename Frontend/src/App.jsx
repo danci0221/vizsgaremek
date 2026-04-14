@@ -103,16 +103,16 @@ function App() {
 
   // Derived state for live day and time labels
   const liveDayLabel = useMemo(() => {
-    const days = ["VasĂˇrnap", "HĂ©tfĹ‘", "Kedd", "Szerda", "CsĂĽtĂ¶rtĂ¶k", "PĂ©ntek", "Szombat"];
+    const days = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
     return days[now.getDay()];
   }, [now]);
 
   const liveTimeLabel = useMemo(() => {
     const hour = now.getHours();
     if (hour >= 6 && hour < 12) return "reggel";
-    if (hour >= 12 && hour < 17) return "dĂ©lutĂˇn";
+    if (hour >= 12 && hour < 17) return "délután";
     if (hour >= 17 && hour < 21) return "este";
-    return "Ă©jjel";
+    return "éjjel";
   }, [now]);
 
   // ============== ROUTE VALIDATION ==============
@@ -197,7 +197,7 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Nem sikerĂĽlt frissĂ­teni a kedvenceket.");
+        const errorMessage = await readErrorMessage(response, "Nem sikerült frissíteni a kedvenceket.");
         throw new Error(errorMessage);
       }
 
@@ -222,15 +222,15 @@ function App() {
               body: JSON.stringify({ sportId }),
             });
             if (!syncResponse.ok) {
-              throw new Error("Nem sikerĂĽlt minden kedvencet szinkronizĂˇlni.");
+              throw new Error("Nem sikerült minden kedvencet szinkronizálni.");
             }
           })
         );
       }
 
       if (!silent) {
-        setFavoritesState({ type: "success", message: "Kedvencek frissĂ­tve." });
-        showToast("success", "Kedvencek frissĂ­tve.");
+        setFavoritesState({ type: "success", message: "Kedvencek frissítve." });
+        showToast("success", "Kedvencek frissítve.");
       }
     } catch (error) {
       setFavoritesState({ type: "error", message: error.message });
@@ -315,7 +315,7 @@ function App() {
         setSports(sportsData.map(normalizeSport));
         setStatus({
           type: "warning",
-          message: "Az API most nem elĂ©rhetĹ‘, helyi mintaadatokat hasznĂˇl az oldal.",
+          message: "Az API most nem elérhető, helyi mintaadatokat használ az oldal.",
         });
       }
     };
@@ -367,8 +367,8 @@ function App() {
     setFavorites(newFavorites);
 
     const successMessage = isFav
-      ? "EltĂˇvolĂ­tva a kedvencekbĹ‘l."
-      : "HozzĂˇadva a kedvencekhez.";
+      ? "Eltávolítva a kedvencekből."
+      : "Hozzáadva a kedvencekhez.";
 
     if (!authUser?.email) {
       setFavoritesState({ type: "success", message: successMessage });
@@ -389,7 +389,7 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Kedvenc mĂłdosĂ­tĂˇs hiba.");
+        const errorMessage = await readErrorMessage(response, "Kedvenc módosítás hiba.");
         throw new Error(errorMessage);
       }
 
@@ -434,7 +434,7 @@ function App() {
       if (!response.ok) {
         const errorMessage = await readErrorMessage(
           response,
-          "Nem sikerĂĄlt betĂ¶lteni a jelentkezĂ©seket."
+          "Nem sikerült betölteni a jelentkezéseket."
         );
         throw new Error(errorMessage);
       }
@@ -448,7 +448,7 @@ function App() {
 
       setRegistrations(list);
       if (!silent) {
-        setRegistrationsState({ type: "success", message: "JelentkezĂ©sek betĂ¶ltve." });
+        setRegistrationsState({ type: "success", message: "Jelentkezések betöltve." });
       }
     } catch (error) {
       setRegistrationsState({ type: "error", message: error.message });
@@ -479,7 +479,7 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Sikertelen jelentkezĂ©s.");
+        const errorMessage = await readErrorMessage(response, "Sikertelen jelentkezés.");
         throw new Error(errorMessage);
       }
 
@@ -488,7 +488,7 @@ function App() {
         const next = prev.filter((item) => item.sportId !== sportId);
         return [data, ...next];
       });
-      setRegistrationsState({ type: "success", message: "Sikeres jelentkezĂ©s." });
+      setRegistrationsState({ type: "success", message: "Sikeres jelentkezés." });
     } catch (error) {
       setRegistrationsState({ type: "error", message: error.message });
     } finally {
@@ -514,16 +514,12 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Sikertelen lemondĂˇs.");
+        const errorMessage = await readErrorMessage(response, "Sikertelen lemondás.");
         throw new Error(errorMessage);
       }
 
-      setRegistrations((prev) =>
-        prev.map((item) =>
-          item.id === registration.id ? { ...item, status: "lemondva" } : item
-        )
-      );
-      setRegistrationsState({ type: "success", message: "JelentkezĂ©s lemondva." });
+      setRegistrations((prev) => prev.filter((item) => item.id !== registration.id));
+      setRegistrationsState({ type: "success", message: "Jelentkezés lemondva." });
     } catch (error) {
       setRegistrationsState({ type: "error", message: error.message });
     } finally {
@@ -569,7 +565,7 @@ function App() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Sikertelen mentĂ©s.");
+        throw new Error(error.message || "Sikertelen mentés.");
       }
 
       const savedItem = normalizeSport(await response.json(), 0);
@@ -579,7 +575,7 @@ function App() {
         setSports((prev) => [savedItem, ...prev]);
       }
 
-      setStatus({ type: "success", message: "Sikeres adatbĂˇzis-mentĂ©s." });
+      setStatus({ type: "success", message: "Sikeres adatbázis-mentés." });
       resetForm();
     } catch (error) {
       setStatus({ type: "error", message: error.message });
@@ -607,21 +603,21 @@ function App() {
   const handleDelete = async (id) => {
     try {
       if (!isAdmin) {
-        setStatus({ type: "error", message: "Csak admin jogosult sporthelyet tĂ¶rĂ¶lni." });
+        setStatus({ type: "error", message: "Csak admin jogosult sporthelyet törölni." });
         return;
       }
 
       const headers = authUser?.email ? { "X-Admin-Email": authUser.email } : undefined;
       const response = await fetch(apiUrl(`/sports/${id}`), { method: "DELETE", headers });
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Sikertelen tĂ¶rlĂ©s.");
+        const errorMessage = await readErrorMessage(response, "Sikertelen törlés.");
         throw new Error(errorMessage);
       }
       setSports((prev) => prev.filter((item) => item.id !== id));
       setFavorites((prev) => prev.filter((itemId) => itemId !== id));
       setCompareIds((prev) => prev.filter((itemId) => itemId !== id));
       if (editingId === id) resetForm();
-      setStatus({ type: "success", message: "Sikeres tĂ¶rlĂ©s az adatbĂˇzisbĂłl." });
+      setStatus({ type: "success", message: "Sikeres törlés az adatbázisból." });
     } catch (error) {
       setStatus({ type: "error", message: error.message });
     }
@@ -650,7 +646,7 @@ function App() {
     }
 
     if (!isValidEmail(email)) {
-      setEmailCheckState({ type: "error", message: "Ă‰rvĂ©nytelen email cĂ­m." });
+      setEmailCheckState({ type: "error", message: "érvénytelen email cím." });
       return { ok: false, exists: false };
     }
 
@@ -659,16 +655,16 @@ function App() {
       if (!response.ok) {
         const errorMessage = await readErrorMessage(
           response,
-          "Nem sikerĂĽlt ellenĹ‘rizni az email cĂ­met."
+          "Nem sikerült ellenőrizni az email címet."
         );
         throw new Error(errorMessage);
       }
 
       const data = await response.json();
       if (data.exists) {
-        setEmailCheckState({ type: "error", message: "Ez az email mĂˇr regisztrĂˇlva van." });
+        setEmailCheckState({ type: "error", message: "Ez az email már regisztrálva van." });
       } else {
-        setEmailCheckState({ type: "success", message: "Ez az email elĂ©rhetĹ‘." });
+        setEmailCheckState({ type: "success", message: "Ez az email elérhető." });
       }
 
       return data;
@@ -688,14 +684,14 @@ function App() {
       const headers = authUser?.email ? { "X-Admin-Email": authUser.email } : undefined;
       const response = await fetch(apiUrl("/admin/users"), { headers });
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "Nem sikerĂĽlt betĂ¶lteni a felhasznĂˇlĂłkat.");
+        const errorMessage = await readErrorMessage(response, "Nem sikerült betölteni a felhasználókat.");
         throw new Error(errorMessage);
       }
 
       const data = await response.json();
       const users = Array.isArray(data) ? data : Array.isArray(data.users) ? data.users : [];
       setAdminUsers(users);
-      setAdminUsersState({ type: "success", message: "FelhasznĂˇlĂłk betĂ¶ltve." });
+      setAdminUsersState({ type: "success", message: "Felhasználók betöltve." });
     } catch (error) {
       setAdminUsersState({ type: "error", message: error.message });
     } finally {
@@ -715,7 +711,7 @@ function App() {
       if (!response.ok) {
         const errorMessage = await readErrorMessage(
           response,
-          "Nem sikerĂĄlt betĂ¶lteni a jelentkezĂ©seket."
+          "Nem sikerült betölteni a jelentkezéseket."
         );
         throw new Error(errorMessage);
       }
@@ -727,7 +723,7 @@ function App() {
           ? data.registrations
           : [];
       setAdminRegistrations(list);
-      setAdminRegistrationsState({ type: "success", message: "JelentkezĂ©sek betĂ¶ltve." });
+      setAdminRegistrationsState({ type: "success", message: "Jelentkezések betöltve." });
     } catch (error) {
       setAdminRegistrationsState({ type: "error", message: error.message });
     } finally {
@@ -742,7 +738,7 @@ function App() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (signUpForm.password !== signUpForm.confirmPassword) {
-      setAuthState({ type: "error", message: "A jelszĂł Ă©s a megerĹ‘sĂ­tĂ©se nem egyezik." });
+      setAuthState({ type: "error", message: "A jelszó és a megerősítése nem egyezik." });
       return;
     }
 
@@ -761,7 +757,7 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "RegisztrĂˇciĂł hiba.");
+        const errorMessage = await readErrorMessage(response, "Regisztrációs hiba.");
         throw new Error(errorMessage);
       }
 
@@ -770,7 +766,7 @@ function App() {
       console.log("signup user", data, user);
       setAuthUser(user);
       setSignUpForm(signUpDefaults);
-      setAuthState({ type: "success", message: "Sikeres regisztrĂˇciĂł!" });
+      setAuthState({ type: "success", message: "Sikeres regisztráció!" });
       navigate("/fiok");
     } catch (error) {
       setAuthState({ type: "error", message: error.message });
@@ -795,7 +791,7 @@ function App() {
       });
 
       if (!response.ok) {
-        const errorMessage = await readErrorMessage(response, "BejelentkezĂ©s hiba.");
+        const errorMessage = await readErrorMessage(response, "Bejelentkezés hiba.");
         throw new Error(errorMessage);
       }
 
@@ -804,7 +800,7 @@ function App() {
       console.log("signin user", data, user);
       setAuthUser(user);
       setSignInForm(signInDefaults);
-      setAuthState({ type: "success", message: "Sikeres bejelentkezĂ©s!" });
+      setAuthState({ type: "success", message: "Sikeres bejelentkezés!" });
       navigate("/fiok");
     } catch (error) {
       setAuthState({ type: "error", message: error.message });
@@ -816,7 +812,7 @@ function App() {
   const handleSignOut = () => {
     setAuthUser(null);
     resetFavoritesForAnon();
-    setAuthState({ type: "success", message: "Sikeresen kijelentkeztĂ©l." });
+    setAuthState({ type: "success", message: "Sikeresen kijelentkeztél." });
     navigate("/auth");
   };
 
